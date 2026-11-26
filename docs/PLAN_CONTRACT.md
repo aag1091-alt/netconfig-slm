@@ -42,7 +42,10 @@ State shape (`src/plan/state.py`):
 
 Mapping to standards: `vlans` ≈ OpenConfig
 `openconfig-vlan:vlans` / Cisco native `Cisco-IOS-XE-vlan`; interface
-L2 fields ≈ `openconfig-vlan:interface` / `Cisco-IOS-XE-switchport`;
+L2 fields ≈ `openconfig-vlan:interface` / Cisco native
+`interface-switchport-grouping` in `Cisco-IOS-XE-interfaces` (erratum
+2026-11-26: there is no `Cisco-IOS-XE-switchport` config module in IOS
+XE 17.18.1 — see `docs/YANG_PIN.md`);
 `trunk_allowed` is a leaf-list with the IOS XE special values `all`
 and `none` represented as the string `"all"` and the empty list.
 `aliases` are inventory metadata (device context), not config — they
