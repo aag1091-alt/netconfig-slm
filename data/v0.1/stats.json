@@ -1,0 +1,93 @@
+{
+  "dataset": "netconfig-slm",
+  "version": "0.1",
+  "assembled_at": "2026-11-23T07:06:44.670782+00:00",
+  "total_rows": 580,
+  "families": {
+    "bgp": 97,
+    "interface_mgmt": 95,
+    "ospf": 97,
+    "static_route": 97,
+    "trunk_svi": 97,
+    "vlan_l2": 97
+  },
+  "splits": {
+    "seed": 42,
+    "method": "stratified by family, 90/5/5 train/val/test, per-family shuffle with random.Random(42); adapted from scripts/make_splits.py",
+    "sizes": {
+      "train": 520,
+      "val": 30,
+      "test": 30
+    },
+    "per_family": {
+      "bgp": {
+        "total": 97,
+        "train": 87,
+        "val": 5,
+        "test": 5
+      },
+      "interface_mgmt": {
+        "total": 95,
+        "train": 85,
+        "val": 5,
+        "test": 5
+      },
+      "ospf": {
+        "total": 97,
+        "train": 87,
+        "val": 5,
+        "test": 5
+      },
+      "static_route": {
+        "total": 97,
+        "train": 87,
+        "val": 5,
+        "test": 5
+      },
+      "trunk_svi": {
+        "total": 97,
+        "train": 87,
+        "val": 5,
+        "test": 5
+      },
+      "vlan_l2": {
+        "total": 97,
+        "train": 87,
+        "val": 5,
+        "test": 5
+      }
+    }
+  },
+  "validation": {
+    "parse_pass": 580,
+    "batfish_pass": 580,
+    "emulation_pass": null,
+    "evidence": [
+      "docs/seed-expansion-run.txt",
+      "docs/gen-run-001-vlan-trunk.txt",
+      "docs/gen-run-002-static-ospf.txt",
+      "docs/gen-run-003-bgp-iface.txt"
+    ],
+    "note": "Source corpus rows carry validation.parse_ok/batfish_ok = null; every row's pass is documented per ID in the run logs above (580/580 parse, 580/580 Batfish on the final corpus; ospf-0066/67/68 failed a first Batfish run, were fixed, and passed on re-validation). Flags were populated in the v0.1 copies from those logs after a per-ID cross-check; source files were not modified."
+  },
+  "provenance": {
+    "handwritten_seeds": 100,
+    "generated_synthetic": 480,
+    "cisco_guide": 0,
+    "origin_files": [
+      "data/examples/seed.jsonl",
+      "data/generated/bgp.jsonl",
+      "data/generated/interface_mgmt.jsonl",
+      "data/generated/ospf.jsonl",
+      "data/generated/static_route.jsonl",
+      "data/generated/trunk_svi.jsonl",
+      "data/generated/vlan_l2.jsonl"
+    ]
+  },
+  "integrity": {
+    "unique_ids": 580,
+    "duplicate_intent_config_pairs": 0,
+    "problems": [],
+    "warnings": []
+  }
+}

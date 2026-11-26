@@ -1,0 +1,25 @@
+{
+  "started_utc": "2026-11-23T16:34:13Z",
+  "base": "Qwen/Qwen3-4B-Base",
+  "cfg": {
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "bs": 4,
+    "accum": 4,
+    "epochs": 3,
+    "lr": 0.0002,
+    "warmup": 0.03,
+    "max_len": 1024
+  },
+  "dataset": "https://huggingface.co/datasets/aag1091/netconfig-slm-dataset/resolve/main"
+}

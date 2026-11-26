@@ -1,0 +1,2 @@
+6b052c64c97b8ed4fcd75a6d
+# attempt 5 — attempt-4 reformulation + modules_to_save=['lm_head'] (job_probe_v5.py); outputs under bucket prefix run5-probe/

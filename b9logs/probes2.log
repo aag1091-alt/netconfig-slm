@@ -1,0 +1,10 @@
+probe-17       nat              parse=PASS (parse ok (13 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-18       nat              parse=PASS (parse ok (12 config lines)) batfish=False (batfish PASSED (CISCO_IOS) but 1 init issue(s): Convert warning (redflag))
+probe-19       nat              parse=PASS (parse ok (13 config lines)) batfish=False (batfish PASSED (CISCO_IOS) but 2 init issue(s): Parse warning)
+probe-20       hsrp             parse=PASS (parse ok (8 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-21       hsrp             parse=PASS (parse ok (8 config lines)) batfish=False (batfish status PARTIALLY_UNRECOGNIZED (CISCO_IOS), 1 init issue(s))
+probe-22       hsrp             parse=PASS (parse ok (8 config lines)) batfish=False (batfish status PARTIALLY_UNRECOGNIZED (CISCO_IOS), 1 init issue(s))
+probe-23       acl              parse=PASS (parse ok (5 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-25       hsrp             parse=PASS (parse ok (9 config lines)) batfish=False (batfish status PARTIALLY_UNRECOGNIZED (CISCO_IOS), 1 init issue(s))
+
+Total: 8 parse-pass, 0 parse-fail, 3 batfish-pass

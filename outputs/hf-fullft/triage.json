@@ -1,0 +1,262 @@
+{
+  "triaged_pass_ids": [
+    "trunk-0409",
+    "trunk-0415",
+    "trunk-0475",
+    "trunk-0600",
+    "trunk-0619",
+    "trunk-0652",
+    "trunk-0757",
+    "trunk-0828",
+    "vlan-0355",
+    "vlan-0455",
+    "vlan-0456",
+    "vlan-0605",
+    "vlan-0613",
+    "vlan-0731"
+  ],
+  "detail": [
+    {
+      "id": "vlan-0213",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet1/0/15: access lines ['switchport access vlan 892'] != vlan 467; GigabitEthernet1/0/28: access lines ['switchport access vlan 892'] != vlan 467; GigabitEthernet1/0/40: access lines ['switchport access vlan 892'] != vlan 467"
+    },
+    {
+      "id": "vlan-0355",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port_vlan"
+      ],
+      "triaged_pass": true,
+      "why": "11 pairs verified"
+    },
+    {
+      "id": "vlan-0418",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet2/1/11: block missing (expected vlan 186); GigabitEthernet2/1/12: block missing (expected vlan 186); GigabitEthernet2/1/21: block missing (expected vlan 186)"
+    },
+    {
+      "id": "vlan-0455",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port_vlan"
+      ],
+      "triaged_pass": true,
+      "why": "11 pairs verified"
+    },
+    {
+      "id": "vlan-0456",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port_vlan"
+      ],
+      "triaged_pass": true,
+      "why": "16 pairs verified"
+    },
+    {
+      "id": "vlan-0493",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port",
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet2/0/1: block missing (expected vlan 884); GigabitEthernet2/0/14: access lines ['switchport access vlan 38'] != vlan 296; GigabitEthernet2/0/18: block missing (expected vlan 951)"
+    },
+    {
+      "id": "vlan-0605",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port_vlan"
+      ],
+      "triaged_pass": true,
+      "why": "13 pairs verified"
+    },
+    {
+      "id": "vlan-0613",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port_vlan"
+      ],
+      "triaged_pass": true,
+      "why": "9 pairs verified"
+    },
+    {
+      "id": "vlan-0627",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet2/0/14: block missing (expected vlan 258); GigabitEthernet2/0/16: block missing (expected vlan 95); GigabitEthernet2/0/24: block missing (expected vlan 258)"
+    },
+    {
+      "id": "vlan-0642",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port",
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet1/0/2: block missing (expected vlan 469); GigabitEthernet1/0/20: access lines [] != vlan 469; GigabitEthernet1/0/29: block missing (expected vlan 660)"
+    },
+    {
+      "id": "vlan-0674",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port",
+        "access_port_mode",
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet3/0/10: no 'switchport mode access'; GigabitEthernet3/0/10: access lines [] != vlan 457; GigabitEthernet3/0/12: block missing (expected vlan 457)"
+    },
+    {
+      "id": "vlan-0702",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet1/1/11: block missing (expected vlan 208); GigabitEthernet1/1/12: block missing (expected vlan 100); GigabitEthernet1/1/14: block missing (expected vlan 208)"
+    },
+    {
+      "id": "vlan-0731",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port_vlan"
+      ],
+      "triaged_pass": true,
+      "why": "9 pairs verified"
+    },
+    {
+      "id": "vlan-0749",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port",
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet3/0/10: block missing (expected vlan 143); GigabitEthernet3/0/11: block missing (expected vlan 143); GigabitEthernet3/0/17: block missing (expected vlan 41)"
+    },
+    {
+      "id": "vlan-0781",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet1/2/16: block missing (expected vlan 621); GigabitEthernet1/2/24: block missing (expected vlan 756); GigabitEthernet1/2/6: block missing (expected vlan 621)"
+    },
+    {
+      "id": "vlan-0783",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port",
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet2/0/17: block missing (expected vlan 186); GigabitEthernet2/0/38: access lines ['switchport access vlan'] != vlan 941; GigabitEthernet2/0/4: block missing (expected vlan 186)"
+    },
+    {
+      "id": "vlan-0793",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port",
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet1/2/15: block missing (expected vlan 22); GigabitEthernet1/2/18: block missing (expected vlan 968); GigabitEthernet1/2/19: block missing (expected vlan 22)"
+    },
+    {
+      "id": "vlan-0822",
+      "family": "vlan_l2",
+      "checks": [
+        "access_port",
+        "access_port_vlan"
+      ],
+      "triaged_pass": false,
+      "why": "GigabitEthernet1/1/17: block missing (expected vlan 351); GigabitEthernet1/1/8: access lines [] != vlan 351"
+    },
+    {
+      "id": "trunk-0409",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "1 trunk(s) verified"
+    },
+    {
+      "id": "trunk-0415",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "2 trunk(s) verified"
+    },
+    {
+      "id": "trunk-0475",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "2 trunk(s) verified"
+    },
+    {
+      "id": "trunk-0600",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "2 trunk(s) verified"
+    },
+    {
+      "id": "trunk-0619",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "2 trunk(s) verified"
+    },
+    {
+      "id": "trunk-0652",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "3 trunk(s) verified"
+    },
+    {
+      "id": "trunk-0757",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "3 trunk(s) verified"
+    },
+    {
+      "id": "trunk-0828",
+      "family": "trunk_svi",
+      "checks": [
+        "trunk_coverage"
+      ],
+      "triaged_pass": true,
+      "why": "1 trunk(s) verified"
+    }
+  ]
+}

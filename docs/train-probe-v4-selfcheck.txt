@@ -1,0 +1,12 @@
+PASS tokenizer shim: 'test<|im_end|>' -> [1944, 151645]
+local data: 4496 train / 252 test
+PASS subset size: 256 rows
+PASS subset family counts: {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}
+PASS short-quartile rows: 102 rows, per-family {'bgp': 17, 'interface_mgmt': 17, 'ospf': 17, 'static_route': 17, 'trunk_svi': 17, 'vlan_l2': 17}, threshold 281 tokens
+PASS subset deterministic: two runs identical
+PASS transform sample: tail: 'bitEthernet0/0/0\nend<|im_end|>'
+PASS heldout: 24 rows, first ids: ['bgp-0763', 'bgp-0238', 'bgp-0392', 'bgp-0175']...
+PASS ending check (train subset): {"tag": "train_subset", "checked": 256, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS ending check (held-out refs): {"tag": "heldout_refs", "checked": 24, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS scan rows: [('ospf-0249', 'ospf'), ('bgp-0763', 'bgp'), ('vlan-0539', 'vlan_l2'), ('iface-0133', 'interface_mgmt')]
+ALL PROBE V4 SELF-CHECKS PASSED

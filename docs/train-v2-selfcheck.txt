@@ -1,0 +1,41 @@
+NetConfig SLM — job_train_eval_v2.py CPU self-check
+date: 2026-11-23T19:25:26Z
+env: scratch venv with the v2 launch pins resolved 2026-11-23 (trl 0.25.1, transformers 4.57.6, torch 2.5.1+cpu, datasets 3.6.0, peft 0.18.1, accelerate 1.15.0)
+method: real code paths — v2 module imported for to_pc/EOS constants; TRL SFTTrainer built on a tiny random Qwen3 (CPU) so dataset processing + data collator are TRL's own, not a reimplementation
+
+versions: trl=0.25.1 transformers=4.57.6 torch=2.5.1+cpu
+tokenizer default eos: '<|endoftext|>' id=151643
+<|im_end|> id: 151645
+<|endoftext|> id: 151643
+after v2 override: eos='<|im_end|>' id=151645
+
+sample row: id=ospf-0115 family=ospf
+prompt tail: 'assive.<|im_end|>\n<|im_start|>assistant\n'
+completion tail: 'nterface GigabitEthernet0/0/2\n<|im_end|>'
+prompt tokens: 147  completion tokens: 216
+completion last 3 token ids: [17, 198, 151645]
+(a) PASS: tokenized completion ends with token id 151645 (<|im_end|>)
+Adding EOS to train dataset:   0%|          | 0/2 [00:00<?, ? examples/s]Adding EOS to train dataset: 100%|██████████| 2/2 [00:00<00:00, 513.47 examples/s]
+Tokenizing train dataset:   0%|          | 0/2 [00:00<?, ? examples/s]Tokenizing train dataset: 100%|██████████| 2/2 [00:00<00:00, 256.39 examples/s]
+Truncating train dataset:   0%|          | 0/2 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 2/2 [00:00<00:00, 704.21 examples/s]
+
+processed dataset columns: ['prompt', 'completion', 'input_ids', 'completion_mask']
+processed row 0: 363 tokens; last 3 ids: [17, 198, 151645]
+raw prompt+completion tokens: 363
+trailing consecutive <|im_end|> tokens in processed row: 1
+labels: first 147 (prompt) all -100: True
+labels: completion positions equal input_ids: True
+last non-masked label: 151645
+(b) PASS: TRL masks prompt tokens out of the loss; completion (ending in 151645) is fully supervised
+Adding EOS to train dataset:   0%|          | 0/2 [00:00<?, ? examples/s]Adding EOS to train dataset: 100%|██████████| 2/2 [00:00<00:00, 760.53 examples/s]
+Tokenizing train dataset:   0%|          | 0/2 [00:00<?, ? examples/s]Tokenizing train dataset: 100%|██████████| 2/2 [00:00<00:00, 322.48 examples/s]
+Truncating train dataset:   0%|          | 0/2 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 2/2 [00:00<00:00, 739.41 examples/s]
+
+(b2) without processing_class: TRL processing tokenizer eos = '<|endoftext|>'
+processed row 0: 364 tokens; last 3 ids: [198, 151645, 151643]
+(b2) CONFIRMED: omitting processing_class appends <|endoftext|> (151643) after <|im_end|> — v2 passes processing_class=tok, so the real run gets exactly one trailing 151645 as in (b)
+
+generation_config.json: {"eos_token_id": [151645, 151643], "pad_token_id": 151643, "transformers_version": "4.57.6"}
+(c) PASS: generation_config serializes eos_token_id [151645, 151643]
+
+ALL SELF-CHECKS PASSED

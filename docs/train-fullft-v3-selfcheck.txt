@@ -1,0 +1,14 @@
+PASS tokenizer shim: 'test<|im_end|>' -> [1944, 151645]
+local data: 4496 train / 252 test
+PASS row counts: 4496 train, 252 test
+PASS train endings (all 4,496): checked=4496 all_ok=True bad=[]
+PASS test-ref endings (all 252): checked=252 all_ok=True bad=[]
+PASS terminator text: sample completion tail: ...'l-preference 200\nend<|im_end|>'
+PASS param census ~4.02B: total=4,022,468,096 trainable=4,022,468,096
+PASS all params trainable (full FT): 4,022,468,096/4,022,468,096
+PASS embeddings included: embed_tokens params=388,956,160
+PASS tied head (not untied): tie_word_embeddings=True, lm_head.weight is embed_tokens.weight: True
+PASS job passes bf16=True (source): main() SFTConfig call carries bf16=True (substituted False in the local object build: CPU-only venv)
+PASS SFTConfig hyperparameters: lr=1e-05 sched=SchedulerType.COSINE warmup=0.05 wd=0.0 clip=1.0 epochs=2 bs=4x4 max_len=1536 ckpt=True {'use_reentrant': False} completion_only=True
+PASS expected optimizer steps: 562
+ALL CHECKS PASSED

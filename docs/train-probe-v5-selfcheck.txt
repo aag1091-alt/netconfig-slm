@@ -1,0 +1,21 @@
+PASS tokenizer shim: 'test<|im_end|>' -> [1944, 151645]
+local data: 4496 train / 252 test
+PASS subset size: 256 rows
+PASS subset family counts: {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}
+PASS short-quartile rows: 102 rows, per-family {'bgp': 17, 'interface_mgmt': 17, 'ospf': 17, 'static_route': 17, 'trunk_svi': 17, 'vlan_l2': 17}, threshold 281 tokens
+PASS subset identical to attempt 4: id list (incl. order) matches run4 RUN_INFO subset_ids
+PASS subset counts identical to attempt 4: counts {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}, threshold 281
+PASS heldout identical to attempt 4: 24 rows: ['bgp-0763', 'bgp-0238', 'bgp-0392', 'bgp-0175']...
+PASS heldout families: 4 per family
+PASS ending check (train subset): {"tag": "train_subset", "checked": 256, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS ending check (held-out refs): {"tag": "heldout_refs", "checked": 24, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS LoraConfig accepts modules_to_save: modules_to_save=['lm_head']
+PASS base config tie flag: tie_word_embeddings=True, vocab=151936, hidden=2560
+PASS tie_report on raw base: {"tie_word_embeddings_config": true, "lm_head_module_type": "Linear", "embed_tokens_module_type": "Embedding", "active_weights_tied": true, "original_weights_tied": true, "lm_head_weight_requires_grad": true, "error": null}
+PASS tie_report on PeftModel: {"tie_word_embeddings_config": true, "lm_head_module_type": "ModulesToSaveWrapper", "embed_tokens_module_type": "Embedding", "active_weights_tied": false, "original_weights_tied": true, "lm_head_weight_requires_grad": true, "error": null}
+tie after wrap: {"tie_word_embeddings_config": true, "lm_head_module_type": "ModulesToSaveWrapper", "embed_tokens_module_type": "Embedding", "active_weights_tied": false, "original_weights_tied": true, "lm_head_weight_requires_grad": true, "error": null}
+peft_config.modules_to_tie after wrap: None
+PASS effective lm_head module: Linear weight shape (151936, 2560), requires_grad=True
+PASS lm_head weight requires grad: the saved head copy is trainable
+PASS trainable param census: lm_head trainable=388,956,160 (389M), total trainable=421,986,304 across 505 tensors
+ALL PROBE V5 SELF-CHECKS PASSED

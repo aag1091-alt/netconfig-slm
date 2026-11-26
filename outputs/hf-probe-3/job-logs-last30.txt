@@ -1,0 +1,30 @@
+
+Truncating train dataset:   0%|          | 0/256 [00:00<?, ? examples/s][ATruncating train dataset: 100%|██████████| 256/256 [00:00<00:00, 96524.80 examples/s]
+[probe] ASSERTION PASSED: every row's last non-pad label == 151645; row0 last5 ids: [16, 20, 15, 198, 151645] row0 last label: 151645
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 151645, 'bos_token_id': None, 'pad_token_id': 151643}.
+
+  0%|          | 0/16 [00:00<?, ?it/s][A/opt/conda/lib/python3.11/site-packages/torch/_dynamo/eval_frame.py:632: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  return fn(*args, **kwargs)
+Traceback (most recent call last):
+  File "/tmp/job_probe_v3.py", line 457, in <module>
+    main()
+  File "/tmp/job_probe_v3.py", line 375, in main
+    result = trainer.train()
+             ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/transformers/trainer.py", line 2325, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/sft_trainer.py", line 1190, in training_step
+    return super().training_step(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/transformers/trainer.py", line 4020, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/sft_trainer.py", line 1151, in compute_loss
+    shift_logits = outputs.logits[..., :-1, :].contiguous()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 4.56 GiB. GPU 0 has a total capacity of 22.30 GiB of which 3.42 GiB is free. Process 1048173 has 18.87 GiB memory in use. Of the allocated memory 15.57 GiB is allocated by PyTorch, and 2.99 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  0%|          | 0/16 [00:07<?, ?it/s]

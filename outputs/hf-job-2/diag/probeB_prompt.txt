@@ -1,0 +1,8 @@
+<|im_start|>user
+On r2, shut down GigabitEthernet0/0/7 and set its description to Decommissioned - shut<|im_end|>
+<|im_start|>assistant
+hostname router2
+!
+interface GigabitEthernet0/0/7
+ description Decommissioned - shut
+ shutdown

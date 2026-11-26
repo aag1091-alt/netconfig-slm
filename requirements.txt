@@ -1,0 +1,10 @@
+ciscoconfparse2>=2.0
+pybatfish>=0.25
+transformers>=4.45
+peft>=0.12
+trl>=0.11
+datasets>=2.20
+accelerate>=0.34
+bitsandbytes>=0.43
+# unsloth - install separately per https://unsloth.ai/docs (GPU-specific)
+pyyaml>=6.0

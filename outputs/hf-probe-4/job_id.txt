@@ -1,0 +1,2 @@
+6b051f40c97b8ed4fcd74d73
+# attempt 4 — position scan + end-terminator reformulation (job_probe_v4.py); outputs under bucket prefix run4-probe/

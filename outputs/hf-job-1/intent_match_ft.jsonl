@@ -1,0 +1,60 @@
+{"id": "iface-0093", "family": "interface_mgmt", "pass": false, "checks_run": 9, "failures": [{"check": "hostname", "entity": "r2", "expected": "hostname router2", "found": "hostname router1"}]}
+{"id": "bgp-0043", "family": "bgp", "pass": false, "checks_run": 6, "failures": [{"check": "hostname", "entity": "r2", "expected": "hostname router2", "found": "hostname router1"}]}
+{"id": "vlan-0155", "family": "vlan_l2", "pass": true, "checks_run": 21, "failures": []}
+{"id": "bgp-0014", "family": "bgp", "pass": true, "checks_run": 7, "failures": []}
+{"id": "vlan-0012", "family": "vlan_l2", "pass": false, "checks_run": 10, "failures": [{"check": "hostname", "entity": "sw1", "expected": "hostname switch1", "found": "hostname switch2"}]}
+{"id": "trunk-0197", "family": "trunk_svi", "pass": false, "checks_run": 7, "failures": [{"check": "hostname", "entity": "sw8", "expected": "hostname switch8", "found": "hostname switch2"}]}
+{"id": "trunk-0151", "family": "trunk_svi", "pass": false, "checks_run": 10, "failures": [{"check": "hostname", "entity": "sw4", "expected": "hostname switch4", "found": "hostname switch2"}]}
+{"id": "trunk-0156", "family": "trunk_svi", "pass": true, "checks_run": 13, "failures": []}
+{"id": "trunk-0041", "family": "trunk_svi", "pass": false, "checks_run": 8, "failures": [{"check": "hostname", "entity": "sw3", "expected": "hostname switch3", "found": "hostname switch1"}]}
+{"id": "vlan-0068", "family": "vlan_l2", "pass": true, "checks_run": 11, "failures": []}
+{"id": "ospf-0113", "family": "ospf", "pass": true, "checks_run": 15, "failures": []}
+{"id": "vlan-0189", "family": "vlan_l2", "pass": false, "checks_run": 13, "failures": [{"check": "hostname", "entity": "core2", "expected": "hostname core2", "found": "hostname switch2"}]}
+{"id": "vlan-0033", "family": "vlan_l2", "pass": false, "checks_run": 8, "failures": [{"check": "hostname", "entity": "sw3", "expected": "hostname switch3", "found": "hostname switch2"}]}
+{"id": "bgp-0013", "family": "bgp", "pass": false, "checks_run": 5, "failures": [{"check": "hostname", "entity": "r2", "expected": "hostname router2", "found": "hostname router1"}]}
+{"id": "ospf-0062", "family": "ospf", "pass": false, "checks_run": 6, "failures": [{"check": "hostname", "entity": "r2", "expected": "hostname router2", "found": "hostname router1"}]}
+{"id": "iface-0114", "family": "interface_mgmt", "pass": true, "checks_run": 9, "failures": []}
+{"id": "trunk-0043", "family": "trunk_svi", "pass": true, "checks_run": 7, "failures": []}
+{"id": "ospf-0018", "family": "ospf", "pass": false, "checks_run": 4, "failures": [{"check": "hostname", "entity": "r1", "expected": "hostname router1", "found": "hostname switch2"}]}
+{"id": "bgp-0114", "family": "bgp", "pass": true, "checks_run": 13, "failures": []}
+{"id": "static-0088", "family": "static_route", "pass": true, "checks_run": 6, "failures": []}
+{"id": "ospf-0013", "family": "ospf", "pass": false, "checks_run": 5, "failures": [{"check": "hostname", "entity": "r1", "expected": "hostname router1", "found": "hostname router2"}]}
+{"id": "iface-0107", "family": "interface_mgmt", "pass": true, "checks_run": 10, "failures": []}
+{"id": "trunk-0021", "family": "trunk_svi", "pass": true, "checks_run": 6, "failures": []}
+{"id": "trunk-0195", "family": "trunk_svi", "pass": false, "checks_run": 9, "failures": [{"check": "hostname", "entity": "sw3", "expected": "hostname switch3", "found": "hostname switch2"}]}
+{"id": "ospf-0059", "family": "ospf", "pass": false, "checks_run": 8, "failures": [{"check": "hostname", "entity": "r1", "expected": "hostname router1", "found": "hostname switch2"}]}
+{"id": "iface-0023", "family": "interface_mgmt", "pass": false, "checks_run": 5, "failures": [{"check": "hostname", "entity": "r2", "expected": "hostname router2", "found": "hostname router1"}]}
+{"id": "static-0150", "family": "static_route", "pass": false, "checks_run": 10, "failures": [{"check": "hostname", "entity": "edge2", "expected": "hostname edge2", "found": "hostname router2"}]}
+{"id": "vlan-0084", "family": "vlan_l2", "pass": true, "checks_run": 8, "failures": []}
+{"id": "static-0181", "family": "static_route", "pass": false, "checks_run": 10, "failures": [{"check": "hostname", "entity": "r5", "expected": "hostname router5", "found": "hostname router1"}]}
+{"id": "bgp-0070", "family": "bgp", "pass": false, "checks_run": 6, "failures": [{"check": "hostname", "entity": "r1", "expected": "hostname router1", "found": "hostname router2"}]}
+{"id": "iface-0178", "family": "interface_mgmt", "pass": true, "checks_run": 15, "failures": []}
+{"id": "static-0176", "family": "static_route", "pass": true, "checks_run": 9, "failures": []}
+{"id": "iface-0004", "family": "interface_mgmt", "pass": true, "checks_run": 5, "failures": []}
+{"id": "vlan-0097", "family": "vlan_l2", "pass": false, "checks_run": 6, "failures": [{"check": "hostname", "entity": "sw3", "expected": "hostname switch3", "found": "hostname router2"}]}
+{"id": "vlan-0013", "family": "vlan_l2", "pass": false, "checks_run": 6, "failures": [{"check": "hostname", "entity": "sw1", "expected": "hostname switch1", "found": "hostname switch2"}]}
+{"id": "bgp-0003", "family": "bgp", "pass": true, "checks_run": 6, "failures": []}
+{"id": "trunk-0147", "family": "trunk_svi", "pass": true, "checks_run": 8, "failures": []}
+{"id": "ospf-0035", "family": "ospf", "pass": false, "checks_run": 5, "failures": [{"check": "hostname", "entity": "core1", "expected": "hostname core1", "found": "hostname router1"}]}
+{"id": "ospf-0101", "family": "ospf", "pass": true, "checks_run": 6, "failures": []}
+{"id": "iface-0042", "family": "interface_mgmt", "pass": true, "checks_run": 6, "failures": []}
+{"id": "bgp-0091", "family": "bgp", "pass": true, "checks_run": 6, "failures": []}
+{"id": "ospf-0131", "family": "ospf", "pass": true, "checks_run": 10, "failures": []}
+{"id": "bgp-0080", "family": "bgp", "pass": true, "checks_run": 9, "failures": []}
+{"id": "bgp-0110", "family": "bgp", "pass": false, "checks_run": 10, "failures": [{"check": "hostname", "entity": "edge2", "expected": "hostname edge2", "found": "hostname router1"}, {"check": "bgp_network", "entity": "10.126.76.0/22", "expected": "network 10.126.76.0 mask 255.255.252.0", "found": "missing"}]}
+{"id": "static-0096", "family": "static_route", "pass": false, "checks_run": 3, "failures": [{"check": "hostname", "entity": "r2", "expected": "hostname router2", "found": "hostname router1"}]}
+{"id": "vlan-0169", "family": "vlan_l2", "pass": true, "checks_run": 18, "failures": []}
+{"id": "static-0047", "family": "static_route", "pass": false, "checks_run": 4, "failures": [{"check": "hostname", "entity": "r2", "expected": "hostname router2", "found": "hostname router1"}]}
+{"id": "trunk-0092", "family": "trunk_svi", "pass": false, "checks_run": 9, "failures": [{"check": "hostname", "entity": "sw3", "expected": "hostname switch3", "found": "hostname switch1"}]}
+{"id": "trunk-0099", "family": "trunk_svi", "pass": true, "checks_run": 6, "failures": []}
+{"id": "static-0178", "family": "static_route", "pass": true, "checks_run": 7, "failures": []}
+{"id": "static-0019", "family": "static_route", "pass": true, "checks_run": 3, "failures": []}
+{"id": "iface-0067", "family": "interface_mgmt", "pass": false, "checks_run": 4, "failures": [{"check": "hostname", "entity": "sw2", "expected": "hostname switch2", "found": "hostname switch1"}]}
+{"id": "vlan-0048", "family": "vlan_l2", "pass": true, "checks_run": 10, "failures": []}
+{"id": "bgp-0156", "family": "bgp", "pass": true, "checks_run": 13, "failures": []}
+{"id": "ospf-0076", "family": "ospf", "pass": false, "checks_run": 7, "failures": [{"check": "hostname", "entity": "r1", "expected": "hostname router1", "found": "hostname switch2"}]}
+{"id": "static-0131", "family": "static_route", "pass": true, "checks_run": 7, "failures": []}
+{"id": "iface-0082", "family": "interface_mgmt", "pass": true, "checks_run": 9, "failures": []}
+{"id": "iface-0029", "family": "interface_mgmt", "pass": true, "checks_run": 6, "failures": []}
+{"id": "ospf-0194", "family": "ospf", "pass": true, "checks_run": 12, "failures": []}
+{"id": "static-0079", "family": "static_route", "pass": true, "checks_run": 4, "failures": []}

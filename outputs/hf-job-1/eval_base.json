@@ -1,0 +1,40 @@
+{
+  "model": "base",
+  "overall": {
+    "n": 60,
+    "parse_ok_pct": 100.0,
+    "mean_coverage": 0.706
+  },
+  "per_family": {
+    "bgp": {
+      "n": 10,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.78
+    },
+    "interface_mgmt": {
+      "n": 10,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.642
+    },
+    "ospf": {
+      "n": 10,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.729
+    },
+    "static_route": {
+      "n": 10,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.677
+    },
+    "trunk_svi": {
+      "n": 10,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.61
+    },
+    "vlan_l2": {
+      "n": 10,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.8
+    }
+  }
+}

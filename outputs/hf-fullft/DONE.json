@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "elapsed_min": 76.1,
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "ending_check_ok": true,
+  "assertion_passed": true,
+  "train_loss": 0.025426902069156706,
+  "stopped_cleanly_pct": 94.8,
+  "model_dir": "model/"
+}

@@ -1,0 +1,18 @@
+{
+  "status": "completed",
+  "elapsed_min": 246.2,
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "base_eval": {
+    "n": 252,
+    "parse_ok_pct": 100.0,
+    "mean_coverage": 0.699,
+    "stopped_cleanly_pct": 20.2
+  },
+  "ft_eval": {
+    "n": 252,
+    "parse_ok_pct": 100.0,
+    "mean_coverage": 0.986,
+    "stopped_cleanly_pct": 0.0
+  },
+  "train_loss": 0.04466035062378695
+}

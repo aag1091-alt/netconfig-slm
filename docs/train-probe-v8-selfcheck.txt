@@ -1,0 +1,31 @@
+PASS tokenizer shim: 'test<|im_end|>' -> [1944, 151645]
+local data: 4496 train / 252 test
+PASS subset size: 256 rows
+PASS subset family counts: {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}
+PASS short-quartile rows: 102 rows, per-family {'bgp': 17, 'interface_mgmt': 17, 'ospf': 17, 'static_route': 17, 'trunk_svi': 17, 'vlan_l2': 17}, threshold 281 tokens
+PASS subset identical to attempt 4: id list (incl. order) matches run4 RUN_INFO subset_ids
+PASS subset counts identical to attempt 4: counts {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}, threshold 281
+PASS heldout identical to attempt 4: 24 rows: ['bgp-0763', 'bgp-0238', 'bgp-0392', 'bgp-0175']...
+PASS heldout families: 4 per family
+PASS ending check (train subset): {"tag": "train_subset", "checked": 256, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS ending check (held-out refs): {"tag": "heldout_refs", "checked": 24, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS CFG values: epochs=1, lr=0.0002, warmup=0.03
+PASS CFG target = attempt 4 list + lm_head: target=['q_proj', 'k_proj', 'v_proj', 'o_proj', 'gate_proj', 'up_proj', 'down_proj', 'lm_head']
+PASS build_trainer guards: logging_steps=2, probe8 output dir
+PASS no modules_to_save in any LoraConfig call: LoraConfig kwargs seen: ['lora_alpha', 'lora_dropout', 'r', 'target_modules', 'task_type']
+PASS no gradient_checkpointing in any SFTConfig call: SFTConfig kwargs seen: ['bf16', 'completion_only_loss', 'gradient_accumulation_steps', 'learning_rate', 'logging_steps', 'lr_scheduler_type', 'max_length', 'num_train_epochs', 'output_dir', 'per_device_train_batch_size', 'report_to', 'save_strategy', 'warmup_ratio']
+PASS cached config ties embeddings: tie_word_embeddings=True, vocab=151936, hidden=2560, layers=36
+PASS tied build: lm_head IS embed_tokens (sanity): weight identity holds under tie=True
+PASS untied_config flips the flag: tie_word_embeddings=False
+PASS untied build: lm_head is a DISTINCT tensor: weight identity broken under tie=False
+PASS LoraConfig built as in main(): target_modules={'q_proj', 'up_proj', 'v_proj', 'lm_head', 'k_proj', 'down_proj', 'o_proj', 'gate_proj'}, modules_to_save=None
+PASS PEFT accepts lm_head as a LoRA target (untied): get_peft_model wrapped the untied model
+PASS LoRA targets found: {"count": 253, "has_lm_head": true, "has_embed_tokens": false, "lm_head_entries": ["base_model.model.lm_head"], "sample": ["base_model.model.model.layers.0.self_attn.q_proj", "base_model.model.model.layers.0.self_attn.k_proj", "base_model.model.model.layers.0.self_attn.v_proj", "base_model.model.model.layers.0.self_attn.o_proj", "base_model.model.model.layers.0.mlp.gate_proj"]}
+PASS lm_head LoRA factor shapes: lora_A (16, 2560), lora_B (151936, 16), module Linear
+PASS tie_report on PeftModel (untie intact): {"tie_word_embeddings_config": false, "lm_head_module_type": "Linear", "embed_tokens_module_type": "Embedding", "active_weights_tied": false, "original_weights_tied": false, "lm_head_weight_requires_grad": false, "error": null}
+PASS untie_check repairs a diverged lm_head: {"tag": "tiny_scrambled", "same_tensor": false, "lm_head_module_type": "Linear", "embed_tokens_module_type": "Embedding", "tie_word_embeddings_config": false, "max_abs_diff_before": 4.084437370300293, "row151645_max_abs_diff_before": null, "values_copied_from_embed": true, "max_abs_diff_after": 0.0, "error": null}
+PASS untie_check leaves an equal lm_head untouched: {"tag": "tiny_equal", "same_tensor": false, "lm_head_module_type": "Linear", "embed_tokens_module_type": "Embedding", "tie_word_embeddings_config": false, "max_abs_diff_before": 0.0, "row151645_max_abs_diff_before": null, "values_copied_from_embed": false, "max_abs_diff_after": 0.0, "error": null}
+PASS adapter movement check runs, delta > 0: {"tag": "adapter", "row": 7, "method": "analytic merged-equivalent (base row + scaling * (B@A)[row])", "delta_l2": 0.33672085404396057, "row_l2": 0.3732968866825104, "base_row_l2": 0.12748503684997559}
+PASS analytic merged row == true merge row: max abs diff 7.45e-09
+PASS embed row unmoved by the merge: {"tag": "merged_embed_tokens", "row": 7, "delta_l2": 0.0, "row_l2": 0.1108025535941124, "base_row_l2": 0.1108025535941124}
+ALL PROBE V8 SELF-CHECKS PASSED

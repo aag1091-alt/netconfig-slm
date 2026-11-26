@@ -1,0 +1,58 @@
+{
+  "elapsed_min": 36.9,
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "ending_check_ok": true,
+  "position_scan": {
+    "ospf-0249": {
+      "p_eos_at_boundary": 0.0004278480482753366,
+      "p_eos_max": 0.0004278480482753366,
+      "max_offset_from_boundary": 0
+    },
+    "bgp-0763": {
+      "p_eos_at_boundary": 0.0004272814840078354,
+      "p_eos_max": 0.0004272814840078354,
+      "max_offset_from_boundary": 0
+    },
+    "vlan-0539": {
+      "p_eos_at_boundary": 0.0004291645309422165,
+      "p_eos_max": 0.0004291645309422165,
+      "max_offset_from_boundary": 0
+    },
+    "iface-0133": {
+      "p_eos_at_boundary": 0.00042805116390809417,
+      "p_eos_max": 0.00042805116390809417,
+      "max_offset_from_boundary": 0
+    }
+  },
+  "tie_info": {
+    "tie_word_embeddings_config": true,
+    "lm_head_module_type": "ModulesToSaveWrapper",
+    "embed_tokens_module_type": "Embedding",
+    "active_weights_tied": false,
+    "original_weights_tied": true,
+    "lm_head_weight_requires_grad": true,
+    "error": null
+  },
+  "lm_head_check": {
+    "base_row_l2": 0.3565717339515686,
+    "adapter": {
+      "tag": "adapter",
+      "row": 151645,
+      "delta_l2": NaN,
+      "row_l2": NaN,
+      "base_row_l2": 0.3565717339515686
+    },
+    "merged": {
+      "tag": "merged",
+      "row": 151645,
+      "delta_l2": NaN,
+      "row_l2": NaN,
+      "base_row_l2": 0.3565717339515686
+    }
+  },
+  "assertion_passed": true,
+  "adapter_stopped_cleanly_pct": 0.0,
+  "merged_stopped_cleanly_pct": 0.0,
+  "train_loss": 0.5730028748512268,
+  "status": "completed"
+}

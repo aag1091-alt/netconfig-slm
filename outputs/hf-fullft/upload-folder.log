@@ -1,0 +1,31 @@
+Upload 4 LFS files:   0%|          | 0/4 [00:00<?, ?it/s]
+model-00001-of-00002.safetensors:   0%|          | 0.00/4.97G [00:00<?, ?B/s][A
+
+model-00002-of-00002.safetensors:   0%|          | 0.00/3.08G [00:00<?, ?B/s][A[A
+
+
+tokenizer.json:   0%|          | 0.00/11.4M [00:00<?, ?B/s][A[A[A
+
+
+
+training_args.bin:   0%|          | 0.00/5.82k [00:00<?, ?B/s][A[A[A[A
+
+model-00002-of-00002.safetensors:   0%|          | 16.4k/3.08G [00:00<13:56:24, 61.3kB/s][A[A
+model-00001-of-00002.safetensors:   0%|          | 16.4k/4.97G [00:00<23:34:46, 58.5kB/s][A
+
+
+
+training_args.bin: 100%|██████████| 5.82k/5.82k [00:00<00:00, 18.1kB/s][A[A[A[A
+
+
+tokenizer.json:   0%|          | 16.4k/11.4M [00:00<03:53, 48.8kB/s][A[A[A
+model-00001-of-00002.safetensors:   0%|          | 524k/4.97G [00:19<23:34:37, 58.5kB/s] [A
+
+
+tokenizer.json:   5%|▍         | 524k/11.4M [00:19<03:43, 48.8kB/s] [A[A[A
+
+
+
+training_args.bin: 100%|██████████| 5.82k/5.82k [00:19<00:00, 18.1kB/s][A[A[A[A
+
+model-00002-of-00002.safetensors:   0%|          | 524k/3.08G [00:19<13:56:15, 61.3kB/s] [A[A

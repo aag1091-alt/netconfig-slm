@@ -1,0 +1,6 @@
+{
+ "id": "iface-0061",
+ "family": "interface_mgmt",
+ "intent": "On r2, shut down GigabitEthernet0/0/7 and set its description to Decommissioned - shut",
+ "config": "hostname router2\n!\ninterface GigabitEthernet0/0/7\n description Decommissioned - shut\n shutdown\n"
+}

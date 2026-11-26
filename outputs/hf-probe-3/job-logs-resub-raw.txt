@@ -1,0 +1,502 @@
+data: {"data":"===== Job started at 2026-11-24 04:16:18 =====","timestamp":"2026-11-24T04:16:18Z"}
+
+data: {"data":"Requirement already satisfied: torch==2.5.1 in /opt/conda/lib/python3.11/site-packages (2.5.1+cu124)","timestamp":"2026-11-24T04:16:23.660Z"}
+
+data: {"data":"Requirement already satisfied: torchvision==0.20.1 in /opt/conda/lib/python3.11/site-packages (0.20.1+cu124)","timestamp":"2026-11-24T04:16:23.660Z"}
+
+data: {"data":"Requirement already satisfied: torchaudio==2.5.1 in /opt/conda/lib/python3.11/site-packages (2.5.1+cu124)","timestamp":"2026-11-24T04:16:23.660Z"}
+
+data: {"data":"Collecting transformers<4.58,>=4.51","timestamp":"2026-11-24T04:16:23.823Z"}
+
+data: {"data":"  Downloading transformers-4.57.6-py3-none-any.whl.metadata (43 kB)","timestamp":"2026-11-24T04:16:23.892Z"}
+
+data: {"data":"Collecting trl<0.26,>=0.19","timestamp":"2026-11-24T04:16:24.116Z"}
+
+data: {"data":"  Downloading trl-0.25.1-py3-none-any.whl.metadata (11 kB)","timestamp":"2026-11-24T04:16:24.132Z"}
+
+data: {"data":"Collecting peft<0.19,>=0.17","timestamp":"2026-11-24T04:16:24.185Z"}
+
+data: {"data":"  Downloading peft-0.18.1-py3-none-any.whl.metadata (14 kB)","timestamp":"2026-11-24T04:16:24.220Z"}
+
+data: {"data":"Collecting bitsandbytes>=0.47","timestamp":"2026-11-24T04:16:24.256Z"}
+
+data: {"data":"  Downloading bitsandbytes-0.50.2-py3-none-manylinux_2_24_x86_64.whl.metadata (10 kB)","timestamp":"2026-11-24T04:16:24.272Z"}
+
+data: {"data":"Collecting accelerate>=1.4","timestamp":"2026-11-24T04:16:24.315Z"}
+
+data: {"data":"  Downloading accelerate-1.16.0-py3-none-any.whl.metadata (19 kB)","timestamp":"2026-11-24T04:16:24.331Z"}
+
+data: {"data":"Collecting datasets<4,>=3.2","timestamp":"2026-11-24T04:16:24.389Z"}
+
+data: {"data":"  Downloading datasets-3.6.0-py3-none-any.whl.metadata (19 kB)","timestamp":"2026-11-24T04:16:24.407Z"}
+
+data: {"data":"Requirement already satisfied: filelock in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (3.16.1)","timestamp":"2026-11-24T04:16:24.436Z"}
+
+data: {"data":"Requirement already satisfied: typing-extensions>=4.8.0 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (4.12.2)","timestamp":"2026-11-24T04:16:24.436Z"}
+
+data: {"data":"Requirement already satisfied: networkx in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (3.4.2)","timestamp":"2026-11-24T04:16:24.437Z"}
+
+data: {"data":"Requirement already satisfied: jinja2 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (3.1.4)","timestamp":"2026-11-24T04:16:24.437Z"}
+
+data: {"data":"Requirement already satisfied: fsspec in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (2024.10.0)","timestamp":"2026-11-24T04:16:24.437Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (12.4.127)","timestamp":"2026-11-24T04:16:24.438Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cuda-runtime-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (12.4.127)","timestamp":"2026-11-24T04:16:24.438Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cuda-cupti-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (12.4.127)","timestamp":"2026-11-24T04:16:24.438Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (9.1.0.70)","timestamp":"2026-11-24T04:16:24.439Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cublas-cu12==12.4.5.8 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (12.4.5.8)","timestamp":"2026-11-24T04:16:24.439Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cufft-cu12==11.2.1.3 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (11.2.1.3)","timestamp":"2026-11-24T04:16:24.440Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-curand-cu12==10.3.5.147 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (10.3.5.147)","timestamp":"2026-11-24T04:16:24.440Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cusolver-cu12==11.6.1.9 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (11.6.1.9)","timestamp":"2026-11-24T04:16:24.441Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-cusparse-cu12==12.3.1.170 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (12.3.1.170)","timestamp":"2026-11-24T04:16:24.441Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-nccl-cu12==2.21.5 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (2.21.5)","timestamp":"2026-11-24T04:16:24.442Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-nvtx-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (12.4.127)","timestamp":"2026-11-24T04:16:24.442Z"}
+
+data: {"data":"Requirement already satisfied: nvidia-nvjitlink-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (12.4.127)","timestamp":"2026-11-24T04:16:24.442Z"}
+
+data: {"data":"Requirement already satisfied: triton==3.1.0 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (3.1.0)","timestamp":"2026-11-24T04:16:24.443Z"}
+
+data: {"data":"Requirement already satisfied: sympy==1.13.1 in /opt/conda/lib/python3.11/site-packages (from torch==2.5.1) (1.13.1)","timestamp":"2026-11-24T04:16:24.443Z"}
+
+data: {"data":"Requirement already satisfied: numpy in /opt/conda/lib/python3.11/site-packages (from torchvision==0.20.1) (2.1.2)","timestamp":"2026-11-24T04:16:24.445Z"}
+
+data: {"data":"Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /opt/conda/lib/python3.11/site-packages (from torchvision==0.20.1) (10.2.0)","timestamp":"2026-11-24T04:16:24.445Z"}
+
+data: {"data":"Requirement already satisfied: mpmath<1.4,>=1.1.0 in /opt/conda/lib/python3.11/site-packages (from sympy==1.13.1->torch==2.5.1) (1.3.0)","timestamp":"2026-11-24T04:16:24.455Z"}
+
+data: {"data":"Collecting huggingface-hub<1.0,>=0.34.0 (from transformers<4.58,>=4.51)","timestamp":"2026-11-24T04:16:24.576Z"}
+
+data: {"data":"  Downloading huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)","timestamp":"2026-11-24T04:16:24.591Z"}
+
+data: {"data":"Requirement already satisfied: packaging>=20.0 in /opt/conda/lib/python3.11/site-packages (from transformers<4.58,>=4.51) (24.1)","timestamp":"2026-11-24T04:16:24.619Z"}
+
+data: {"data":"Requirement already satisfied: pyyaml>=5.1 in /opt/conda/lib/python3.11/site-packages (from transformers<4.58,>=4.51) (6.0.2)","timestamp":"2026-11-24T04:16:24.619Z"}
+
+data: {"data":"Collecting regex!=2019.12.17 (from transformers<4.58,>=4.51)","timestamp":"2026-11-24T04:16:25.219Z"}
+
+data: {"data":"  Downloading regex-2026.11.23-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)","timestamp":"2026-11-24T04:16:25.234Z"}
+
+data: {"data":"Requirement already satisfied: requests in /opt/conda/lib/python3.11/site-packages (from transformers<4.58,>=4.51) (2.32.3)","timestamp":"2026-11-24T04:16:25.241Z"}
+
+data: {"data":"Collecting tokenizers<=0.23.0,>=0.22.0 (from transformers<4.58,>=4.51)","timestamp":"2026-11-24T04:16:25.419Z"}
+
+data: {"data":"  Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)","timestamp":"2026-11-24T04:16:25.434Z"}
+
+data: {"data":"Collecting safetensors>=0.4.3 (from transformers<4.58,>=4.51)","timestamp":"2026-11-24T04:16:25.620Z"}
+
+data: {"data":"  Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.2 kB)","timestamp":"2026-11-24T04:16:25.635Z"}
+
+data: {"data":"Requirement already satisfied: tqdm>=4.27 in /opt/conda/lib/python3.11/site-packages (from transformers<4.58,>=4.51) (4.66.5)","timestamp":"2026-11-24T04:16:25.643Z"}
+
+data: {"data":"Requirement already satisfied: psutil in /opt/conda/lib/python3.11/site-packages (from peft<0.19,>=0.17) (6.1.0)","timestamp":"2026-11-24T04:16:25.666Z"}
+
+data: {"data":"INFO: pip is looking at multiple versions of accelerate to determine which version is compatible with other requirements. This could take a while.","timestamp":"2026-11-24T04:16:25.764Z"}
+
+data: {"data":"Collecting accelerate>=1.4","timestamp":"2026-11-24T04:16:25.764Z"}
+
+data: {"data":"  Downloading accelerate-1.15.0-py3-none-any.whl.metadata (19 kB)","timestamp":"2026-11-24T04:16:25.782Z"}
+
+data: {"data":"Collecting pyarrow>=15.0.0 (from datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:25.935Z"}
+
+data: {"data":"  Downloading pyarrow-26.0.1-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (3.0 kB)","timestamp":"2026-11-24T04:16:25.950Z"}
+
+data: {"data":"Collecting dill<0.3.9,>=0.3.0 (from datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:25.977Z"}
+
+data: {"data":"  Downloading dill-0.3.8-py3-none-any.whl.metadata (10 kB)","timestamp":"2026-11-24T04:16:25.993Z"}
+
+data: {"data":"Collecting pandas (from datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:26.164Z"}
+
+data: {"data":"  Downloading pandas-3.1.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (16 kB)","timestamp":"2026-11-24T04:16:26.179Z"}
+
+data: {"data":"Collecting xxhash (from datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:26.496Z"}
+
+data: {"data":"  Downloading xxhash-4.1.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (18 kB)","timestamp":"2026-11-24T04:16:26.513Z"}
+
+data: {"data":"Collecting multiprocess<0.70.17 (from datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:26.550Z"}
+
+data: {"data":"  Downloading multiprocess-0.70.16-py311-none-any.whl.metadata (7.2 kB)","timestamp":"2026-11-24T04:16:26.566Z"}
+
+data: {"data":"Collecting aiohttp!=4.0.0a0,!=4.0.0a1 (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:27.321Z"}
+
+data: {"data":"  Downloading aiohttp-3.14.5-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.3 kB)","timestamp":"2026-11-24T04:16:27.337Z"}
+
+data: {"data":"Collecting hf-xet<2.0.0,>=1.1.3 (from huggingface-hub<1.0,>=0.34.0->transformers<4.58,>=4.51)","timestamp":"2026-11-24T04:16:27.412Z"}
+
+data: {"data":"  Downloading hf_xet-1.8.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)","timestamp":"2026-11-24T04:16:27.438Z"}
+
+data: {"data":"Requirement already satisfied: charset-normalizer<4,>=2 in /opt/conda/lib/python3.11/site-packages (from requests->transformers<4.58,>=4.51) (3.4.0)","timestamp":"2026-11-24T04:16:27.455Z"}
+
+data: {"data":"Requirement already satisfied: idna<4,>=2.5 in /opt/conda/lib/python3.11/site-packages (from requests->transformers<4.58,>=4.51) (3.10)","timestamp":"2026-11-24T04:16:27.455Z"}
+
+data: {"data":"Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/conda/lib/python3.11/site-packages (from requests->transformers<4.58,>=4.51) (2.2.3)","timestamp":"2026-11-24T04:16:27.455Z"}
+
+data: {"data":"Requirement already satisfied: certifi>=2017.4.17 in /opt/conda/lib/python3.11/site-packages (from requests->transformers<4.58,>=4.51) (2024.8.30)","timestamp":"2026-11-24T04:16:27.456Z"}
+
+data: {"data":"Requirement already satisfied: MarkupSafe>=2.0 in /opt/conda/lib/python3.11/site-packages (from jinja2->torch==2.5.1) (3.0.2)","timestamp":"2026-11-24T04:16:27.486Z"}
+
+data: {"data":"Collecting python-dateutil>=2.9.0 (from pandas->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:27.518Z"}
+
+data: {"data":"  Downloading python_dateutil-4.0.0-py3-none-any.whl.metadata (7.3 kB)","timestamp":"2026-11-24T04:16:27.533Z"}
+
+data: {"data":"Collecting aiohappyeyeballs>=2.5.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:27.571Z"}
+
+data: {"data":"  Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl.metadata (5.9 kB)","timestamp":"2026-11-24T04:16:27.586Z"}
+
+data: {"data":"Collecting aiosignal>=1.4.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:27.609Z"}
+
+data: {"data":"  Downloading aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)","timestamp":"2026-11-24T04:16:27.624Z"}
+
+data: {"data":"Requirement already satisfied: attrs>=17.3.0 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2) (24.2.0)","timestamp":"2026-11-24T04:16:27.627Z"}
+
+data: {"data":"Collecting frozenlist>=1.1.1 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:27.791Z"}
+
+data: {"data":"  Downloading frozenlist-1.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (20 kB)","timestamp":"2026-11-24T04:16:27.806Z"}
+
+data: {"data":"Collecting multidict<8.0,>=4.5 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:28.171Z"}
+
+data: {"data":"  Downloading multidict-7.2.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (6.1 kB)","timestamp":"2026-11-24T04:16:28.186Z"}
+
+data: {"data":"Collecting propcache>=0.2.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:28.282Z"}
+
+data: {"data":"  Downloading propcache-0.5.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (25 kB)","timestamp":"2026-11-24T04:16:28.297Z"}
+
+data: {"data":"Collecting yarl<2.0,>=1.25.1 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:28.719Z"}
+
+data: {"data":"  Downloading yarl-1.25.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (111 kB)","timestamp":"2026-11-24T04:16:28.734Z"}
+
+data: {"data":"Collecting tzdata (from python-dateutil>=2.9.0->pandas->datasets<4,>=3.2)","timestamp":"2026-11-24T04:16:28.812Z"}
+
+data: {"data":"  Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)","timestamp":"2026-11-24T04:16:28.827Z"}
+
+data: {"data":"Downloading transformers-4.57.6-py3-none-any.whl (12.0 MB)","timestamp":"2026-11-24T04:16:28.876Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 23.8 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:29.400Z"}
+
+data: {"data":"Downloading trl-0.25.1-py3-none-any.whl (465 kB)","timestamp":"2026-11-24T04:16:29.436Z"}
+
+data: {"data":"Downloading peft-0.18.1-py3-none-any.whl (556 kB)","timestamp":"2026-11-24T04:16:29.459Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 557.0/557.0 kB 51.3 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:29.470Z"}
+
+data: {"data":"Downloading bitsandbytes-0.50.2-py3-none-manylinux_2_24_x86_64.whl (43.1 MB)","timestamp":"2026-11-24T04:16:29.486Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 43.1/43.1 MB 99.0 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:29.924Z"}
+
+data: {"data":"Downloading accelerate-1.15.0-py3-none-any.whl (394 kB)","timestamp":"2026-11-24T04:16:29.940Z"}
+
+data: {"data":"Downloading datasets-3.6.0-py3-none-any.whl (491 kB)","timestamp":"2026-11-24T04:16:29.959Z"}
+
+data: {"data":"Downloading dill-0.3.8-py3-none-any.whl (116 kB)","timestamp":"2026-11-24T04:16:29.977Z"}
+
+data: {"data":"Downloading huggingface_hub-0.36.2-py3-none-any.whl (566 kB)","timestamp":"2026-11-24T04:16:29.994Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 116.8 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:29.999Z"}
+
+data: {"data":"Downloading multiprocess-0.70.16-py311-none-any.whl (143 kB)","timestamp":"2026-11-24T04:16:30.016Z"}
+
+data: {"data":"Downloading pyarrow-26.0.1-cp311-cp311-manylinux_2_28_x86_64.whl (55.0 MB)","timestamp":"2026-11-24T04:16:30.033Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 55.0/55.0 MB 174.8 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:30.349Z"}
+
+data: {"data":"Downloading regex-2026.11.23-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (806 kB)","timestamp":"2026-11-24T04:16:30.364Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 806.0/806.0 kB 145.8 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:30.370Z"}
+
+data: {"data":"Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)","timestamp":"2026-11-24T04:16:30.385Z"}
+
+data: {"data":"Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)","timestamp":"2026-11-24T04:16:30.405Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 163.6 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:30.425Z"}
+
+data: {"data":"Downloading pandas-3.1.1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.4 MB)","timestamp":"2026-11-24T04:16:30.444Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.4/12.4 MB 138.5 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:30.533Z"}
+
+data: {"data":"Downloading xxhash-4.1.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (471 kB)","timestamp":"2026-11-24T04:16:30.549Z"}
+
+data: {"data":"Downloading aiohttp-3.14.5-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.9 MB)","timestamp":"2026-11-24T04:16:30.567Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.9/1.9 MB 197.5 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:30.578Z"}
+
+data: {"data":"Downloading hf_xet-1.8.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)","timestamp":"2026-11-24T04:16:30.593Z"}
+
+data: {"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 176.5 MB/s eta 0:00:00","timestamp":"2026-11-24T04:16:30.617Z"}
+
+data: {"data":"Downloading python_dateutil-4.0.0-py3-none-any.whl (92 kB)","timestamp":"2026-11-24T04:16:30.633Z"}
+
+data: {"data":"Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl (15 kB)","timestamp":"2026-11-24T04:16:30.650Z"}
+
+data: {"data":"Downloading aiosignal-1.4.0-py3-none-any.whl (7.5 kB)","timestamp":"2026-11-24T04:16:30.666Z"}
+
+data: {"data":"Downloading frozenlist-1.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (231 kB)","timestamp":"2026-11-24T04:16:30.683Z"}
+
+data: {"data":"Downloading multidict-7.2.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (510 kB)","timestamp":"2026-11-24T04:16:30.701Z"}
+
+data: {"data":"Downloading propcache-0.5.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (235 kB)","timestamp":"2026-11-24T04:16:30.719Z"}
+
+data: {"data":"Downloading yarl-1.25.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (117 kB)","timestamp":"2026-11-24T04:16:30.736Z"}
+
+data: {"data":"Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)","timestamp":"2026-11-24T04:16:30.754Z"}
+
+data: {"data":"Installing collected packages: xxhash, tzdata, safetensors, regex, pyarrow, propcache, multidict, hf-xet, frozenlist, dill, aiohappyeyeballs, yarl, python-dateutil, multiprocess, huggingface-hub, aiosignal, tokenizers, pandas, aiohttp, transformers, bitsandbytes, accelerate, peft, datasets, trl","timestamp":"2026-11-24T04:16:31.044Z"}
+
+data: {"data":"Successfully installed accelerate-1.15.0 aiohappyeyeballs-2.7.1 aiohttp-3.14.5 aiosignal-1.4.0 bitsandbytes-0.50.2 datasets-3.6.0 dill-0.3.8 frozenlist-1.8.0 hf-xet-1.8.0 huggingface-hub-0.36.2 multidict-7.2.1 multiprocess-0.70.16 pandas-3.1.1 peft-0.18.1 propcache-0.5.4 pyarrow-26.0.1 python-dateutil-4.0.0 regex-2026.11.23 safetensors-0.8.0 tokenizers-0.22.2 transformers-4.57.6 trl-0.25.1 tzdata-2026.6 xxhash-4.1.0 yarl-1.25.1","timestamp":"2026-11-24T04:16:44.247Z"}
+
+data: {"data":"WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable.It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.","timestamp":"2026-11-24T04:16:44.247Z"}
+
+data: {"data":"[probe] output mount OK, RUN_INFO written; versions: {'trl': '0.25.1', 'transformers': '4.57.6', 'peft': '0.18.1', 'datasets': '3.6.0', 'torch': '2.5.1+cu124', 'accelerate': '1.15.0', 'bitsandbytes': '0.50.2'}","timestamp":"2026-11-24T04:16:45.627Z"}
+
+data: {"data":"[probe] dataset ecf3d5a9a67a rows: 4496 train / 252 test","timestamp":"2026-11-24T04:16:46.014Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:48.767Z"}
+
+data: {"data":"\rtokenizer_config.json:   0%|          | 0.00/9.68k [00:00<?, ?B/s]\u001b[A\rtokenizer_config.json: 100%|██████████| 9.68k/9.68k [00:00<00:00, 61.6MB/s]","timestamp":"2026-11-24T04:16:48.767Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:48.826Z"}
+
+data: {"data":"\rvocab.json:   0%|          | 0.00/2.78M [00:00<?, ?B/s]\u001b[A\rvocab.json: 100%|██████████| 2.78M/2.78M [00:00<00:00, 29.8MB/s]","timestamp":"2026-11-24T04:16:48.919Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:48.957Z"}
+
+data: {"data":"\rmerges.txt:   0%|          | 0.00/1.67M [00:00<?, ?B/s]\u001b[A\rmerges.txt: 100%|██████████| 1.67M/1.67M [00:00<00:00, 21.6MB/s]","timestamp":"2026-11-24T04:16:49.034Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:49.077Z"}
+
+data: {"data":"\rtokenizer.json:   0%|          | 0.00/7.03M [00:00<?, ?B/s]\u001b[A\rtokenizer.json: 100%|██████████| 7.03M/7.03M [00:00<00:00, 32.9MB/s]","timestamp":"2026-11-24T04:16:49.291Z"}
+
+data: {"data":"[probe] subset: 256 rows {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}; heldout: 24 prompts","timestamp":"2026-11-24T04:16:50.774Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:51.882Z"}
+
+data: {"data":"\rconfig.json:   0%|          | 0.00/727 [00:00<?, ?B/s]\u001b[A\rconfig.json: 100%|██████████| 727/727 [00:00<00:00, 9.38MB/s]","timestamp":"2026-11-24T04:16:51.882Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:53.220Z"}
+
+data: {"data":"\rmodel.safetensors.index.json:   0%|          | 0.00/32.8k [00:00<?, ?B/s]\u001b[A\rmodel.safetensors.index.json: 100%|██████████| 32.8k/32.8k [00:00<00:00, 175MB/s]","timestamp":"2026-11-24T04:16:53.220Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:53.233Z"}
+
+data: {"data":"\rFetching 3 files:   0%|          | 0/3 [00:00<?, ?it/s]\u001b[A","timestamp":"2026-11-24T04:16:53.260Z"}
+
+data: {"data":"\rmodel-00003-of-00003.safetensors:   0%|          | 0.00/99.6M [00:00<?, ?B/s]\u001b[A","timestamp":"2026-11-24T04:16:53.262Z"}
+
+data: {"data":"\rmodel-00001-of-00003.safetensors:   0%|          | 0.00/3.96G [00:00<?, ?B/s]\u001b[A","timestamp":"2026-11-24T04:16:53.264Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:   0%|          | 0.00/3.99G [00:00<?, ?B/s]\u001b[A","timestamp":"2026-11-24T04:16:54.335Z"}
+
+data: {"data":"\rmodel-00003-of-00003.safetensors: 100%|██████████| 99.6M/99.6M [00:01<00:00, 92.7MB/s]\u001b[A\rmodel-00003-of-00003.safetensors: 100%|██████████| 99.6M/99.6M [00:01<00:00, 92.5MB/s]","timestamp":"2026-11-24T04:16:54.337Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:16:54.789Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:   1%|▏         | 49.9M/3.99G [00:01<02:00, 32.7MB/s]\u001b[A","timestamp":"2026-11-24T04:16:54.789Z"}
+
+data: {"data":"\rmodel-00001-of-00003.safetensors:   6%|▋         | 256M/3.96G [00:01<00:22, 168MB/s]\u001b[A","timestamp":"2026-11-24T04:16:56.040Z"}
+
+data: {"data":"\rmodel-00001-of-00003.safetensors:  17%|█▋        | 669M/3.96G [00:02<00:12, 255MB/s]\u001b[A","timestamp":"2026-11-24T04:16:56.544Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:   8%|▊         | 314M/3.99G [00:03<00:34, 106MB/s]  \u001b[A","timestamp":"2026-11-24T04:16:57.806Z"}
+
+data: {"data":"\rmodel-00001-of-00003.safetensors:  30%|██▉       | 1.18G/3.96G [00:04<00:10, 273MB/s]\u001b[A","timestamp":"2026-11-24T04:16:58.041Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:  23%|██▎       | 915M/3.99G [00:04<00:13, 233MB/s]\u001b[A","timestamp":"2026-11-24T04:16:58.831Z"}
+
+data: {"data":"\rmodel-00001-of-00003.safetensors:  54%|█████▎    | 2.12G/3.96G [00:05<00:03, 467MB/s]\u001b[A","timestamp":"2026-11-24T04:16:59.335Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:  39%|███▉      | 1.55G/3.99G [00:06<00:07, 322MB/s]\u001b[A","timestamp":"2026-11-24T04:17:00.790Z"}
+
+data: {"data":"\rmodel-00001-of-00003.safetensors:  70%|██████▉   | 2.77G/3.96G [00:07<00:02, 406MB/s]\u001b[A","timestamp":"2026-11-24T04:17:01.041Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:  56%|█████▌    | 2.22G/3.99G [00:07<00:05, 350MB/s]\u001b[A","timestamp":"2026-11-24T04:17:02.043Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:  72%|███████▏  | 2.89G/3.99G [00:08<00:02, 429MB/s]\u001b[A","timestamp":"2026-11-24T04:17:02.289Z"}
+
+data: {"data":"\rmodel-00001-of-00003.safetensors:  85%|████████▍ | 3.36G/3.96G [00:09<00:01, 401MB/s]\u001b[A\rmodel-00001-of-00003.safetensors: 100%|██████████| 3.96G/3.96G [00:09<00:00, 400MB/s]","timestamp":"2026-11-24T04:17:03.157Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:03.158Z"}
+
+data: {"data":"\rFetching 3 files:  33%|███▎      | 1/3 [00:09<00:19,  9.92s/it]\u001b[A","timestamp":"2026-11-24T04:17:03.290Z"}
+
+data: {"data":"\rmodel-00002-of-00003.safetensors:  94%|█████████▍| 3.76G/3.99G [00:10<00:00, 512MB/s]\u001b[A\rmodel-00002-of-00003.safetensors: 100%|██████████| 3.99G/3.99G [00:10<00:00, 364MB/s]","timestamp":"2026-11-24T04:17:04.228Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:04.229Z"}
+
+data: {"data":"\rFetching 3 files:  67%|██████▋   | 2/3 [00:10<00:04,  4.72s/it]\u001b[A\rFetching 3 files: 100%|██████████| 3/3 [00:10<00:00,  3.67s/it]","timestamp":"2026-11-24T04:17:04.229Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:04.566Z"}
+
+data: {"data":"\rLoading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]\u001b[A","timestamp":"2026-11-24T04:17:07.377Z"}
+
+data: {"data":"\rLoading checkpoint shards:  33%|███▎      | 1/3 [00:02<00:05,  2.81s/it]\u001b[A","timestamp":"2026-11-24T04:17:10.705Z"}
+
+data: {"data":"\rLoading checkpoint shards:  67%|██████▋   | 2/3 [00:06<00:03,  3.11s/it]\u001b[A\rLoading checkpoint shards: 100%|██████████| 3/3 [00:06<00:00,  2.08s/it]","timestamp":"2026-11-24T04:17:10.792Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:10.815Z"}
+
+data: {"data":"\rgeneration_config.json:   0%|          | 0.00/138 [00:00<?, ?B/s]\u001b[A\rgeneration_config.json: 100%|██████████| 138/138 [00:00<00:00, 2.08MB/s]","timestamp":"2026-11-24T04:17:10.815Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:24.246Z"}
+
+data: {"data":"\rAdding EOS to train dataset:   0%|          | 0/256 [00:00<?, ? examples/s]\u001b[A\rAdding EOS to train dataset: 100%|██████████| 256/256 [00:00<00:00, 30063.33 examples/s]","timestamp":"2026-11-24T04:17:24.254Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:24.337Z"}
+
+data: {"data":"\rTokenizing train dataset:   0%|          | 0/256 [00:00<?, ? examples/s]\u001b[A\rTokenizing train dataset: 100%|██████████| 256/256 [00:00<00:00, 933.65 examples/s]","timestamp":"2026-11-24T04:17:24.611Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:24.613Z"}
+
+data: {"data":"\rTruncating train dataset:   0%|          | 0/256 [00:00<?, ? examples/s]\u001b[A\rTruncating train dataset: 100%|██████████| 256/256 [00:00<00:00, 93498.94 examples/s]","timestamp":"2026-11-24T04:17:24.616Z"}
+
+data: {"data":"[probe] ASSERTION PASSED: every row's last non-pad label == 151645; row0 last5 ids: [16, 20, 15, 198, 151645] row0 last label: 151645","timestamp":"2026-11-24T04:17:24.631Z"}
+
+data: {"data":"The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 151645, 'bos_token_id': None, 'pad_token_id': 151643}.","timestamp":"2026-11-24T04:17:24.631Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:24.905Z"}
+
+data: {"data":"\r  0%|          | 0/16 [00:00<?, ?it/s]\u001b[A/opt/conda/lib/python3.11/site-packages/torch/_dynamo/eval_frame.py:632: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.","timestamp":"2026-11-24T04:17:25.058Z"}
+
+data: {"data":"  return fn(*args, **kwargs)","timestamp":"2026-11-24T04:17:25.058Z"}
+
+data: {"data":"","timestamp":"2026-11-24T04:17:36.613Z"}
+
+data: {"data":"\r  6%|▋         | 1/16 [00:11<02:55, 11.71s/it]\u001b[A","timestamp":"2026-11-24T04:17:47.903Z"}
+
+data: {"data":"\r 12%|█▎        | 2/16 [00:22<02:40, 11.46s/it]\u001b[A","timestamp":"2026-11-24T04:18:00.890Z"}
+
+data: {"data":"\r 19%|█▉        | 3/16 [00:35<02:38, 12.16s/it]\u001b[A","timestamp":"2026-11-24T04:18:13.284Z"}
+
+data: {"data":"\r 25%|██▌       | 4/16 [00:48<02:27, 12.25s/it]\u001b[A","timestamp":"2026-11-24T04:18:24.847Z"}
+
+data: {"data":"\r 31%|███▏      | 5/16 [00:59<02:12, 12.00s/it]\u001b[A","timestamp":"2026-11-24T04:18:33.917Z"}
+
+data: {"data":"\r 38%|███▊      | 6/16 [01:09<01:50, 11.01s/it]\u001b[A","timestamp":"2026-11-24T04:18:45.855Z"}
+
+data: {"data":"\r 44%|████▍     | 7/16 [01:20<01:41, 11.31s/it]\u001b[A","timestamp":"2026-11-24T04:18:57.970Z"}
+
+data: {"data":"\r 50%|█████     | 8/16 [01:33<01:32, 11.57s/it]\u001b[A","timestamp":"2026-11-24T04:19:09.358Z"}
+
+data: {"data":"\r 56%|█████▋    | 9/16 [01:44<01:20, 11.51s/it]\u001b[A","timestamp":"2026-11-24T04:19:22.507Z"}
+
+data: {"data":"\r 62%|██████▎   | 10/16 [01:57<01:12, 12.02s/it]\u001b[A","timestamp":"2026-11-24T04:19:22.507Z"}
+
+data: {"data":"{'loss': 0.1727, 'grad_norm': 0.2700088322162628, 'learning_rate': 8.954715367323468e-05, 'entropy': 0.7637269921600819, 'num_tokens': 69379.0, 'mean_token_accuracy': 0.965560545027256, 'epoch': 0.62}","timestamp":"2026-11-24T04:19:22.507Z"}
+
+data: {"data":"\r                                               \r\u001b[A","timestamp":"2026-11-24T04:19:22.507Z"}
+
+data: {"data":"\r 62%|██████▎   | 10/16 [01:57<01:12, 12.02s/it]\u001b[A","timestamp":"2026-11-24T04:19:35.142Z"}
+
+data: {"data":"\r 69%|██████▉   | 11/16 [02:10<01:01, 12.21s/it]\u001b[A","timestamp":"2026-11-24T04:19:47.316Z"}
+
+data: {"data":"\r 75%|███████▌  | 12/16 [02:22<00:48, 12.20s/it]\u001b[A","timestamp":"2026-11-24T04:19:59.342Z"}
+
+data: {"data":"\r 81%|████████▏ | 13/16 [02:34<00:36, 12.14s/it]\u001b[A","timestamp":"2026-11-24T04:20:10.050Z"}
+
+data: {"data":"\r 88%|████████▊ | 14/16 [02:45<00:23, 11.71s/it]\u001b[A","timestamp":"2026-11-24T04:20:21.669Z"}
+
+data: {"data":"\r 94%|█████████▍| 15/16 [02:56<00:11, 11.68s/it]\u001b[A","timestamp":"2026-11-24T04:20:34.179Z"}
+
+data: {"data":"\r100%|██████████| 16/16 [03:09<00:00, 11.93s/it]\u001b[A","timestamp":"2026-11-24T04:20:34.179Z"}
+
+data: {"data":"\r                                               \r\u001b[A","timestamp":"2026-11-24T04:20:34.179Z"}
+
+data: {"data":"{'train_runtime': 189.2788, 'train_samples_per_second': 1.353, 'train_steps_per_second': 0.085, 'train_loss': 0.14254378154873848, 'entropy': 0.649806547909975, 'num_tokens': 111471.0, 'mean_token_accuracy': 0.9815257278581461, 'epoch': 1.0}","timestamp":"2026-11-24T04:20:34.179Z"}
+
+data: {"data":"\r100%|██████████| 16/16 [03:09<00:00, 11.93s/it]\u001b[A\r100%|██████████| 16/16 [03:09<00:00, 11.83s/it]","timestamp":"2026-11-24T04:20:34.180Z"}
+
+data: {"data":"[probe] train done; loss: 0.14254378154873848 in 189.5 s","timestamp":"2026-11-24T04:20:34.180Z"}
+
+data: {"data":"Traceback (most recent call last):","timestamp":"2026-11-24T04:20:34.824Z"}
+
+data: {"data":"  File \"/tmp/job_probe_v3.py\", line 460, in <module>","timestamp":"2026-11-24T04:20:34.824Z"}
+
+data: {"data":"    main()","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"  File \"/tmp/job_probe_v3.py\", line 389, in main","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"    adapter_eval, adapter_pp = run_eval(trainer.model, tok, heldout,","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"  File \"/tmp/job_probe_v3.py\", line 265, in run_eval","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"    out = model.generate(**inputs, max_new_tokens=MAX_NEW_TOKENS,","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/peft/peft_model.py\", line 2048, in generate","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"    outputs = self.base_model.generate(*args, **kwargs)","timestamp":"2026-11-24T04:20:34.825Z"}
+
+data: {"data":"              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/torch/utils/_contextlib.py\", line 116, in decorate_context","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"    return func(*args, **kwargs)","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"           ^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/transformers/generation/utils.py\", line 2566, in generate","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"    result = decoding_method(","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"             ^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/transformers/generation/utils.py\", line 2786, in _sample","timestamp":"2026-11-24T04:20:34.826Z"}
+
+data: {"data":"    outputs = self(**model_inputs, return_dict=True)","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/torch/nn/modules/module.py\", line 1736, in _wrapped_call_impl","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"    return self._call_impl(*args, **kwargs)","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/torch/nn/modules/module.py\", line 1747, in _call_impl","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"    return forward_call(*args, **kwargs)","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/transformers/utils/generic.py\", line 918, in wrapper","timestamp":"2026-11-24T04:20:34.827Z"}
+
+data: {"data":"    output = func(self, *args, **kwargs)","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"             ^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py\", line 494, in forward","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"    logits = self.lm_head(hidden_states[:, slice_indices, :])","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/torch/nn/modules/module.py\", line 1736, in _wrapped_call_impl","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"    return self._call_impl(*args, **kwargs)","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/torch/nn/modules/module.py\", line 1747, in _call_impl","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"    return forward_call(*args, **kwargs)","timestamp":"2026-11-24T04:20:34.828Z"}
+
+data: {"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.829Z"}
+
+data: {"data":"  File \"/opt/conda/lib/python3.11/site-packages/torch/nn/modules/linear.py\", line 125, in forward","timestamp":"2026-11-24T04:20:34.829Z"}
+
+data: {"data":"    return F.linear(input, self.weight, self.bias)","timestamp":"2026-11-24T04:20:34.829Z"}
+
+data: {"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^","timestamp":"2026-11-24T04:20:34.829Z"}
+
+data: {"data":"RuntimeError: expected scalar type Half but found Float","timestamp":"2026-11-24T04:20:34.829Z"}
+

@@ -1,0 +1,427 @@
+{
+  "script": "job_probe_v8.py",
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "versions": {
+    "trl": "0.25.1",
+    "transformers": "4.57.6",
+    "peft": "0.18.1",
+    "datasets": "3.6.0",
+    "torch": "2.5.1+cu124",
+    "accelerate": "1.15.0",
+    "bitsandbytes": "0.50.2"
+  },
+  "subset_rows": 256,
+  "subset_family_counts": {
+    "bgp": 43,
+    "interface_mgmt": 43,
+    "ospf": 43,
+    "static_route": 43,
+    "trunk_svi": 42,
+    "vlan_l2": 42
+  },
+  "subset_short_family_counts": {
+    "bgp": 17,
+    "interface_mgmt": 17,
+    "ospf": 17,
+    "static_route": 17,
+    "trunk_svi": 17,
+    "vlan_l2": 17
+  },
+  "subset_short_rows": 102,
+  "short_quartile_threshold_tokens": 281,
+  "heldout_rows": 24,
+  "ending_check": {
+    "train_subset": {
+      "tag": "train_subset",
+      "checked": 256,
+      "end_token_ids": [
+        198,
+        408
+      ],
+      "all_ok": true,
+      "bad": []
+    },
+    "heldout_refs": {
+      "tag": "heldout_refs",
+      "checked": 24,
+      "end_token_ids": [
+        198,
+        408
+      ],
+      "all_ok": true,
+      "bad": []
+    }
+  },
+  "position_scan": [
+    {
+      "id": "ospf-0249",
+      "family": "ospf",
+      "completion_tokens": 199,
+      "config_variant": "original (run 2 training format)",
+      "p_eos_at_boundary": 0.0004278480482753366,
+      "p_eos_max": 0.0004278480482753366,
+      "max_offset_from_boundary": 0,
+      "p_eos_mean": 2.1392478237608826e-06
+    },
+    {
+      "id": "bgp-0763",
+      "family": "bgp",
+      "completion_tokens": 214,
+      "config_variant": "original (run 2 training format)",
+      "p_eos_at_boundary": 0.0004272814840078354,
+      "p_eos_max": 0.0004272814840078354,
+      "max_offset_from_boundary": 0,
+      "p_eos_mean": 1.987356691861641e-06
+    },
+    {
+      "id": "vlan-0539",
+      "family": "vlan_l2",
+      "completion_tokens": 250,
+      "config_variant": "original (run 2 training format)",
+      "p_eos_at_boundary": 0.0004291645309422165,
+      "p_eos_max": 0.0004291645309422165,
+      "max_offset_from_boundary": 0,
+      "p_eos_mean": 1.7099136251731567e-06
+    },
+    {
+      "id": "iface-0133",
+      "family": "interface_mgmt",
+      "completion_tokens": 238,
+      "config_variant": "original (run 2 training format)",
+      "p_eos_at_boundary": 0.00042805116390809417,
+      "p_eos_max": 0.00042805116390809417,
+      "max_offset_from_boundary": 0,
+      "p_eos_mean": 1.7910095115768087e-06
+    }
+  ],
+  "untie_check": {
+    "train_load": {
+      "tag": "train_load",
+      "same_tensor": false,
+      "lm_head_module_type": "Linear",
+      "embed_tokens_module_type": "Embedding",
+      "tie_word_embeddings_config": false,
+      "max_abs_diff_before": 0.2578125,
+      "row151645_max_abs_diff_before": 0.104339599609375,
+      "values_copied_from_embed": true,
+      "max_abs_diff_after": 0.0,
+      "error": null
+    },
+    "merge_load": {
+      "tag": "merge_load",
+      "same_tensor": false,
+      "lm_head_module_type": "Linear",
+      "embed_tokens_module_type": "Embedding",
+      "tie_word_embeddings_config": false,
+      "max_abs_diff_before": null,
+      "row151645_max_abs_diff_before": null,
+      "values_copied_from_embed": false,
+      "max_abs_diff_after": null,
+      "error": "Traceback (most recent call last):\n  File \"/tmp/job_probe_v8.py\", line 414, in untie_check\n    - out_w.detach().float()).abs().max()\n                              ^^^^^\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.45 GiB. GPU 0 has a total capacity of 22.30 GiB of which 282.62 MiB is free. Process 32535 has 22.02 GiB memory in use. Of the allocated memory 21.38 GiB is allocated by PyTorch, and 333.35 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)\n"
+    }
+  },
+  "tie_info": {
+    "tie_word_embeddings_config": false,
+    "lm_head_module_type": "Linear",
+    "embed_tokens_module_type": "Embedding",
+    "active_weights_tied": false,
+    "original_weights_tied": false,
+    "lm_head_weight_requires_grad": false,
+    "error": null
+  },
+  "lora_targets_found": {
+    "count": 253,
+    "has_lm_head": true,
+    "has_embed_tokens": false,
+    "lm_head_entries": [
+      "base_model.model.lm_head"
+    ],
+    "sample": [
+      "base_model.model.model.layers.0.self_attn.q_proj",
+      "base_model.model.model.layers.0.self_attn.k_proj",
+      "base_model.model.model.layers.0.self_attn.v_proj",
+      "base_model.model.model.layers.0.self_attn.o_proj",
+      "base_model.model.model.layers.0.mlp.gate_proj"
+    ]
+  },
+  "lm_head_check": {
+    "base_row_l2": 0.3565717339515686,
+    "base_embed_row_l2": 0.3565717339515686,
+    "adapter": {
+      "tag": "adapter",
+      "row": 151645,
+      "method": "analytic merged-equivalent (base row + scaling * (B@A)[row])",
+      "delta_l2": 0.005708367098122835,
+      "row_l2": 0.3565765917301178,
+      "base_row_l2": 0.3565717339515686
+    },
+    "merged": {
+      "tag": "merged",
+      "error": "merged artifact unavailable: the merge block failed before the movement check"
+    },
+    "merged_embed": {
+      "tag": "merged_embed_tokens",
+      "error": "merged artifact unavailable: the merge block failed before the movement check"
+    }
+  },
+  "assertion": {
+    "passed": true,
+    "expect": 151645,
+    "method": "train_dataloader",
+    "n_rows": 2,
+    "per_row_last_labels": [
+      151645,
+      151645
+    ],
+    "row0_last5_token_ids": [
+      41633,
+      17190,
+      198,
+      408,
+      151645
+    ],
+    "row0_last_label": 151645,
+    "error": null
+  },
+  "assertion_warning": null,
+  "train": {
+    "loss": 0.17532702442258596,
+    "epochs": 1,
+    "steps_expected": 16,
+    "log_history": [
+      {
+        "loss": 0.3103,
+        "grad_norm": 0.3596571385860443,
+        "learning_rate": 0.0002,
+        "entropy": 0.9134761579334736,
+        "num_tokens": 12286.0,
+        "mean_token_accuracy": 0.9397949203848839,
+        "epoch": 0.125,
+        "step": 2
+      },
+      {
+        "loss": 0.2889,
+        "grad_norm": 0.3491731882095337,
+        "learning_rate": 0.0001913545457642601,
+        "entropy": 1.0408635586500168,
+        "num_tokens": 21184.0,
+        "mean_token_accuracy": 0.9418437071144581,
+        "epoch": 0.25,
+        "step": 4
+      },
+      {
+        "loss": 0.1692,
+        "grad_norm": 0.40870726108551025,
+        "learning_rate": 0.00016691306063588583,
+        "entropy": 0.8190044313669205,
+        "num_tokens": 32462.0,
+        "mean_token_accuracy": 0.9608744904398918,
+        "epoch": 0.375,
+        "step": 6
+      },
+      {
+        "loss": 0.124,
+        "grad_norm": 0.2266857773065567,
+        "learning_rate": 0.00013090169943749476,
+        "entropy": 0.7333201579749584,
+        "num_tokens": 44693.0,
+        "mean_token_accuracy": 0.9726005680859089,
+        "epoch": 0.5,
+        "step": 8
+      },
+      {
+        "loss": 0.1328,
+        "grad_norm": 0.29316583275794983,
+        "learning_rate": 8.954715367323468e-05,
+        "entropy": 0.8164022043347359,
+        "num_tokens": 54654.0,
+        "mean_token_accuracy": 0.973405048251152,
+        "epoch": 0.625,
+        "step": 10
+      },
+      {
+        "loss": 0.1256,
+        "grad_norm": 0.2533456087112427,
+        "learning_rate": 5.000000000000002e-05,
+        "entropy": 0.730738153681159,
+        "num_tokens": 65418.0,
+        "mean_token_accuracy": 0.9720733985304832,
+        "epoch": 0.75,
+        "step": 12
+      },
+      {
+        "loss": 0.1485,
+        "grad_norm": 0.41127949953079224,
+        "learning_rate": 1.9098300562505266e-05,
+        "entropy": 0.8095745295286179,
+        "num_tokens": 74610.0,
+        "mean_token_accuracy": 0.9655793532729149,
+        "epoch": 0.875,
+        "step": 14
+      },
+      {
+        "loss": 0.1034,
+        "grad_norm": 0.23609836399555206,
+        "learning_rate": 2.1852399266194314e-06,
+        "entropy": 0.7190229669213295,
+        "num_tokens": 86619.0,
+        "mean_token_accuracy": 0.971089031547308,
+        "epoch": 1.0,
+        "step": 16
+      },
+      {
+        "train_runtime": 158.9386,
+        "train_samples_per_second": 1.611,
+        "train_steps_per_second": 0.101,
+        "total_flos": 2843143760351232.0,
+        "train_loss": 0.17532702442258596,
+        "epoch": 1.0,
+        "step": 16
+      }
+    ]
+  },
+  "adapter_eval": {
+    "n": 24,
+    "stopped_cleanly_pct": 4.2,
+    "mean_coverage": 0.977,
+    "gate_pass": false,
+    "per_prompt": [
+      {
+        "id": "bgp-0763",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0238",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0392",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0175",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0133",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0605",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0320",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0206",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0249",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0478",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0731",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0763",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0771",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0220",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0602",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0620",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0475",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0174",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0118",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0030",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0539",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0720",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0573",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0050",
+        "family": "vlan_l2",
+        "stopped_cleanly": true
+      }
+    ]
+  },
+  "merged_eval": {
+    "error": "Traceback (most recent call last):\n  File \"/tmp/job_probe_v8.py\", line 1041, in main\n    fp32_base, adapter_dir).merge_and_unload()\n                            ^^^^^^^^^^^^^^^^^^\n  File \"/opt/conda/lib/python3.11/site-packages/peft/tuners/tuners_utils.py\", line 645, in merge_and_unload\n    return self._unload_and_optionally_merge(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/conda/lib/python3.11/site-packages/peft/tuners/tuners_utils.py\", line 606, in _unload_and_optionally_merge\n    target.merge(safe_merge=safe_merge, adapter_names=adapter_names)\n  File \"/opt/conda/lib/python3.11/site-packages/peft/tuners/lora/layer.py\", line 708, in merge\n    delta_weight = self.get_delta_weight(active_adapter)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/conda/lib/python3.11/site-packages/peft/tuners/lora/layer.py\", line 768, in get_delta_weight\n    output_tensor = transpose(weight_B @ weight_A, self.fan_in_fan_out) * self.scaling[adapter]\n                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.45 GiB. GPU 0 has a total capacity of 22.30 GiB of which 278.62 MiB is free. Process 32535 has 22.02 GiB memory in use. Of the allocated memory 21.39 GiB is allocated by PyTorch, and 325.92 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)\n"
+  },
+  "durations": {
+    "scan_s": 37.7,
+    "train_s": 159.3,
+    "eval_adapter_s": 1314.4,
+    "merge_s": null,
+    "eval_merged_s": null,
+    "total_min": 26.8
+  },
+  "gate": {
+    "rule": "stopped_cleanly >= 90.0% on 24 held-out prompts",
+    "adapter_pass": false,
+    "merged_pass": null
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "job_id": "6b04b9c9ca8b51043c3a7f19",
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "train_rows": 4496,
+  "test_rows": 252,
+  "train_loss": 0.04466035062378695,
+  "in_job_elapsed_min": 246.2,
+  "job_durations_secs": {
+    "scheduling": 7,
+    "running": 14798,
+    "total": 14806
+  },
+  "estimated_cost_usd": 10.28,
+  "flavor": "a100-large @ $2.50/hr",
+  "base_eval": {
+    "model": "base",
+    "overall": {
+      "n": 252,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.699,
+      "stopped_cleanly_pct": 20.2
+    },
+    "per_family": {
+      "bgp": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.791,
+        "stopped_cleanly_pct": 14.3
+      },
+      "interface_mgmt": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.666,
+        "stopped_cleanly_pct": 21.4
+      },
+      "ospf": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.646,
+        "stopped_cleanly_pct": 14.3
+      },
+      "static_route": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.679,
+        "stopped_cleanly_pct": 9.5
+      },
+      "trunk_svi": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.484,
+        "stopped_cleanly_pct": 16.7
+      },
+      "vlan_l2": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.932,
+        "stopped_cleanly_pct": 45.2
+      }
+    }
+  },
+  "ft_eval_injob": {
+    "model": "ft",
+    "overall": {
+      "n": 252,
+      "parse_ok_pct": 100.0,
+      "mean_coverage": 0.986,
+      "stopped_cleanly_pct": 0.0
+    },
+    "per_family": {
+      "bgp": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.985,
+        "stopped_cleanly_pct": 0.0
+      },
+      "interface_mgmt": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 1.0,
+        "stopped_cleanly_pct": 0.0
+      },
+      "ospf": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 1.0,
+        "stopped_cleanly_pct": 0.0
+      },
+      "static_route": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.998,
+        "stopped_cleanly_pct": 0.0
+      },
+      "trunk_svi": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.995,
+        "stopped_cleanly_pct": 0.0
+      },
+      "vlan_l2": {
+        "n": 42,
+        "parse_ok_pct": 100.0,
+        "mean_coverage": 0.941,
+        "stopped_cleanly_pct": 0.0
+      }
+    }
+  },
+  "home_raw_scoring": {
+    "n": 252,
+    "parse_pass": 252,
+    "parse_pct": 100.0,
+    "batfish_pass": 7,
+    "batfish_pct": 2.8,
+    "batfish_pass_ids": [
+      "vlan-0822",
+      "vlan-0418",
+      "vlan-0702",
+      "vlan-0627",
+      "vlan-0493",
+      "vlan-0674",
+      "vlan-0781"
+    ],
+    "intent_raw_pass": 185,
+    "intent_raw_pct": 73.4,
+    "intent_triaged_pass": 198,
+    "intent_triaged_pct": 78.6,
+    "intent_triaged_extra_ids": [
+      "trunk-0409",
+      "trunk-0415",
+      "trunk-0475",
+      "trunk-0600",
+      "trunk-0619",
+      "trunk-0652",
+      "trunk-0757",
+      "vlan-0355",
+      "vlan-0455",
+      "vlan-0456",
+      "vlan-0605",
+      "vlan-0613",
+      "vlan-0731"
+    ],
+    "per_family_batfish_parse": {
+      "ospf": {
+        "n": 42,
+        "parse": 42,
+        "batfish": 0,
+        "parse_pct": 100.0,
+        "batfish_pct": 0.0
+      },
+      "bgp": {
+        "n": 42,
+        "parse": 42,
+        "batfish": 0,
+        "parse_pct": 100.0,
+        "batfish_pct": 0.0
+      },
+      "static_route": {
+        "n": 42,
+        "parse": 42,
+        "batfish": 0,
+        "parse_pct": 100.0,
+        "batfish_pct": 0.0
+      },
+      "vlan_l2": {
+        "n": 42,
+        "parse": 42,
+        "batfish": 7,
+        "parse_pct": 100.0,
+        "batfish_pct": 16.7
+      },
+      "interface_mgmt": {
+        "n": 42,
+        "parse": 42,
+        "batfish": 0,
+        "parse_pct": 100.0,
+        "batfish_pct": 0.0
+      },
+      "trunk_svi": {
+        "n": 42,
+        "parse": 42,
+        "batfish": 0,
+        "parse_pct": 100.0,
+        "batfish_pct": 0.0
+      }
+    },
+    "per_family_intent": {
+      "ospf": {
+        "n": 42,
+        "raw_pass": 32,
+        "triaged_pass": 32,
+        "raw_pct": 76.2,
+        "triaged_pct": 76.2
+      },
+      "bgp": {
+        "n": 42,
+        "raw_pass": 31,
+        "triaged_pass": 31,
+        "raw_pct": 73.8,
+        "triaged_pct": 73.8
+      },
+      "static_route": {
+        "n": 42,
+        "raw_pass": 38,
+        "triaged_pass": 38,
+        "raw_pct": 90.5,
+        "triaged_pct": 90.5
+      },
+      "vlan_l2": {
+        "n": 42,
+        "raw_pass": 18,
+        "triaged_pass": 24,
+        "raw_pct": 42.9,
+        "triaged_pct": 57.1
+      },
+      "interface_mgmt": {
+        "n": 42,
+        "raw_pass": 40,
+        "triaged_pass": 40,
+        "raw_pct": 95.2,
+        "triaged_pct": 95.2
+      },
+      "trunk_svi": {
+        "n": 42,
+        "raw_pass": 26,
+        "triaged_pass": 33,
+        "raw_pct": 61.9,
+        "triaged_pct": 78.6
+      }
+    }
+  },
+  "publish_bar": {
+    "batfish_min_pct": 95,
+    "intent_triaged_min_pct": 90
+  },
+  "verdict": "BAR MISSED",
+  "verdict_detail": "RAW fine-tuned generations: Batfish 2.8% (< 95%) and triaged intent-match 78.6% (< 90%). Root cause unchanged from the smoke run: stopped_cleanly 0.0% \u2014 the EOS/stopping fix did not take effect in generation; every raw output continues past the first config with hallucinated extra turns, which Batfish rejects (PARTIALLY_UNRECOGNIZED) and which corrupts intent checks (e.g. last-hostname-wins, merged interface blocks). Content quality improved: in-job key-token coverage 0.986 (base 0.699), train loss 0.0447.",
+  "weakest_families": {
+    "intent_triaged": [
+      "vlan_l2 57.1%",
+      "bgp 73.8%",
+      "ospf 76.2%",
+      "trunk_svi 78.6%"
+    ],
+    "coverage": [
+      "vlan_l2 0.941",
+      "bgp 0.985"
+    ]
+  },
+  "gguf_job_id": "6b04f83cc97b8ed4fcd70e62",
+  "gguf": {
+    "status": "completed",
+    "file": "run2/gguf/netconfig-slm-qwen3-4b-q4_k_m.gguf",
+    "size_bytes": 2497280288
+  },
+  "manual_test_pack": "outputs/manual-test-pack/ (intents.md, answers.md, README.md)"
+}

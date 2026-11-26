@@ -1,0 +1,14 @@
+{
+  "elapsed_min": 72.8,
+  "base_eval": {
+    "n": 60,
+    "parse_ok_pct": 100.0,
+    "mean_coverage": 0.706
+  },
+  "ft_eval": {
+    "n": 60,
+    "parse_ok_pct": 100.0,
+    "mean_coverage": 0.983
+  },
+  "train_loss": 0.3791799716540237
+}

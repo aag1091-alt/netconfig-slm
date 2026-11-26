@@ -1,0 +1,38 @@
+# QLoRA training config - Qwen3-4B-Base
+# Reference implementation: TRL SFTTrainer / Unsloth compatible values
+base_model: Qwen/Qwen3-4B-Base
+dataset: data/processed/train.jsonl
+val_dataset: data/processed/val.jsonl
+output_dir: outputs/qwen3-4b-netconfig-v0
+
+# EOS / stopping (v2 fix, 2026-11-23): Qwen3-4B-Base's tokenizer eos is
+# <|endoftext|> (id 151643), but ChatML turns end with <|im_end|> (id
+# 151645). v1 trained on plain text with the default eos, so generations
+# never stopped. v2 sets the tokenizer eos to <|im_end|>, trains on TRL
+# prompt/completion pairs (completion-only loss, completion ends with
+# <|im_end|>), and generates with eos_token_id: [151645, 151643]. The
+# merged model ships a generation_config.json with those eos ids.
+eos_token: "<|im_end|>"
+generation_eos_token_ids: [151645, 151643]
+completion_only_loss: true
+
+# QLoRA
+load_in_4bit: true
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+# Training
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 4
+num_train_epochs: 3
+learning_rate: 0.0002
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+logging_steps: 10
+save_strategy: epoch
+bf16: true
+max_seq_length: 1024
+
+# Notes: ~5k examples x 3 epochs on RTX 4090 ~2-4h. See docs/V0_SCOPE.md

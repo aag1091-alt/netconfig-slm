@@ -1,0 +1,24 @@
+corpus: 5861 rows, 5740 signatures
+acl: wrote 287 (gate caught 0, dupes rejected 0, 287 attempts)
+nat: wrote 287 (gate caught 0, dupes rejected 6, 293 attempts)
+hsrp: wrote 287 (gate caught 0, dupes rejected 3, 290 attempts)
+{
+ "acl": {
+  "written": 287,
+  "gate_caught": 0,
+  "dupes_rejected": 0,
+  "attempts": 287
+ },
+ "nat": {
+  "written": 287,
+  "gate_caught": 0,
+  "dupes_rejected": 6,
+  "attempts": 293
+ },
+ "hsrp": {
+  "written": 287,
+  "gate_caught": 0,
+  "dupes_rejected": 3,
+  "attempts": 290
+ }
+}

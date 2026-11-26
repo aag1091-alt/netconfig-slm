@@ -1,0 +1,30 @@
+PASS tokenizer shim: 'test<|im_end|>' -> [1944, 151645]
+local data: 4496 train / 252 test
+PASS subset size: 256 rows
+PASS subset family counts: {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}
+PASS short-quartile rows: 102 rows, per-family {'bgp': 17, 'interface_mgmt': 17, 'ospf': 17, 'static_route': 17, 'trunk_svi': 17, 'vlan_l2': 17}, threshold 281 tokens
+PASS subset identical to attempt 4: id list (incl. order) matches run4 RUN_INFO subset_ids
+PASS subset counts identical to attempt 4: counts {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42}, threshold 281
+PASS heldout identical to attempt 4: 24 rows: ['bgp-0763', 'bgp-0238', 'bgp-0392', 'bgp-0175']...
+PASS heldout families: 4 per family
+PASS ending check (train subset): {"tag": "train_subset", "checked": 256, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS ending check (held-out refs): {"tag": "heldout_refs", "checked": 24, "end_token_ids": [198, 408], "all_ok": true, "bad": []}
+PASS CFG values: epochs=1, lr=0.0002, head_lr=1e-05, warmup=0.1
+PASS build_trainer guards: logging_steps=2, max_grad_norm=1.0, GC on, head-split trainer class, probe7 output dir
+PASS LoraConfig accepts modules_to_save: modules_to_save=['lm_head']
+PASS base config tie flag: tie_word_embeddings=True, vocab=151936, hidden=2560
+PASS tie_report on raw base: {"tie_word_embeddings_config": true, "lm_head_module_type": "Linear", "embed_tokens_module_type": "Embedding", "active_weights_tied": true, "original_weights_tied": true, "lm_head_weight_requires_grad": true, "error": null}
+PASS tie_report on PeftModel: {"tie_word_embeddings_config": true, "lm_head_module_type": "ModulesToSaveWrapper", "embed_tokens_module_type": "Embedding", "active_weights_tied": false, "original_weights_tied": true, "lm_head_weight_requires_grad": true, "error": null}
+tie after wrap: {"tie_word_embeddings_config": true, "lm_head_module_type": "ModulesToSaveWrapper", "embed_tokens_module_type": "Embedding", "active_weights_tied": false, "original_weights_tied": true, "lm_head_weight_requires_grad": true, "error": null}
+PASS effective lm_head module: Linear weight shape (151936, 2560), requires_grad=True
+PASS split returns two groups: report={"adapter_lr": 0.0002, "head_lr": 1e-05, "weight_decay": 0.0, "adapter_tensors": 504, "adapter_params": 33030144, "head_tensors": 1, "head_params": 388956160, "trainable_tensors": 505}
+PASS split group LRs: adapter lr=0.0002, head lr=1e-05
+PASS head group == active lm_head params (module ownership): 1 tensors vs module's 1
+PASS partition exact: union == trainable, disjoint: adapter 504 + head 1 == trainable 505
+PASS head param total: head=388,956,160, adapter=33,030,144
+PASS trainer class overrides create_optimizer: class HeadSplitSFTTrainer, module job_probe_v7
+PASS create_optimizer returns AdamW: AdamW
+PASS optimizer group LRs: [0.0002, 1e-05]
+PASS optimizer groups match the split: adapter/head tensor sets identical to split_param_groups
+PASS optimizer report recorded on trainer: {"adapter_lr": 0.0002, "head_lr": 1e-05, "weight_decay": 0.0, "adapter_tensors": 504, "adapter_params": 33030144, "head_tensors": 1, "head_params": 388956160, "trainable_tensors": 505}
+ALL PROBE V7 SELF-CHECKS PASSED

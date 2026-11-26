@@ -1,0 +1,3 @@
+6b05122dca8b51043c3b1c49
+# previous: 6b050f92ca8b51043c3b1854 (resubmission — trained OK, then adapter eval crashed in generate: "expected scalar type Half but found Float"; resubmitted with bf16 autocast in run_eval + per-artifact crash isolation)
+# before that: 6b050d13ca8b51043c3b14d3 (original probe — CUDA OOM on training step 1)

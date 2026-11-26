@@ -1,0 +1,178 @@
+{
+  "dataset": "netconfig-slm",
+  "version": "0.2",
+  "assembled_at": "2026-11-23T16:25:52.173910+00:00",
+  "total_rows": 1180,
+  "families": {
+    "bgp": 197,
+    "interface_mgmt": 195,
+    "ospf": 197,
+    "static_route": 197,
+    "trunk_svi": 197,
+    "vlan_l2": 197
+  },
+  "splits": {
+    "seed": 42,
+    "method": "stratified by family, 90/5/5 train/val/test, per-family shuffle with random.Random(42); same algorithm as v0.1 (scripts/build_v01_dataset.py)",
+    "sizes": {
+      "train": 1060,
+      "val": 60,
+      "test": 60
+    },
+    "per_family": {
+      "bgp": {
+        "total": 197,
+        "train": 177,
+        "val": 10,
+        "test": 10
+      },
+      "interface_mgmt": {
+        "total": 195,
+        "train": 175,
+        "val": 10,
+        "test": 10
+      },
+      "ospf": {
+        "total": 197,
+        "train": 177,
+        "val": 10,
+        "test": 10
+      },
+      "static_route": {
+        "total": 197,
+        "train": 177,
+        "val": 10,
+        "test": 10
+      },
+      "trunk_svi": {
+        "total": 197,
+        "train": 177,
+        "val": 10,
+        "test": 10
+      },
+      "vlan_l2": {
+        "total": 197,
+        "train": 177,
+        "val": 10,
+        "test": 10
+      }
+    }
+  },
+  "validation": {
+    "parse_pass": 1180,
+    "batfish_pass": 1180,
+    "emulation_pass": null,
+    "evidence": [
+      "docs/seed-expansion-run.txt",
+      "docs/gen-run-001-vlan-trunk.txt",
+      "docs/gen-run-002-static-ospf.txt",
+      "docs/gen-run-003-bgp-iface.txt",
+      "docs/gen-run-004-batch4.txt",
+      "docs/gen-run-005-v02-revalidation.txt",
+      "docs/validation-round-1.md",
+      "data/v0.2/intent_match_results.jsonl"
+    ],
+    "note": "v0.2 = v0.1 corpus (580, flags carried from the published snapshot) + batch 4 (600, flags from gen run 004, which included an intent-match self-check gate). Every row changed by the v0.2 fixes was re-run through both ladder rungs (parse + Batfish) - see gen-run-005. The full 1,180-row corpus was re-checked with scripts/intent_match.py (round 1 on v0.1: 580/580, 3,686 assertions)."
+  },
+  "fixes_applied": {
+    "invented_vlan_name_lines_removed": 32,
+    "aggregate_prefixes_canonicalised": 2,
+    "glued_bang_lines_split": 48,
+    "glued_bang_rows": 36,
+    "rows_changed_total": 61,
+    "detail": [
+      "trunk-0002: removed invented 'name Sales' under 'vlan 10'",
+      "trunk-0002: removed invented 'name Engineering' under 'vlan 20'",
+      "trunk-0003: removed invented 'name Marketing' under 'vlan 30'",
+      "trunk-0004: removed invented 'name Finance' under 'vlan 40'",
+      "trunk-0004: removed invented 'name HR' under 'vlan 50'",
+      "trunk-0005: removed invented 'name Servers' under 'vlan 100'",
+      "trunk-0010: removed invented 'name Sales' under 'vlan 10'",
+      "trunk-0010: removed invented 'name Engineering' under 'vlan 20'",
+      "trunk-0010: removed invented 'name Marketing' under 'vlan 30'",
+      "trunk-0014: removed invented 'name Storage' under 'vlan 110'",
+      "trunk-0014: removed invented 'name Backup' under 'vlan 120'",
+      "trunk-0015: removed invented 'name Management' under 'vlan 5'",
+      "trunk-0017: removed invented 'name Lab' under 'vlan 200'",
+      "bgp-0093: aggregate 10.43.0.0/15 -> 10.42.0.0/15 (intent + config)",
+      "bgp-0094: aggregate 10.51.0.0/15 -> 10.50.0.0/15 (intent + config)",
+      "iface-0040: split 1 glued-'!' line(s)",
+      "iface-0041: split 1 glued-'!' line(s)",
+      "iface-0042: split 1 glued-'!' line(s)",
+      "iface-0043: split 1 glued-'!' line(s)",
+      "iface-0044: split 1 glued-'!' line(s)",
+      "iface-0045: split 1 glued-'!' line(s)",
+      "iface-0046: split 1 glued-'!' line(s)",
+      "iface-0047: split 1 glued-'!' line(s)",
+      "iface-0048: split 1 glued-'!' line(s)",
+      "iface-0049: split 1 glued-'!' line(s)",
+      "iface-0050: split 1 glued-'!' line(s)",
+      "iface-0051: split 1 glued-'!' line(s)",
+      "iface-0052: split 2 glued-'!' line(s)",
+      "iface-0053: split 2 glued-'!' line(s)",
+      "iface-0054: split 2 glued-'!' line(s)",
+      "iface-0073: split 1 glued-'!' line(s)",
+      "iface-0074: split 1 glued-'!' line(s)",
+      "iface-0075: split 1 glued-'!' line(s)",
+      "iface-0076: split 1 glued-'!' line(s)",
+      "iface-0077: split 1 glued-'!' line(s)",
+      "iface-0078: split 1 glued-'!' line(s)",
+      "iface-0079: split 1 glued-'!' line(s)",
+      "iface-0080: split 2 glued-'!' line(s)",
+      "iface-0081: split 2 glued-'!' line(s)",
+      "iface-0082: split 2 glued-'!' line(s)",
+      "iface-0085: split 1 glued-'!' line(s)",
+      "iface-0086: split 1 glued-'!' line(s)",
+      "iface-0087: split 1 glued-'!' line(s)",
+      "iface-0088: split 2 glued-'!' line(s)",
+      "iface-0089: split 2 glued-'!' line(s)",
+      "iface-0090: split 2 glued-'!' line(s)",
+      "iface-0091: split 2 glued-'!' line(s)",
+      "iface-0092: split 2 glued-'!' line(s)",
+      "iface-0093: split 2 glued-'!' line(s)",
+      "iface-0094: split 1 glued-'!' line(s)",
+      "iface-0095: split 1 glued-'!' line(s)",
+      "trunk-0018: removed invented 'name Warehouse' under 'vlan 120'",
+      "trunk-0020: removed invented 'name Lab' under 'vlan 200'",
+      "trunk-0022: removed invented 'name Printers' under 'vlan 60'",
+      "trunk-0024: removed invented 'name Developers' under 'vlan 25'",
+      "trunk-0028: removed invented 'name Zone33' under 'vlan 33'",
+      "trunk-0035: removed invented 'name IoT' under 'vlan 150'",
+      "trunk-0035: removed invented 'name Wireless' under 'vlan 180'",
+      "trunk-0037: removed invented 'name Finance' under 'vlan 40'",
+      "trunk-0037: removed invented 'name Printers' under 'vlan 60'",
+      "trunk-0039: removed invented 'name Servers' under 'vlan 100'",
+      "trunk-0039: removed invented 'name Warehouse' under 'vlan 120'",
+      "trunk-0041: removed invented 'name Facilities' under 'vlan 250'",
+      "trunk-0041: removed invented 'name NOC' under 'vlan 270'",
+      "trunk-0043: removed invented 'name Support' under 'vlan 45'",
+      "trunk-0076: removed invented 'name Warehouse' under 'vlan 120'",
+      "trunk-0078: removed invented 'name Boardroom' under 'vlan 140'",
+      "trunk-0080: removed invented 'name Kiosks' under 'vlan 160'",
+      "trunk-0082: removed invented 'name Wireless' under 'vlan 180'",
+      "trunk-0094: removed invented 'name Zone44' under 'vlan 44'"
+    ]
+  },
+  "provenance": {
+    "handwritten_seeds": 100,
+    "generated_synthetic": 1080,
+    "cisco_guide": 0,
+    "origin_files": [
+      "data/v0.1/dataset.jsonl",
+      "data/generated/bgp_b4.jsonl",
+      "data/generated/interface_mgmt_b4.jsonl",
+      "data/generated/ospf_b4.jsonl",
+      "data/generated/static_route_b4.jsonl",
+      "data/generated/trunk_svi_b4.jsonl",
+      "data/generated/vlan_l2_b4.jsonl"
+    ]
+  },
+  "integrity": {
+    "unique_ids": 1180,
+    "duplicate_intent_config_pairs": 0,
+    "scrub_secret_pattern_hits": 0,
+    "routable_ip_tokens": "all globally-routable dotted quads are OSPF/BGP router-id identifiers (conventional lab placeholders, e.g. 1.1.1.1) in v0.1 seed-era rows; every assigned address, peer, network and next-hop is RFC1918 or an IETF documentation range",
+    "problems": [],
+    "warnings": []
+  }
+}

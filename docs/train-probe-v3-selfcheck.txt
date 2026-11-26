@@ -1,0 +1,54 @@
+local data: 4496 train / 252 test
+tokenizer eos after override: <|im_end|> 151645
+PASS subset: 256 rows, counts: {'bgp': 43, 'interface_mgmt': 43, 'ospf': 43, 'static_route': 43, 'trunk_svi': 42, 'vlan_l2': 42} | deterministic
+PASS heldout: 24 rows, 4/family: {'bgp': 4, 'interface_mgmt': 4, 'ospf': 4, 'static_route': 4, 'trunk_svi': 4, 'vlan_l2': 4}
+Adding EOS to train dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Adding EOS to train dataset: 100%|██████████| 32/32 [00:00<00:00, 7975.86 examples/s]
+Tokenizing train dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Tokenizing train dataset: 100%|██████████| 32/32 [00:00<00:00, 470.07 examples/s]
+Truncating train dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 32/32 [00:00<00:00, 10602.55 examples/s]
+assertion (with processing_class): {
+ "passed": true,
+ "expect": 151645,
+ "method": "train_dataloader",
+ "n_rows": 8,
+ "per_row_last_labels": [
+  151645,
+  151645,
+  151645,
+  151645,
+  151645,
+  151645,
+  151645,
+  151645
+ ],
+ "row0_last5_token_ids": [
+  15,
+  14,
+  18,
+  198,
+  151645
+ ],
+ "row0_last_label": 151645,
+ "error": null
+}
+PASS assertion: real collator batch supervises 151645 at row ends
+Adding EOS to train dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Adding EOS to train dataset: 100%|██████████| 32/32 [00:00<00:00, 9122.39 examples/s]
+Tokenizing train dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Tokenizing train dataset: 100%|██████████| 32/32 [00:00<00:00, 793.86 examples/s]
+Truncating train dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 32/32 [00:00<00:00, 11796.25 examples/s]
+assertion (no processing_class): {
+ "passed": false,
+ "method": "train_dataloader",
+ "n_rows": 8,
+ "per_row_last_labels": [
+  151643,
+  151643,
+  151643,
+  151643,
+  151643,
+  151643,
+  151643,
+  151643
+ ],
+ "row0_last_label": 151643
+}
+PASS negative control: assertion catches the v1 defect
+ALL PROBE SELF-CHECKS PASSED

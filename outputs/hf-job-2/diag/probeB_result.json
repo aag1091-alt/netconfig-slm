@@ -1,0 +1,1179 @@
+{
+ "index": 0,
+ "content": "\tNdrFc\nIntialized router2\nhostname router",
+ "tokens": [],
+ "id_slot": 0,
+ "stop": true,
+ "model": "model.gguf",
+ "tokens_predicted": 8,
+ "tokens_evaluated": 56,
+ "generation_settings": {
+  "seed": 4294967295,
+  "temperature": 0.0,
+  "dynatemp_range": 0.0,
+  "dynatemp_exponent": 1.0,
+  "top_k": 40,
+  "top_p": 0.949999988079071,
+  "min_p": 0.05000000074505806,
+  "top_n_sigma": -1.0,
+  "xtc_probability": 0.0,
+  "xtc_threshold": 0.10000000149011612,
+  "typical_p": 1.0,
+  "repeat_last_n": 64,
+  "repeat_penalty": 1.0,
+  "presence_penalty": 0.0,
+  "frequency_penalty": 0.0,
+  "dry_multiplier": 0.0,
+  "dry_base": 1.75,
+  "dry_allowed_length": 2,
+  "dry_penalty_last_n": 64,
+  "dry_sequence_breakers": [
+   "\n",
+   ":",
+   "\"",
+   "*"
+  ],
+  "mirostat": 0,
+  "mirostat_tau": 5.0,
+  "mirostat_eta": 0.10000000149011612,
+  "adaptive_target": -1.0,
+  "adaptive_decay": 0.8999999761581421,
+  "stop": [],
+  "max_tokens": 8,
+  "n_predict": 8,
+  "n_keep": 0,
+  "n_discard": 0,
+  "ignore_eos": false,
+  "stream": false,
+  "logit_bias": [],
+  "n_probs": 10,
+  "min_keep": 0,
+  "grammar": "",
+  "grammar_lazy": false,
+  "grammar_triggers": [],
+  "preserved_tokens": [],
+  "chat_format": "Content-only",
+  "reasoning_format": "deepseek",
+  "reasoning_in_content": false,
+  "generation_prompt": "",
+  "samplers": [
+   "penalties",
+   "dry",
+   "top_n_sigma",
+   "top_k",
+   "typ_p",
+   "top_p",
+   "min_p",
+   "xtc",
+   "temperature"
+  ],
+  "speculative.types": "none",
+  "timings_per_token": false,
+  "post_sampling_probs": false,
+  "backend_sampling": false,
+  "lora": []
+ },
+ "prompt": "<|im_start|>user\nOn r2, shut down GigabitEthernet0/0/7 and set its description to Decommissioned - shut<|im_end|>\n<|im_start|>assistant\nhostname router2\n!\ninterface GigabitEthernet0/0/7\n description Decommissioned - shut\n shutdown\n",
+ "has_new_line": true,
+ "truncated": false,
+ "stop_type": "limit",
+ "stopping_word": "",
+ "tokens_cached": 63,
+ "timings": {
+  "cache_n": 0,
+  "prompt_n": 56,
+  "prompt_ms": 5497.563,
+  "prompt_per_token_ms": 98.17076785714286,
+  "prompt_per_second": 10.186331652770509,
+  "predicted_n": 8,
+  "predicted_ms": 3890.577,
+  "predicted_per_token_ms": 555.7967142857143,
+  "predicted_per_second": 1.7992189847418516
+ },
+ "completion_probabilities": [
+  {
+   "id": 70564,
+   "token": "\tNdrFc",
+   "bytes": [
+    9,
+    78,
+    100,
+    114,
+    70,
+    99
+   ],
+   "logprob": -7.644847393035889,
+   "top_logprobs": [
+    {
+     "id": 70564,
+     "token": "\tNdrFc",
+     "bytes": [
+      9,
+      78,
+      100,
+      114,
+      70,
+      99
+     ],
+     "logprob": -7.644847393035889
+    },
+    {
+     "id": 27487,
+     "token": "\ufffd\ufffd\u53d6",
+     "bytes": [
+      142,
+      183,
+      229,
+      143,
+      150
+     ],
+     "logprob": -7.658455848693848
+    },
+    {
+     "id": 88372,
+     "token": "useRalative",
+     "bytes": [
+      117,
+      115,
+      101,
+      82,
+      97,
+      108,
+      97,
+      116,
+      105,
+      118,
+      101
+     ],
+     "logprob": -7.66176700592041
+    },
+    {
+     "id": 151298,
+     "token": "\ud834\uddda",
+     "bytes": [
+      240,
+      157,
+      135,
+      154
+     ],
+     "logprob": -7.685208797454834
+    },
+    {
+     "id": 51088,
+     "token": "\ufffd\u59cb\u5316",
+     "bytes": [
+      157,
+      229,
+      167,
+      139,
+      229,
+      140,
+      150
+     ],
+     "logprob": -7.705531597137451
+    },
+    {
+     "id": 138112,
+     "token": " pa\u017adzi",
+     "bytes": [
+      32,
+      112,
+      97,
+      197,
+      186,
+      100,
+      122,
+      105
+     ],
+     "logprob": -7.710099220275879
+    },
+    {
+     "id": 127734,
+     "token": "\u05e4\u05d9\u05d9\u05e1\u05d1",
+     "bytes": [
+      215,
+      164,
+      215,
+      153,
+      215,
+      153,
+      215,
+      161,
+      215,
+      145
+     ],
+     "logprob": -7.739266395568848
+    },
+    {
+     "id": 139941,
+     "token": " \u05dc\u05d7\u05dc\u05d5\u05d8",
+     "bytes": [
+      32,
+      215,
+      156,
+      215,
+      151,
+      215,
+      156,
+      215,
+      149,
+      215,
+      152
+     ],
+     "logprob": -7.74788236618042
+    },
+    {
+     "id": 179,
+     "token": "",
+     "bytes": [
+      247
+     ],
+     "logprob": -7.760977745056152
+    },
+    {
+     "id": 181,
+     "token": "\ufffd",
+     "bytes": [
+      249
+     ],
+     "logprob": -7.760977745056152
+    }
+   ]
+  },
+  {
+   "id": 198,
+   "token": "\n",
+   "bytes": [
+    10
+   ],
+   "logprob": -0.000424415513407439,
+   "top_logprobs": [
+    {
+     "id": 198,
+     "token": "\n",
+     "bytes": [
+      10
+     ],
+     "logprob": -0.000424415513407439
+    },
+    {
+     "id": 27806,
+     "token": "hostname",
+     "bytes": [
+      104,
+      111,
+      115,
+      116,
+      110,
+      97,
+      109,
+      101
+     ],
+     "logprob": -7.998784065246582
+    },
+    {
+     "id": 872,
+     "token": "user",
+     "bytes": [
+      117,
+      115,
+      101,
+      114
+     ],
+     "logprob": -11.162388801574707
+    },
+    {
+     "id": 14380,
+     "token": "lab",
+     "bytes": [
+      108,
+      97,
+      98
+     ],
+     "logprob": -12.135098457336426
+    },
+    {
+     "id": 23582,
+     "token": "priority",
+     "bytes": [
+      112,
+      114,
+      105,
+      111,
+      114,
+      105,
+      116,
+      121
+     ],
+     "logprob": -12.64311695098877
+    },
+    {
+     "id": 606,
+     "token": "name",
+     "bytes": [
+      110,
+      97,
+      109,
+      101
+     ],
+     "logprob": -12.82166576385498
+    },
+    {
+     "id": 271,
+     "token": "\n\n",
+     "bytes": [
+      10,
+      10
+     ],
+     "logprob": -12.922472953796387
+    },
+    {
+     "id": 2153,
+     "token": "core",
+     "bytes": [
+      99,
+      111,
+      114,
+      101
+     ],
+     "logprob": -12.977757453918457
+    },
+    {
+     "id": 3790,
+     "token": "host",
+     "bytes": [
+      104,
+      111,
+      115,
+      116
+     ],
+     "logprob": -13.059844017028809
+    },
+    {
+     "id": 9047,
+     "token": "theme",
+     "bytes": [
+      116,
+      104,
+      101,
+      109,
+      101
+     ],
+     "logprob": -13.387667655944824
+    }
+   ]
+  },
+  {
+   "id": 81736,
+   "token": "Intialized",
+   "bytes": [
+    73,
+    110,
+    116,
+    105,
+    97,
+    108,
+    105,
+    122,
+    101,
+    100
+   ],
+   "logprob": -7.103445529937744,
+   "top_logprobs": [
+    {
+     "id": 81736,
+     "token": "Intialized",
+     "bytes": [
+      73,
+      110,
+      116,
+      105,
+      97,
+      108,
+      105,
+      122,
+      101,
+      100
+     ],
+     "logprob": -7.103445529937744
+    },
+    {
+     "id": 94227,
+     "token": "(reordered",
+     "bytes": [
+      40,
+      114,
+      101,
+      111,
+      114,
+      100,
+      101,
+      114,
+      101,
+      100
+     ],
+     "logprob": -7.621981143951416
+    },
+    {
+     "id": 27487,
+     "token": "\ufffd\ufffd\u53d6",
+     "bytes": [
+      142,
+      183,
+      229,
+      143,
+      150
+     ],
+     "logprob": -7.693638324737549
+    },
+    {
+     "id": 151298,
+     "token": "\ud834\uddda",
+     "bytes": [
+      240,
+      157,
+      135,
+      154
+     ],
+     "logprob": -7.733885288238525
+    },
+    {
+     "id": 88372,
+     "token": "useRalative",
+     "bytes": [
+      117,
+      115,
+      101,
+      82,
+      97,
+      108,
+      97,
+      116,
+      105,
+      118,
+      101
+     ],
+     "logprob": -7.7440667152404785
+    },
+    {
+     "id": 70564,
+     "token": "\tNdrFc",
+     "bytes": [
+      9,
+      78,
+      100,
+      114,
+      70,
+      99
+     ],
+     "logprob": -7.751427173614502
+    },
+    {
+     "id": 177,
+     "token": "",
+     "bytes": [
+      245
+     ],
+     "logprob": -7.775862216949463
+    },
+    {
+     "id": 180,
+     "token": "\ufffd",
+     "bytes": [
+      248
+     ],
+     "logprob": -7.775862216949463
+    },
+    {
+     "id": 178,
+     "token": "",
+     "bytes": [
+      246
+     ],
+     "logprob": -7.775862216949463
+    },
+    {
+     "id": 181,
+     "token": "\ufffd",
+     "bytes": [
+      249
+     ],
+     "logprob": -7.775862216949463
+    }
+   ]
+  },
+  {
+   "id": 9273,
+   "token": " router",
+   "bytes": [
+    32,
+    114,
+    111,
+    117,
+    116,
+    101,
+    114
+   ],
+   "logprob": -0.8247009515762329,
+   "top_logprobs": [
+    {
+     "id": 9273,
+     "token": " router",
+     "bytes": [
+      32,
+      114,
+      111,
+      117,
+      116,
+      101,
+      114
+     ],
+     "logprob": -0.8247009515762329
+    },
+    {
+     "id": 198,
+     "token": "\n",
+     "bytes": [
+      10
+     ],
+     "logprob": -2.2224690914154053
+    },
+    {
+     "id": 28115,
+     "token": " hostname",
+     "bytes": [
+      32,
+      104,
+      111,
+      115,
+      116,
+      110,
+      97,
+      109,
+      101
+     ],
+     "logprob": -2.4726293087005615
+    },
+    {
+     "id": 3398,
+     "token": " switch",
+     "bytes": [
+      32,
+      115,
+      119,
+      105,
+      116,
+      99,
+      104
+     ],
+     "logprob": -3.035794973373413
+    },
+    {
+     "id": 279,
+     "token": " the",
+     "bytes": [
+      32,
+      116,
+      104,
+      101
+     ],
+     "logprob": -3.787656307220459
+    },
+    {
+     "id": 3671,
+     "token": " device",
+     "bytes": [
+      32,
+      100,
+      101,
+      118,
+      105,
+      99,
+      101
+     ],
+     "logprob": -3.948596477508545
+    },
+    {
+     "id": 96539,
+     "token": " OSP",
+     "bytes": [
+      32,
+      79,
+      83,
+      80
+     ],
+     "logprob": -4.429316997528076
+    },
+    {
+     "id": 264,
+     "token": " a",
+     "bytes": [
+      32,
+      97
+     ],
+     "logprob": -4.440232753753662
+    },
+    {
+     "id": 435,
+     "token": " r",
+     "bytes": [
+      32,
+      114
+     ],
+     "logprob": -4.4463210105896
+    },
+    {
+     "id": 28795,
+     "token": " gateway",
+     "bytes": [
+      32,
+      103,
+      97,
+      116,
+      101,
+      119,
+      97,
+      121
+     ],
+     "logprob": -4.565959453582764
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "token": "2",
+   "bytes": [
+    50
+   ],
+   "logprob": -0.046581853181123734,
+   "top_logprobs": [
+    {
+     "id": 17,
+     "token": "2",
+     "bytes": [
+      50
+     ],
+     "logprob": -0.046581853181123734
+    },
+    {
+     "id": 16,
+     "token": "1",
+     "bytes": [
+      49
+     ],
+     "logprob": -3.586460590362549
+    },
+    {
+     "id": 18,
+     "token": "3",
+     "bytes": [
+      51
+     ],
+     "logprob": -5.324738025665283
+    },
+    {
+     "id": 198,
+     "token": "\n",
+     "bytes": [
+      10
+     ],
+     "logprob": -5.700033664703369
+    },
+    {
+     "id": 28115,
+     "token": " hostname",
+     "bytes": [
+      32,
+      104,
+      111,
+      115,
+      116,
+      110,
+      97,
+      109,
+      101
+     ],
+     "logprob": -6.332642078399658
+    },
+    {
+     "id": 220,
+     "token": " ",
+     "bytes": [
+      32
+     ],
+     "logprob": -6.761963367462158
+    },
+    {
+     "id": 435,
+     "token": " r",
+     "bytes": [
+      32,
+      114
+     ],
+     "logprob": -6.793459415435791
+    },
+    {
+     "id": 9273,
+     "token": " router",
+     "bytes": [
+      32,
+      114,
+      111,
+      117,
+      116,
+      101,
+      114
+     ],
+     "logprob": -7.894381046295166
+    },
+    {
+     "id": 19,
+     "token": "4",
+     "bytes": [
+      52
+     ],
+     "logprob": -8.011590003967285
+    },
+    {
+     "id": 448,
+     "token": " with",
+     "bytes": [
+      32,
+      119,
+      105,
+      116,
+      104
+     ],
+     "logprob": -8.079020500183105
+    }
+   ]
+  },
+  {
+   "id": 198,
+   "token": "\n",
+   "bytes": [
+    10
+   ],
+   "logprob": -0.014959631487727165,
+   "top_logprobs": [
+    {
+     "id": 198,
+     "token": "\n",
+     "bytes": [
+      10
+     ],
+     "logprob": -0.014959631487727165
+    },
+    {
+     "id": 510,
+     "token": ":\n",
+     "bytes": [
+      58,
+      10
+     ],
+     "logprob": -6.067274570465088
+    },
+    {
+     "id": 11,
+     "token": ",",
+     "bytes": [
+      44
+     ],
+     "logprob": -6.0914177894592285
+    },
+    {
+     "id": 28115,
+     "token": " hostname",
+     "bytes": [
+      32,
+      104,
+      111,
+      115,
+      116,
+      110,
+      97,
+      109,
+      101
+     ],
+     "logprob": -6.161911487579346
+    },
+    {
+     "id": 448,
+     "token": " with",
+     "bytes": [
+      32,
+      119,
+      105,
+      116,
+      104
+     ],
+     "logprob": -6.766623020172119
+    },
+    {
+     "id": 13,
+     "token": ".",
+     "bytes": [
+      46
+     ],
+     "logprob": -7.165682315826416
+    },
+    {
+     "id": 311,
+     "token": " to",
+     "bytes": [
+      32,
+      116,
+      111
+     ],
+     "logprob": -7.205891132354736
+    },
+    {
+     "id": 320,
+     "token": " (",
+     "bytes": [
+      32,
+      40
+     ],
+     "logprob": -7.312475681304932
+    },
+    {
+     "id": 7790,
+     "token": " successfully",
+     "bytes": [
+      32,
+      115,
+      117,
+      99,
+      99,
+      101,
+      115,
+      115,
+      102,
+      117,
+      108,
+      108,
+      121
+     ],
+     "logprob": -7.540455341339111
+    },
+    {
+     "id": 438,
+     "token": " as",
+     "bytes": [
+      32,
+      97,
+      115
+     ],
+     "logprob": -7.915649890899658
+    }
+   ]
+  },
+  {
+   "id": 27806,
+   "token": "hostname",
+   "bytes": [
+    104,
+    111,
+    115,
+    116,
+    110,
+    97,
+    109,
+    101
+   ],
+   "logprob": -2.02197527885437,
+   "top_logprobs": [
+    {
+     "id": 27806,
+     "token": "hostname",
+     "bytes": [
+      104,
+      111,
+      115,
+      116,
+      110,
+      97,
+      109,
+      101
+     ],
+     "logprob": -2.02197527885437
+    },
+    {
+     "id": 89998,
+     "token": "(Initialized",
+     "bytes": [
+      40,
+      73,
+      110,
+      105,
+      116,
+      105,
+      97,
+      108,
+      105,
+      122,
+      101,
+      100
+     ],
+     "logprob": -5.015373706817627
+    },
+    {
+     "id": 81736,
+     "token": "Intialized",
+     "bytes": [
+      73,
+      110,
+      116,
+      105,
+      97,
+      108,
+      105,
+      122,
+      101,
+      100
+     ],
+     "logprob": -5.146912097930908
+    },
+    {
+     "id": 20191,
+     "token": "VRTX",
+     "bytes": [
+      86,
+      82,
+      84,
+      88
+     ],
+     "logprob": -5.2582268714904785
+    },
+    {
+     "id": 48502,
+     "token": "\u00e1tica",
+     "bytes": [
+      195,
+      161,
+      116,
+      105,
+      99,
+      97
+     ],
+     "logprob": -6.012360095977783
+    },
+    {
+     "id": 5295,
+     "token": "arter",
+     "bytes": [
+      97,
+      114,
+      116,
+      101,
+      114
+     ],
+     "logprob": -6.107450008392334
+    },
+    {
+     "id": 67009,
+     "token": "\trouter",
+     "bytes": [
+      9,
+      114,
+      111,
+      117,
+      116,
+      101,
+      114
+     ],
+     "logprob": -6.338350772857666
+    },
+    {
+     "id": 9937,
+     "token": "router",
+     "bytes": [
+      114,
+      111,
+      117,
+      116,
+      101,
+      114
+     ],
+     "logprob": -6.632049083709717
+    },
+    {
+     "id": 61210,
+     "token": "(router",
+     "bytes": [
+      40,
+      114,
+      111,
+      117,
+      116,
+      101,
+      114
+     ],
+     "logprob": -7.125725269317627
+    },
+    {
+     "id": 14361,
+     "token": "arters",
+     "bytes": [
+      97,
+      114,
+      116,
+      101,
+      114,
+      115
+     ],
+     "logprob": -7.258030414581299
+    }
+   ]
+  },
+  {
+   "id": 9273,
+   "token": " router",
+   "bytes": [
+    32,
+    114,
+    111,
+    117,
+    116,
+    101,
+    114
+   ],
+   "logprob": -3.57628505298635e-06,
+   "top_logprobs": [
+    {
+     "id": 9273,
+     "token": " router",
+     "bytes": [
+      32,
+      114,
+      111,
+      117,
+      116,
+      101,
+      114
+     ],
+     "logprob": -3.57628505298635e-06
+    },
+    {
+     "id": 3398,
+     "token": " switch",
+     "bytes": [
+      32,
+      115,
+      119,
+      105,
+      116,
+      99,
+      104
+     ],
+     "logprob": -12.887205123901367
+    },
+    {
+     "id": 435,
+     "token": " r",
+     "bytes": [
+      32,
+      114
+     ],
+     "logprob": -14.279397964477539
+    },
+    {
+     "id": 6021,
+     "token": " route",
+     "bytes": [
+      32,
+      114,
+      111,
+      117,
+      116,
+      101
+     ],
+     "logprob": -14.775455474853516
+    },
+    {
+     "id": 6200,
+     "token": " core",
+     "bytes": [
+      32,
+      99,
+      111,
+      114,
+      101
+     ],
+     "logprob": -15.821725845336914
+    },
+    {
+     "id": 29058,
+     "token": " routing",
+     "bytes": [
+      32,
+      114,
+      111,
+      117,
+      116,
+      105,
+      110,
+      103
+     ],
+     "logprob": -16.72694206237793
+    },
+    {
+     "id": 31381,
+     "token": " rho",
+     "bytes": [
+      32,
+      114,
+      104,
+      111
+     ],
+     "logprob": -17.306217193603516
+    },
+    {
+     "id": 61210,
+     "token": "(router",
+     "bytes": [
+      40,
+      114,
+      111,
+      117,
+      116,
+      101,
+      114
+     ],
+     "logprob": -17.475088119506836
+    },
+    {
+     "id": 59175,
+     "token": " routers",
+     "bytes": [
+      32,
+      114,
+      111,
+      117,
+      116,
+      101,
+      114,
+      115
+     ],
+     "logprob": -17.648517608642578
+    },
+    {
+     "id": 28115,
+     "token": " hostname",
+     "bytes": [
+      32,
+      104,
+      111,
+      115,
+      116,
+      110,
+      97,
+      109,
+      101
+     ],
+     "logprob": -17.693784713745117
+    }
+   ]
+  }
+ ]
+}

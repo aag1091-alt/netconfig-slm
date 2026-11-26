@@ -1,0 +1,18 @@
+probe-01       acl              parse=PASS (parse ok (16 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-02       acl              parse=PASS (parse ok (6 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-03       acl              parse=PASS (parse ok (9 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-04       acl              parse=PASS (parse ok (8 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-05       acl              parse=PASS (parse ok (8 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-06       nat              parse=PASS (parse ok (12 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-07       nat              parse=PASS (parse ok (13 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-08       nat              parse=PASS (parse ok (13 config lines)) batfish=False (batfish PASSED (CISCO_IOS) but 3 init issue(s): Convert warning (redflag); Parse warning)
+probe-09       nat              parse=PASS (parse ok (11 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-10       nat              parse=PASS (parse ok (11 config lines)) batfish=False (batfish status PARTIALLY_UNRECOGNIZED (CISCO_IOS), 2 init issue(s))
+probe-11       hsrp             parse=PASS (parse ok (7 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-12       hsrp             parse=PASS (parse ok (11 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+probe-13       hsrp             parse=PASS (parse ok (10 config lines)) batfish=False (batfish status PARTIALLY_UNRECOGNIZED (CISCO_IOS), 2 init issue(s))
+probe-14       acl              parse=PASS (parse ok (5 config lines)) batfish=False (batfish PASSED (CISCO_IOS) but 1 init issue(s): Parse warning)
+probe-15       nat              parse=PASS (parse ok (10 config lines)) batfish=False (batfish status PARTIALLY_UNRECOGNIZED (CISCO_IOS), 1 init issue(s))
+probe-16       hsrp             parse=PASS (parse ok (7 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+
+Total: 16 parse-pass, 0 parse-fail, 11 batfish-pass

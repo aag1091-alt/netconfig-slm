@@ -1,0 +1,102 @@
+{
+  "elapsed_min": 26.8,
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "ending_check_ok": true,
+  "position_scan": {
+    "ospf-0249": {
+      "p_eos_at_boundary": 0.0004278480482753366,
+      "p_eos_max": 0.0004278480482753366,
+      "max_offset_from_boundary": 0
+    },
+    "bgp-0763": {
+      "p_eos_at_boundary": 0.0004272814840078354,
+      "p_eos_max": 0.0004272814840078354,
+      "max_offset_from_boundary": 0
+    },
+    "vlan-0539": {
+      "p_eos_at_boundary": 0.0004291645309422165,
+      "p_eos_max": 0.0004291645309422165,
+      "max_offset_from_boundary": 0
+    },
+    "iface-0133": {
+      "p_eos_at_boundary": 0.00042805116390809417,
+      "p_eos_max": 0.00042805116390809417,
+      "max_offset_from_boundary": 0
+    }
+  },
+  "untie_check": {
+    "train_load": {
+      "tag": "train_load",
+      "same_tensor": false,
+      "lm_head_module_type": "Linear",
+      "embed_tokens_module_type": "Embedding",
+      "tie_word_embeddings_config": false,
+      "max_abs_diff_before": 0.2578125,
+      "row151645_max_abs_diff_before": 0.104339599609375,
+      "values_copied_from_embed": true,
+      "max_abs_diff_after": 0.0,
+      "error": null
+    },
+    "merge_load": {
+      "tag": "merge_load",
+      "same_tensor": false,
+      "lm_head_module_type": "Linear",
+      "embed_tokens_module_type": "Embedding",
+      "tie_word_embeddings_config": false,
+      "max_abs_diff_before": null,
+      "row151645_max_abs_diff_before": null,
+      "values_copied_from_embed": false,
+      "max_abs_diff_after": null,
+      "error": "Traceback (most recent call last):\n  File \"/tmp/job_probe_v8.py\", line 414, in untie_check\n    - out_w.detach().float()).abs().max()\n                              ^^^^^\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.45 GiB. GPU 0 has a total capacity of 22.30 GiB of which 282.62 MiB is free. Process 32535 has 22.02 GiB memory in use. Of the allocated memory 21.38 GiB is allocated by PyTorch, and 333.35 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)\n"
+    }
+  },
+  "tie_info": {
+    "tie_word_embeddings_config": false,
+    "lm_head_module_type": "Linear",
+    "embed_tokens_module_type": "Embedding",
+    "active_weights_tied": false,
+    "original_weights_tied": false,
+    "lm_head_weight_requires_grad": false,
+    "error": null
+  },
+  "lora_targets_found": {
+    "count": 253,
+    "has_lm_head": true,
+    "has_embed_tokens": false,
+    "lm_head_entries": [
+      "base_model.model.lm_head"
+    ],
+    "sample": [
+      "base_model.model.model.layers.0.self_attn.q_proj",
+      "base_model.model.model.layers.0.self_attn.k_proj",
+      "base_model.model.model.layers.0.self_attn.v_proj",
+      "base_model.model.model.layers.0.self_attn.o_proj",
+      "base_model.model.model.layers.0.mlp.gate_proj"
+    ]
+  },
+  "lm_head_check": {
+    "base_row_l2": 0.3565717339515686,
+    "base_embed_row_l2": 0.3565717339515686,
+    "adapter": {
+      "tag": "adapter",
+      "row": 151645,
+      "method": "analytic merged-equivalent (base row + scaling * (B@A)[row])",
+      "delta_l2": 0.005708367098122835,
+      "row_l2": 0.3565765917301178,
+      "base_row_l2": 0.3565717339515686
+    },
+    "merged": {
+      "tag": "merged",
+      "error": "merged artifact unavailable: the merge block failed before the movement check"
+    },
+    "merged_embed": {
+      "tag": "merged_embed_tokens",
+      "error": "merged artifact unavailable: the merge block failed before the movement check"
+    }
+  },
+  "assertion_passed": true,
+  "adapter_stopped_cleanly_pct": 4.2,
+  "merged_stopped_cleanly_pct": null,
+  "train_loss": 0.17532702442258596,
+  "status": "completed"
+}

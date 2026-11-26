@@ -1,0 +1,340 @@
+{
+  "script": "job_probe_v3.py",
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "versions": {
+    "trl": "0.25.1",
+    "transformers": "4.57.6",
+    "peft": "0.18.1",
+    "datasets": "3.6.0",
+    "torch": "2.5.1+cu124",
+    "accelerate": "1.15.0",
+    "bitsandbytes": "0.50.2"
+  },
+  "subset_rows": 256,
+  "subset_family_counts": {
+    "bgp": 43,
+    "interface_mgmt": 43,
+    "ospf": 43,
+    "static_route": 43,
+    "trunk_svi": 42,
+    "vlan_l2": 42
+  },
+  "heldout_rows": 24,
+  "assertion": {
+    "passed": true,
+    "expect": 151645,
+    "method": "train_dataloader",
+    "n_rows": 2,
+    "per_row_last_labels": [
+      151645,
+      151645
+    ],
+    "row0_last5_token_ids": [
+      16,
+      20,
+      15,
+      198,
+      151645
+    ],
+    "row0_last_label": 151645,
+    "error": null
+  },
+  "assertion_warning": null,
+  "train": {
+    "loss": 0.14242926239967346,
+    "epochs": 1,
+    "steps_expected": 16,
+    "log_history": [
+      {
+        "loss": 0.1726,
+        "grad_norm": 0.13353857398033142,
+        "learning_rate": 8.954715367323468e-05,
+        "entropy": 0.7626527439802885,
+        "num_tokens": 69379.0,
+        "mean_token_accuracy": 0.9657086983323098,
+        "epoch": 0.625,
+        "step": 10
+      },
+      {
+        "train_runtime": 189.2132,
+        "train_samples_per_second": 1.353,
+        "train_steps_per_second": 0.085,
+        "total_flos": 3102510578749440.0,
+        "train_loss": 0.14242926239967346,
+        "entropy": 0.6460238993167877,
+        "num_tokens": 111471.0,
+        "mean_token_accuracy": 0.9813893077274164,
+        "epoch": 1.0,
+        "step": 16
+      }
+    ]
+  },
+  "adapter_eval": {
+    "n": 24,
+    "stopped_cleanly_pct": 0.0,
+    "mean_coverage": 0.983,
+    "gate_pass": false,
+    "per_prompt": [
+      {
+        "id": "bgp-0763",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0238",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0392",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0175",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0133",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0605",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0320",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0206",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0249",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0478",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0731",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0763",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0771",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0220",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0602",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0620",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0475",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0174",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0118",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0030",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0539",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0720",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0573",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0050",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      }
+    ]
+  },
+  "merged_eval": {
+    "n": 24,
+    "stopped_cleanly_pct": 0.0,
+    "mean_coverage": 0.99,
+    "gate_pass": false,
+    "per_prompt": [
+      {
+        "id": "bgp-0763",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0238",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0392",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "bgp-0175",
+        "family": "bgp",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0133",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0605",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0320",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "iface-0206",
+        "family": "interface_mgmt",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0249",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0478",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0731",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "ospf-0763",
+        "family": "ospf",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0771",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0220",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0602",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "static-0620",
+        "family": "static_route",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0475",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0174",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0118",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "trunk-0030",
+        "family": "trunk_svi",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0539",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0720",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0573",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      },
+      {
+        "id": "vlan-0050",
+        "family": "vlan_l2",
+        "stopped_cleanly": false
+      }
+    ]
+  },
+  "durations": {
+    "train_s": 189.5,
+    "eval_adapter_s": 1338.8,
+    "merge_s": 21.8,
+    "eval_merged_s": 552.0,
+    "total_min": 35.7
+  },
+  "gate": {
+    "rule": "stopped_cleanly >= 90.0% on 24 held-out prompts",
+    "adapter_pass": false,
+    "merged_pass": false
+  }
+}

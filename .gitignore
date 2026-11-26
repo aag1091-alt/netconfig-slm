@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+# Model weights live on Hugging Face, not in git
+*.safetensors
+*.gguf
+outputs/hf-fullft/stage-model/
+
+# Publish scratch: LFS request payloads can carry auth headers
+outputs/hf-fullft/lfs-*.json

@@ -1,0 +1,7 @@
+vlan-0001      vlan_l2          parse=PASS (parse ok (8 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+trunk-0001     trunk_svi        parse=PASS (parse ok (11 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+static-0001    static_route     parse=PASS (parse ok (3 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+ospf-0001      ospf             parse=PASS (parse ok (5 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+bgp-0001       bgp              parse=PASS (parse ok (9 config lines)) batfish=True (batfish PASSED (CISCO_IOS), 0 init issues)
+
+Total: 5 parse-pass, 0 parse-fail, 5 batfish-pass

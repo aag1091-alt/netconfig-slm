@@ -1,0 +1,105 @@
+{
+  "dataset": "netconfig-slm",
+  "version": "1.0",
+  "assembled_at": "2026-11-23T22:06:44.432076+00:00",
+  "total_rows": 5000,
+  "families": {
+    "bgp": 834,
+    "interface_mgmt": 830,
+    "ospf": 834,
+    "static_route": 834,
+    "trunk_svi": 834,
+    "vlan_l2": 834
+  },
+  "splits": {
+    "seed": 42,
+    "method": "stratified by family, 90/5/5 train/val/test, per-family shuffle with random.Random(42); same algorithm as v0.1-v0.4 (scripts/build_v01_dataset.py .. build_v04_dataset.py)",
+    "sizes": {
+      "train": 4496,
+      "val": 252,
+      "test": 252
+    },
+    "per_family": {
+      "bgp": {
+        "total": 834,
+        "train": 750,
+        "val": 42,
+        "test": 42
+      },
+      "interface_mgmt": {
+        "total": 830,
+        "train": 746,
+        "val": 42,
+        "test": 42
+      },
+      "ospf": {
+        "total": 834,
+        "train": 750,
+        "val": 42,
+        "test": 42
+      },
+      "static_route": {
+        "total": 834,
+        "train": 750,
+        "val": 42,
+        "test": 42
+      },
+      "trunk_svi": {
+        "total": 834,
+        "train": 750,
+        "val": 42,
+        "test": 42
+      },
+      "vlan_l2": {
+        "total": 834,
+        "train": 750,
+        "val": 42,
+        "test": 42
+      }
+    }
+  },
+  "validation": {
+    "parse_pass": 5000,
+    "batfish_pass": 5000,
+    "emulation_pass": null,
+    "evidence": [
+      "docs/seed-expansion-run.txt",
+      "docs/gen-run-001-vlan-trunk.txt",
+      "docs/gen-run-002-static-ospf.txt",
+      "docs/gen-run-003-bgp-iface.txt",
+      "docs/gen-run-004-batch4.txt",
+      "docs/gen-run-005-v02-revalidation.txt",
+      "docs/gen-run-005-batch5.txt",
+      "docs/gen-run-006-batch6.txt",
+      "docs/gen-run-007-batch7.txt",
+      "docs/validation-round-1.md",
+      "data/v0.2/intent_match_results.jsonl",
+      "data/v0.3/intent_match_results.jsonl",
+      "data/v0.4/intent_match_results.jsonl",
+      "data/v1.0/intent_match_results.jsonl"
+    ],
+    "note": "v1.0 = v0.4 corpus (3,280, validated at v0.4) + batch 7 (1,720, flags from gen run 007, which included a mutation-tested intent-match self-check gate: 22/22 hand-corrupted rows caught). v1.0 completes the locked Cisco v0 scope (2026-11-22): 6 families, exactly 5,000 validated pairs. The full 5,000-row corpus was additionally audited with scripts/intent_match.py; residual flags are documented checker extraction limits (triaged, sample-verified), not data mismatches - see data/v1.0/intent_match_results.jsonl and the v1.0 DATASET_CARD.md intent-match section for the triage detail."
+  },
+  "provenance": {
+    "handwritten_seeds": 100,
+    "generated_synthetic": 4900,
+    "cisco_guide": 0,
+    "origin_files": [
+      "data/v0.4/dataset.jsonl",
+      "data/generated/bgp_b7.jsonl",
+      "data/generated/interface_mgmt_b7.jsonl",
+      "data/generated/ospf_b7.jsonl",
+      "data/generated/static_route_b7.jsonl",
+      "data/generated/trunk_svi_b7.jsonl",
+      "data/generated/vlan_l2_b7.jsonl"
+    ]
+  },
+  "integrity": {
+    "unique_ids": 5000,
+    "duplicate_intent_config_pairs": 0,
+    "scrub_secret_pattern_hits": 0,
+    "routable_ip_tokens": "all globally-routable dotted quads are OSPF/BGP router-id identifiers (conventional lab placeholders, e.g. 1.1.1.1) in v0.1 seed-era rows; every assigned address, peer, network and next-hop is RFC1918 or an IETF documentation range",
+    "problems": [],
+    "warnings": []
+  }
+}

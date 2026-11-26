@@ -1,0 +1,36 @@
+{
+  "elapsed_min": 35.5,
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "ending_check_ok": true,
+  "tie_info": {
+    "tie_word_embeddings_config": true,
+    "lm_head_module_type": "ModulesToSaveWrapper",
+    "embed_tokens_module_type": "Embedding",
+    "active_weights_tied": false,
+    "original_weights_tied": true,
+    "lm_head_weight_requires_grad": true,
+    "error": null
+  },
+  "lm_head_check": {
+    "base_row_l2": 0.3565717339515686,
+    "adapter": {
+      "tag": "adapter",
+      "row": 151645,
+      "delta_l2": NaN,
+      "row_l2": NaN,
+      "base_row_l2": 0.3565717339515686
+    },
+    "merged": {
+      "tag": "merged",
+      "row": 151645,
+      "delta_l2": NaN,
+      "row_l2": NaN,
+      "base_row_l2": 0.3565717339515686
+    }
+  },
+  "assertion_passed": true,
+  "adapter_stopped_cleanly_pct": 0.0,
+  "merged_stopped_cleanly_pct": 0.0,
+  "train_loss": 18720.966796875,
+  "status": "completed"
+}

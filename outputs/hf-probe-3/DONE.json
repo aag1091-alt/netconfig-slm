@@ -1,0 +1,9 @@
+{
+  "elapsed_min": 35.7,
+  "dataset_sha": "ecf3d5a9a67ab9a52342d3a2ed6ed91b01392831",
+  "assertion_passed": true,
+  "adapter_stopped_cleanly_pct": 0.0,
+  "merged_stopped_cleanly_pct": 0.0,
+  "train_loss": 0.14242926239967346,
+  "status": "completed"
+}
