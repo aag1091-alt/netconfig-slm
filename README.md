@@ -25,7 +25,7 @@ Model v1 scores on the held-out test split (raw, untruncated generations): parse
 
 1. **Generate from intent outward.** Each family generator samples a valid structured intent, renders the IOS XE config deterministically, and writes natural-language surface forms. Flagged candidates are dropped and regenerated, never patched.
 2. **Gate every row.** Dedupe (exact + shape signature) → intent-match checker → ciscoconfparse2 parse → Batfish semantic validation.
-3. **Score honestly.** Raw generations on the held-out split; intent failures triaged by hand before any number is published. `outputs/hf-fullft/DIAGNOSIS.md` documents why QLoRA could not teach the base model to stop (tied embeddings froze the stop token's output row) and why full fine-tuning fixed it.
+3. **Score honestly.** Raw generations on the held-out split; intent failures triaged by hand before any number is published. `outputs/hf-job-2/DIAGNOSIS.md` documents why QLoRA could not teach the base model to stop (tied embeddings froze the stop token's output row) and why full fine-tuning fixed it.
 
 ## Repo map
 

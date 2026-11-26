@@ -1,0 +1,426 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  columns=fullflexible,
+  frame=single,
+  framesep=4pt,
+  xleftmargin=2pt,
+  xrightmargin=2pt
+}
+
+\newcommand{\tbd}{\textbf{[TBD]}}
+
+\begin{document}
+
+\title{Plans, Not Payloads: Semantic Parsing and Deterministic Compilation for Stateful Network Configuration with Small Language Models}
+
+\author{\IEEEauthorblockN{Avinash Ashok Gosavi}
+\IEEEauthorblockA{[Affiliation TBD]}}
+
+\maketitle
+
+\begin{abstract}
+Prior work on language models for network configuration generates configurations for a fresh device. Operators, however, edit running devices: a request means a change against existing state, and a correct change must leave everything else untouched. We present a two-stage architecture---a small language model translates an operator request and a snapshot of device state into a compact, typed change plan; deterministic code validates the plan against the device schema, applies it, and renders the CLI. Acceptance requires three distinct checks: the resulting state is schema-valid, the requested intent is achieved, and unrelated state is preserved. Ambiguity is a trained output: when a request under-specifies the target, the correct behavior is to ask. As a first stage, we built the direct-generation baseline properly: an intent-first synthesis pipeline with deduplication, intent-match, parse, and Batfish gates produced a 5,861-pair Cisco IOS~XE corpus, and a fully fine-tuned Qwen3-4B scores 100\% parse, 92.5\% intent-match (triaged), and 98.8\% Batfish on held-out greenfield generation. A cause-tagged analysis of its residual failures shows that 11 of the 12 real failures in its weakest family are output-length truncations---the defect class the plan representation removes structurally, because a plan names each port and VLAN once and a deterministic renderer performs the expansion. On a frozen, independently authored benchmark of stateful VLAN and trunk edits, we compare direct CLI generation, prompted plans, prompted plans with YANG-lookup context (adapted from Holl\'osi et al.), fine-tuned plans, and a classifier-plus-slot-extraction baseline on correct state change, unintended changes, clarification accuracy in both directions, output tokens, and latency. \textbf{[TBD --- comparison pending: headline comparison results, the size floor from the step-down study, and the attribution of accuracy to training versus output-space narrowing will be inserted here.]} All data, models, code, and the benchmark are public.
+\end{abstract}
+
+\begin{IEEEkeywords}
+network configuration, small language models, semantic parsing, YANG, OpenConfig, Batfish, intent-based networking
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Production networks are not configured once; they are edited, continuously, for years. The unit of operational work is a change against a running device: ``add VLAN~20 to the uplink trunk,'' ``move this port to the voice VLAN, but don't enable it yet,'' ``restrict that trunk to only the management VLAN.'' Each such request is interpreted against the device's current state, and its correctness has two halves that a greenfield generator never faces. First, the meaning of the request depends on state: on a trunk allowing $\{10, 30\}$, ``add VLAN~20'' must produce $\{10, 20, 30\}$, while ``allow only VLAN~20'' must produce $\{20\}$---the sentences differ by one word, and the states they start from are identical, so no state-free system can distinguish them. Second, a correct edit is defined as much by what it does \emph{not} change: every other interface, VLAN, and parameter on the device must survive the edit exactly. A system that re-emits a whole configuration to express a one-line change puts every line it retypes at risk.
+
+The published literature on language models for network configuration has largely optimized the other problem: generating a configuration payload for a fresh device from an instruction. Holl\'osi et al.~\cite{hollosi2024netconf} prompt general-purpose LLMs, optionally augmented with retrieved YANG modules, to emit NETCONF XML; SLM\_netconfig~\cite{slmnetconfig2025} fine-tunes small models to emit CLI configurations mined from vendor documentation; NetConfEval~\cite{netconfeval} evaluates natural-language to structured-JSON translation for network \emph{policies} such as reachability. None of these takes current device state as input, none scores preservation of unrelated state, and none treats an ambiguous request as something to clarify rather than guess. We argue the stateful edit, not the greenfield payload, is the task worth solving---and the task whose failure modes are worth measuring.
+
+This paper presents NetConfig, a two-stage architecture that separates the part of the problem that is linguistic from the part that is mechanical. A small language model performs \emph{semantic parsing}: given an operator request and a snapshot of device state, it emits a compact, typed change plan $\Delta$ drawn from a small operation set. Deterministic code---the \emph{compiler}---validates $\Delta$ against the device schema, applies it to the state $S$ to obtain $S' = \mathrm{apply}(S, \Delta)$, and renders the IOS~XE CLI. A candidate change is accepted only when three distinct checks pass: $S'$ is schema-valid; the requested intent is achieved (the diff $S \rightarrow S'$ contains every authorized change); and nothing else changed (the diff contains nothing beyond the operation's documented effects). Ambiguity is a first-class output of the parser: when a request cannot be resolved against the device inventory---two interfaces answer to ``uplink''---the correct output is a clarification question, and guessing is scored as an error, as is asking when the request was already clear.
+
+We did not begin with the architecture; we arrived at it by building the direct approach first and measuring where it breaks. In the first phase of this project we constructed a gated synthesis pipeline that produced a 5,000-pair Cisco IOS~XE corpus across six configuration families, fine-tuned Qwen3-4B on it, and scored raw generations on a held-out split with a pre-registered publish bar (Batfish $\geq$95\%, intent-match $\geq$90\% after triage). The resulting model clears the bar (Section~\ref{sec:expa-results}), but its residual failures are instructive: in its weakest family, 11 of 12 real failures are generations that run out of output budget while enumerating long port lists, and across families the model occasionally retypes a wrong hostname---a fact it was \emph{given}. Both defect classes are artifacts of asking a language model to emit the whole configuration. A plan names each port and VLAN once and lets the renderer expand them; the device identity lives in context, outside generation, and no operation in the plan language can rename it. The plan representation removes both classes structurally rather than statistically.
+
+This paper is organized around four research questions:
+
+\begin{itemize}
+\item \textbf{RQ1 (size).} How small can a model get while translating operator language into OpenConfig-backed, state-aware device edits?
+\item \textbf{RQ2 (attribution).} How much of the reliability comes from training, and how much from narrowing the output space---plan schema, decoding constraints, deterministic compilation? A corollary: how much does schema retrieval (YANG lookup) add, for prompted and for fine-tuned emitters?
+\item \textbf{RQ3 (restraint).} Can a small model learn when \emph{not} to act---asking on ambiguous requests without over-asking on clear ones?
+\item \textbf{RQ4 (defect classes).} Does the plan representation eliminate the observed failure classes of direct CLI generation---truncation on long enumerations and hostname slips---and what replaces them?
+\end{itemize}
+
+Our contributions are:
+
+\begin{enumerate}
+\item A formulation of network configuration as \emph{stateful editing} $(S, x) \rightarrow \Delta$ with preservation of unrelated state as a first-class, measured criterion, in contrast to the greenfield payload generation of prior work.
+\item A plan-and-compiler architecture in which the model emits a small typed change plan (nine operations plus a clarify output for the evaluated slice) and deterministic code owns validation, application, and rendering---including device binding outside generation, which makes hostname errors structurally impossible rather than merely unlikely.
+\item A benchmark designed to catch bugs that the generator, the apply engine, and the renderer all agree on: expected diffs are hand-authored literals that grade the engine (never the reverse), same-state contrast triples separate add/replace/remove semantics, an independent CLI interpreter re-derives the change from rendered text as a second scorer, and contrast/clarification groups are never split across train and evaluation partitions.
+\item A five-arm comparison under a frozen protocol---same base checkpoint, context format, plan schema, decoding constraints, and token budget---that attributes accuracy to training versus output-space narrowing versus retrieval, including a faithful adaptation of the strongest published prompted approach~\cite{hollosi2024netconf} and a non-generative classifier-plus-slot-extraction baseline that bounds how much model the task needs at all.
+\item Public artifacts: the datasets, the fine-tuned model, the plan engine and contract, the benchmark with its golden diffs, and all scoring code.
+\end{enumerate}
+
+Section~\ref{sec:related} positions this work. Section~\ref{sec:approach} describes the state model, the plan contract, and the compiler. Section~\ref{sec:data} describes the data pipeline and benchmark construction. Section~\ref{sec:experiments} specifies the experiments, including the completed direct-generation study and the frozen comparison protocol. Section~\ref{sec:results} reports results, Section~\ref{sec:discussion} discusses attribution, limitations, and threats to validity, and Sections~\ref{sec:conclusion}--\ref{sec:artifacts} conclude and document the artifacts.
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Prompted generation with schema retrieval}
+
+Holl\'osi, Ficzere, and Varga~\cite{hollosi2024netconf} is the closest published work and the reference point for our prompted baselines. They evaluate five LLMs (GPT-3.5, GPT-4, GPT-4o, Gemini, and a locally deployed Llama~3) zero-shot on 12 hand-written greenfield scenarios---setting an address, a gateway, a static route, RIP, DNS, NTP, NAT, a VLAN, and one complex TSN bridge case---asking for NETCONF configuration XML. Their pipeline addresses the models' ignorance of YANG by \emph{lookup}: the model is shown a list of YANG module names with descriptions, selects the modules it needs, and receives those modules in context before generating. Outputs are validated with yanglint and graded by human judgment as valid, minor issues (conceptually right, with namespace or model faults), or major issues. Across three runs (252 cases), their best configuration---GPT-4o with YANG lookup---produced 24 of 36 valid responses, up from 14 for raw GPT-4o; raw Llama~3 produced none. Their error taxonomy is dominated by XML surface faults: namespace anomalies, leakage of vendor-specific YANG readings (e.g., a Cisco interpretation of \texttt{ietf-routing} that is invalid against RFC~8349~\cite{rfc8349}), and misunderstanding of the YANG \texttt{choice} construct. The authors conclude the approach is promising but ``not yet mature enough for immediate industrial application in complex cases,'' and release no code, data, or models.
+
+Two things follow for us. First, their pipeline is the strongest published prompted method, so our comparison includes it---adapted, as Section~\ref{sec:expb} specifies, to take current state as input and emit our plan format; we label it an adaptation, not a reproduction, since a reproduction would generate NETCONF XML on their greenfield task. Second, claim discipline matters: their Llama~3 result shows that \emph{their} small-model prompting setup struggled to produce valid NETCONF XML. Whether a prompted small model can emit a correct \emph{typed plan}---a far smaller, schema-constrained output space with no namespaces to get wrong---is a different question, and it is exactly what our comparison tests (RQ2).
+
+\subsection{Fine-tuning small models for configuration}
+
+SLM\_netconfig~\cite{slmnetconfig2025} is the closest work in training philosophy: it fine-tunes small language models to translate natural language into network configurations, using on the order of ten thousand pairs derived from Cisco IOS~XE configuration guides. It establishes that small, specialized, fine-tuned models are a viable route to CLI generation. It differs from this work in three ways: its data is mined from documentation rather than synthesized intent-first with gated validation; its task is greenfield generation, with no current-state input, no edit semantics, and no preservation criterion; and it does not address ambiguity or clarification. Our Phase~1 study (Section~\ref{sec:expa}) is directly comparable to it in task, and our Phase~2 study departs from it in task formulation.
+
+NetConfEval~\cite{netconfeval} provides natural-language to structured-JSON tasks for network policies such as reachability, and has been adapted with paraphrases for SLM fine-tuning. It is a precedent for structured intent as a target representation, but its questions are policy-level---\emph{should} traffic flow---rather than device-level edits against a concrete state, so its accuracy numbers do not transfer to our setting.
+
+\subsection{Constrained decoding and structured output}
+
+Geng et al.~\cite{geng2023grammar} show that grammar-constrained decoding can substantially improve structured prediction by prompted models without any finetuning, by restricting generation to outputs the grammar accepts. We use schema-constrained decoding in all prompted plan arms, and RQ2 is precisely the question their result raises for our task: if constraints do most of the work, fine-tuning should add little; if the semantics of add-versus-replace against a given state must be \emph{learned}, it should add a great deal. The classifier baseline sharpens the same question from below: if operation classification plus slot copying suffices, no generative model is needed at all.
+
+\subsection{Models, standards, and on-device precedent}
+
+We use OpenConfig models~\cite{openconfigpublic} as the vocabulary for the state a plan changes, and the Cisco IOS~XE native models published in the YangModels repository~\cite{yangmodels}---including release-specific deviations from OpenConfig---to decide what the compiler can support on a given device and release. YANG itself is specified in RFC~7950~\cite{rfc7950}; the YANG library (RFC~8525~\cite{rfc8525}) is the mechanism by which a device advertises the exact schema it supports, which is how a production version of our validator would pin its contract per device. NETCONF (RFC~6241~\cite{rfc6241}) is the transport Holl\'osi et al.\ target; our renderer targets the CLI because that is what our Phase~1 corpus and validation ladder cover, but the plan representation is transport-neutral---a NETCONF renderer is a second back end, not a different architecture. Finally, Cisco DevNet's 2024 demonstration of Ollama running locally in Guest Shell on a Catalyst~9300~\cite{devnetguestshell2024} establishes that on-switch inference is operationally plausible; it does not measure whether the changes a local model proposes are reliable, which is the gap our on-switch study (Section~\ref{sec:expe}) is designed to fill.
+
+Table~\ref{tab:positioning} summarizes the positioning.
+
+\begin{table*}[t]
+\centering
+\caption{Positioning against prior work.}
+\label{tab:positioning}
+\small
+\begin{tabular}{@{}p{2.6cm}p{2.2cm}p{1.9cm}p{1.8cm}p{2.0cm}p{3.4cm}p{1.9cm}@{}}
+\toprule
+\textbf{Work} & \textbf{Task} & \textbf{Current state?} & \textbf{Trained?} & \textbf{Output} & \textbf{Validation} & \textbf{Artifacts} \\
+\midrule
+Holl\'osi et al.~\cite{hollosi2024netconf} & NL $\rightarrow$ config & No & No (prompting + YANG lookup) & NETCONF XML & yanglint + human grading, 252 cases & Paper only \\
+SLM\_netconfig~\cite{slmnetconfig2025} & NL $\rightarrow$ config & No & Yes (SLM fine-tune) & CLI & Per paper & Per paper \\
+NetConfEval~\cite{netconfeval} & NL $\rightarrow$ policy & No (policy-level) & Evaluation set & JSON & Exact/semantic match & Dataset \\
+\textbf{This paper} & NL $+$ $S$ $\rightarrow$ edit & \textbf{Yes; preservation scored} & \textbf{Yes (SLM fine-tune)} & \textbf{Typed plan $\rightarrow$ CLI} & \textbf{State diff vs.\ hand-authored goldens + Batfish, automated} & \textbf{Data, model, code, benchmark} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\section{Approach}
+\label{sec:approach}
+
+\subsection{State, requests, and plans}
+
+We model a device configuration as a typed tree with references: interfaces and VLANs are keyed objects, fields have types and ranges, and some fields refer to other objects (an access port refers to a VLAN; a trunk's native VLAN refers to a VLAN). Given the current state $S$, an operator request $x$, and device context (the inventory, including human aliases such as ``uplink''), the model predicts a change plan $\Delta = f_\theta(x, S, \mathrm{context})$, and deterministic code computes $S' = \mathrm{apply}(S, \Delta)$ and renders the CLI. YANG supplies the vocabulary for what valid states look like---types, keys, references, and constraints---while the plan schema, defined below, is the contract for what changes can be expressed. For platform and release differences we pin the relevant Cisco native model revisions~\cite{yangmodels}; in a production deployment the device's advertised YANG library~\cite{rfc8525} would supply them.
+
+The evaluated slice covers one switch's VLANs and interface Layer-2 parameters. Listing~\ref{lst:state} shows the state representation. The \texttt{vlans} object corresponds to OpenConfig \texttt{openconfig-vlan:vlans} (Cisco native \texttt{Cisco-IOS-XE-vlan}); interface Layer-2 fields correspond to \texttt{openconfig-vlan} interface configuration (\texttt{Cisco-IOS-XE-switchport}). The trunk allowed set is a leaf-list with the two IOS~XE special values represented explicitly: the string \texttt{"all"} and the empty list (\texttt{none}). Aliases are inventory metadata---device context, not configuration---and are never rendered. The structured intent field of our Phase~1 dataset (\texttt{intent\_oc}) is the static ancestor of this representation: it describes a target configuration, whereas a plan describes an \emph{operation on} a configuration, which \texttt{intent\_oc} cannot express.
+
+\begin{lstlisting}[caption={Device state for the evaluated slice (abridged).}, label={lst:state}]
+{
+  "device": "sw-acc-1",
+  "hostname": "switch1",
+  "vlans": {"20": {"name": "Engineering"}},
+  "interfaces": {
+    "GigabitEthernet1/0/48": {
+      "mode": "trunk", "access_vlan": 1,
+      "trunk_allowed": [10, 20, 30],
+      "native_vlan": 10, "admin": "up",
+      "description": "Uplink to core",
+      "aliases": ["uplink"]
+    }
+  }
+}
+\end{lstlisting}
+
+Fig.~\ref{fig:arch} summarizes the pipeline: the model sees the request and the state, emits a plan or a clarification, and every downstream step is deterministic.
+
+\begin{figure}[t]
+\centering
+\fbox{\parbox{0.92\columnwidth}{\centering\small
+request $x$ $+$ state $S$ $+$ inventory context\\[2pt]
+$\downarrow$ \emph{small language model (semantic parsing)}\\[2pt]
+plan $\Delta$ \quad\text{or}\quad \texttt{clarify}\\[2pt]
+$\downarrow$ \emph{validate (schema, preconditions, completeness)}\\[2pt]
+$S' = \mathrm{apply}(S, \Delta)$ \quad$\downarrow$ \emph{render}\\[2pt]
+IOS~XE CLI delta\\[2pt]
+accept iff: schema-valid $\wedge$ intent achieved $\wedge$ no unintended changes
+}}
+\caption{The plan-and-compiler pipeline. Only the first step is learned; validation, application, and rendering are deterministic and independently testable.}
+\label{fig:arch}
+\end{figure}
+
+\subsection{The plan contract}
+
+A plan is a JSON object $\{\texttt{device}, \texttt{operation}, \ldots\}$; a multi-part request is expressed as $\{\texttt{device}, \texttt{steps}: [\ldots]\}$, with steps applied in order and each step validated against the state produced by the steps before it. Table~\ref{tab:ops} lists the nine operations of the slice. Four semantic decisions define the contract's character, and we state them as design decisions, validated so far only against our hand-authored golden cases (Section~\ref{sec:results-verification}):
+
+\begin{enumerate}
+\item \textbf{Removal from \texttt{all} is a compiler refusal.} \texttt{remove\_trunk\_vlans} is set difference, and removing an absent member of an explicit list is an idempotent no-op. Removing from \texttt{trunk\_allowed = "all"}, however, raises a \texttt{PlanError}: the honest rendering would expand roughly 4,094 VLAN identifiers, so the compiler refuses and the operator must state the intended list via \texttt{replace\_trunk\_vlans}. A plan model must therefore learn a refusal boundary, not only operations.
+\item \textbf{\texttt{set\_access\_vlan} is strict.} The target VLAN must already exist in $S$; the compiler never invents state. This deliberately diverges from IOS~XE, which silently creates the VLAN on assignment---silent invention is exactly the failure class this architecture exists to remove. The operation changes only \texttt{access\_vlan}: it does not switch the port's mode and never touches \texttt{admin}.
+\item \textbf{\texttt{replace\_trunk\_vlans} cannot empty a trunk.} Replace is exact (``allow only''): the allowed set becomes precisely the given list, which the schema requires to be non-empty. An empty allowed set (\texttt{allowed vlan none}) is reachable today only through remove/delete cascades---a deliberate slice restriction.
+\item \textbf{\texttt{delete\_vlan} leaves \texttt{native\_vlan} pointers alone.} Deletion cascades mirror what IOS~XE actually leaves behind: access ports assigned to the deleted VLAN fall back to \texttt{access\_vlan} $=$ null, the identifier is stripped from explicit trunk allowed lists, trunks set to \texttt{"all"} are untouched, and \texttt{native\_vlan} pointers are \emph{not} rewritten---IOS leaves the configured native VLAN pointing at the deleted identifier, and so do we.
+\end{enumerate}
+
+The remaining semantics are equally explicit. \texttt{add\_trunk\_vlans} is set union (IOS \texttt{allowed vlan add}); on a trunk set to \texttt{"all"} it is a no-op. \texttt{set\_port\_mode} changes only the mode; stored \texttt{access\_vlan}, \texttt{trunk\_allowed}, and \texttt{native\_vlan} values are preserved, as IOS preserves them across mode toggles. \texttt{set\_native\_vlan} changes only the native VLAN; it does not add the VLAN to the allowed set (IOS does not either). \texttt{create\_vlan} creates the VLAN, renames it if it exists under a different name, and is a no-op if identical. Deleting a nonexistent VLAN is a no-op. \texttt{set\_admin\_state} is the only operation that touches \texttt{admin}: ``leave the admin state alone'' is the default for every other operation, and the benchmark grades it explicitly. Each operation carries an invariant, checked in the golden set: the diff of any accepted plan is a subset of the operation's primary paths union the documented \texttt{delete\_vlan} cascades.
+
+\begin{table}[t]
+\centering
+\caption{The operation set of the VLAN/trunk slice.}
+\label{tab:ops}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Operation} & \textbf{Typed fields} \\
+\midrule
+\texttt{create\_vlan} & \texttt{vlan\_id}, \texttt{name?} \\
+\texttt{delete\_vlan} & \texttt{vlan\_id} \\
+\texttt{set\_access\_vlan} & \texttt{interface}, \texttt{vlan\_id} \\
+\texttt{add\_trunk\_vlans} & \texttt{interface}, \texttt{vlans[]} \\
+\texttt{remove\_trunk\_vlans} & \texttt{interface}, \texttt{vlans[]} \\
+\texttt{replace\_trunk\_vlans} & \texttt{interface}, \texttt{vlans[]} \\
+\texttt{set\_native\_vlan} & \texttt{interface}, \texttt{vlan\_id} \\
+\texttt{set\_port\_mode} & \texttt{interface}, \texttt{mode} \\
+\texttt{set\_admin\_state} & \texttt{interface}, \texttt{admin} \\
+\midrule
+\texttt{clarify} & \texttt{reason}, \texttt{question}, \texttt{candidates} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Binding, completeness, and the two structural defect fixes}
+
+\emph{Device binding lives outside generation.} The caller supplies the target device in context, and a plan carries \texttt{device} only as a binding assertion, validated to equal the context device. No operation can rename the device---there is no \texttt{set\_hostname} operation---and the renderer takes the hostname from state. A plan model therefore \emph{cannot} emit a wrong hostname, because it never emits a hostname at all. This is a structural fix for an observed defect: in our Phase~1 study, six of the fine-tuned model's residual failures were configurations bearing a wrong hostname the model had retyped from its own prompt (Section~\ref{sec:expa-results}).
+
+\emph{Completeness is checked before apply, all-or-nothing.} Validation runs before \texttt{apply()} and rejects---never partially applies---a plan whose JSON does not parse, whose typed fields are missing, mistyped, or out of range (VLAN identifiers in 1--4094, excluding the reserved 1002--1005), whose interface is not in the inventory, or whose VLAN lists are inexact. \texttt{apply()} re-validates and raises \texttt{PlanError} rather than guessing. This is the structural fix for the second observed defect class: because a plan names each port and VLAN once and the deterministic renderer expands them into CLI blocks, output length grows with the \emph{change}, not with the size of the device, and a 28-port assignment is a 28-element list in one plan---there is no prose block to truncate, and exact membership is checkable mechanically.
+
+\subsection{Clarification as an output class}
+
+Alias resolution happens against the context inventory: exactly one match resolves to that interface; zero matches yields a \texttt{clarify} with reason \texttt{unknown\_interface}; more than one yields \texttt{ambiguous\_alias} with the candidates listed. The full reason set is \texttt{ambiguous\_alias}, \texttt{unknown\_interface}, \texttt{unknown\_vlan}, \texttt{missing\_vlan\_id}, and \texttt{missing\_interface}. A clarify output changes no state. Crucially, clarification is a \emph{trained} output class in the fine-tuned arm, not only a scored one---otherwise fine-tuning on resolvable examples teaches always-guess behavior. Scoring is symmetric: a guess on an ambiguous request is an error, and an unnecessary clarification on a clear request is an error (RQ3).
+
+\subsection{Verifying the compiler independently}
+
+The architecture moves the correctness burden from the model to deterministic code, which is only an improvement if that code is itself graded against something it did not produce. Our golden set (Section~\ref{sec:data}) therefore consists of hand-authored before/after state literals: \texttt{apply()} is tested against them, never used to generate them. A second, independent check grades the renderer: a small interpreter for the rendered delta-CLI subset---a separate code path from \texttt{render()}---reads only the CLI text, recomputes the state change it describes (including its own \texttt{delete\_vlan} cascade and its own refusal of removal from \texttt{all}), and compares it against the golden diffs. Batfish on the rendered full configuration is the planned third check. Section~\ref{sec:results-verification} reports the outcome, including two real bugs this process caught before any model was trained on the contract.
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Generation from meaning outward}
+
+Both phases generate data from meaning outward: we first sample a valid structured intent (Phase~1) or a valid (state, operation) pair (Phase~2), apply deterministic rendering to obtain the configuration or expected outcome, and only then write the natural-language surface forms. Labels are therefore exact by construction, and rare combinations can be covered deliberately rather than hoped for. Paraphrases teach invariance (``carry VLAN~20 on the uplink too'' and ``add VLAN~20 to the uplink'' map to the same edit); contrast pairs teach sensitivity (``allow only VLAN~20'' differs by one word and must produce a different operation); and keeping the words fixed while changing the state teaches state-dependence---with one interface aliased \texttt{uplink} the expected output is a plan, with two it is a clarification. Where a stronger model is used to diversify phrasing, the typed plan remains the source of labels, and a candidate paraphrase is accepted only after a check that it preserved the verb, the identifiers, and the conditions---a fluent paraphrase can quietly turn ``add'' into ``set.''
+
+\subsection{Phase 1 corpus: synthesis with gates}
+
+Phase~1 rows are JSONL records $\{\texttt{instruction}, \texttt{intent\_oc}, \texttt{config}\}$ over six families: VLAN and Layer-2 switching, trunks and SVIs, static routing, single-area OSPF, eBGP basics, and interface/management basics. Hygiene rules are enforced at generation: addresses only from RFC~1918 and documentation ranges, documentation ASNs, no secrets or credential material, bounded list lengths, and a \texttt{hostname} line first in every configuration (a Batfish requirement). Every candidate row passes four gates, in order:
+
+\begin{enumerate}
+\item \textbf{Deduplication} against the corpus and within the batch, on both the exact pair and a normalized shape signature (intent and configuration with numbers, names, and descriptions abstracted).
+\item \textbf{Intent-match}: a programmatic checker verifies that every load-bearing entity in the intent appears in the configuration in the right role. Flagged candidates are dropped and regenerated, never patched.
+\item \textbf{Parse}: the configuration parses under ciscoconfparse2~\cite{ciscoconfparse2}.
+\item \textbf{Batfish}: the configuration passes semantic validation in Batfish~\cite{fogel2015batfish}, with the platform declared as Cisco IOS~XE and zero initialization issues.
+\end{enumerate}
+
+Scoring discipline for generated models was fixed before the publish decision: raw, untruncated generations on the held-out test split, with a pre-registered publish bar of Batfish $\geq$95\% and intent-match $\geq$90\%. Because the intent-match checker has documented extraction limits (it under-extracts port-to-VLAN assignments in long lists and some trunk specifications), flagged rows are \emph{triaged}: each flagged row is independently re-verified by re-parsing, and we report both the raw and triaged intent numbers throughout. Triage follows a fixed rule---independent re-parse, never a weaker checker---so the triaged number cannot be inflated by relaxing the gate.
+
+Table~\ref{tab:dataset} summarizes the corpus versions. Dataset v1.0 contains exactly 5,000 pairs across the six families, split 4,496/252/252 (train/validation/test), stratified by family, with the test split held out from all training. Phase~1 expansion added an L2 cluster (Batch~8: EtherChannel, spanning tree, port security; 287 rows per family, 861 total) with zero drops at every gate, yielding v1.1: 5,861 pairs across nine families, split 5,273/294/294. A full-corpus intent audit of v1.1 flags 242 rows, all in the two documented checker extraction-limit classes (147 VLAN/L2, 95 trunk/SVI); all 861 Batch~8 rows pass. Batch~9 (extended ACLs, NAT/PAT, HSRP; 861 rows generated, 861/861 through the intent gate, with new per-family checkers written and mutation-tested before use) is mid-validation at the time of writing---189 of 861 rows fully Batfish-validated---and will yield dataset v1.2 (6,722 pairs if validation completes without drops).
+
+\begin{table}[t]
+\centering
+\caption{Corpus versions. Splits are train/validation/test.}
+\label{tab:dataset}
+\small
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+\textbf{Version} & \textbf{Pairs} & \textbf{Families} & \textbf{Splits} \\
+\midrule
+v1.0 & 5,000 & 6 & 4,496 / 252 / 252 \\
+v1.1 & 5,861 & 9 & 5,273 / 294 / 294 \\
+v1.2 (in prep.) & 6,722 & 12 & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Phase 2 slice data and benchmark construction}
+
+The Phase~2 training data follows the same outward recipe: sample a valid starting state $S$ and an operation, apply the contract semantics to obtain the expected $S'$, save the plan, the expected state change, and the rendered CLI, and write several operator phrasings per instance. Same-state contrast sets (add versus replace versus remove on identical before-states) and clarification cases (ambiguous alias, missing VLAN identifier, nonexistent interface) are generated as groups, and groups are kept together when splitting---a contrast group never straddles the train/evaluation boundary, since near-duplicates across the split would leak the very semantics being tested.
+
+The evaluation benchmark is constructed to a stricter standard than the training data, because its job is to catch bugs the rest of the system agrees on. Its requests are independently hand-authored (not sampled from the generator's templates), and each case carries hand-authored expectations: the set of state paths that must change and the set that must not. If \texttt{apply()} computed both the reference diff and the model's diff, a shared replace-versus-append bug would score as correct; hand-authored literals break that agreement. The golden set contains 13 cases covering every operation, a multi-step plan, and an expected-error case (removal from \texttt{all}); the contrast set contains six same-state triples (18 cases), an admin-state pair, and an ambiguous-alias clarify case. Section~\ref{sec:results-verification} reports the compiler's scores against them.
+
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experiment A: direct CLI generation}
+\label{sec:expa}
+
+Experiment~A establishes the direct-generation baseline and, more importantly, its failure taxonomy. The base model is Qwen3-4B-Base~\cite{qwen3techreport}; training uses the v1.0 corpus (4,496 train rows), and evaluation is greedy generation on all 252 held-out test prompts, scored \emph{raw}---no truncation repair, no output cleanup---on three rungs: ciscoconfparse2 parse, intent-match (raw and triaged), and Batfish (pass requires zero initialization issues).
+
+\emph{The stopping failure and its diagnosis.} Our first two runs used QLoRA~\cite{hu2022lora,dettmers2023qlora}. Run~2 reached a train loss of 0.0447, 100\% parse, and 0.986 key-token coverage in-job---yet \texttt{stopped\_cleanly} was 0.0\% (the base model, under the identical harness, stopped 20.2\% of the time), and the home ladder scored Batfish 2.8\% and intent-match 73.4\% raw / 78.6\% triaged. The generations were not malformed; they were \emph{unterminated}: 204 of 252 contained a second \texttt{hostname} line---a second, hallucinated configuration appended after the first---and in 143 cases the reference configuration was reproduced verbatim up to its exact final token and then continued. We verified the training pipeline four independent ways (a single-row TRL self-check; independent re-tokenization of all 4,496 rows, each ending in exactly one stop token; a direct read of the TRL collator source; and the job's own logs) and ruled out the wrong-EOS defect of run~1, example packing, label masking of the stop position, and length truncation (only 50 of 4,496 rows exceeded the 1,024-token limit). A teacher-forced probe of the shipped weights then localized the fault to a single token position: at the end-of-configuration boundary the output distribution was flat and context-independent (top-1 probability 0.00048; the stop token absent from the top 50, $P \lesssim 4\times10^{-4}$), while a mid-configuration position in the same model had top-1 probability 1.0000. We attribute the failure to the stop position receiving no effective gradient under the adapter configuration: Qwen3-4B-Base ties its output head to its input embeddings, which adapter training leaves frozen, so the stop token's output row could not be raised. An eight-attempt probe loop bisected adapter-versus-merge behavior and boundary-signal variants and exhausted the LoRA-family routes.
+
+\emph{Run 3 (the published model).} Run~3 changed the formulation rather than the plumbing: full-parameter fine-tuning of Qwen3-4B-Base in bf16, learning rate $1\times10^{-5}$ with cosine decay, 2 epochs, effective batch 16, maximum length 1,536, with the data reformulated so each configuration ends with the natural Cisco \texttt{end} line before the stop token---a high-frequency text token as a stepping stone to the special token. Training took 76.1 minutes on a single A100 and cost \$3.19, reaching a train loss of 0.0254; in-job, 94.8\% of test generations stopped cleanly. Section~\ref{sec:expa-results} reports the full scoring.
+
+\subsection{Experiment B: the five-arm comparison}
+\label{sec:expb}
+
+Experiment~B is the paper's core experiment. All arms are evaluated on the frozen, independently authored benchmark of Section~\ref{sec:data}, which contains straightforward operations, add/replace/remove contrasts on identical states, unique and ambiguous aliases, missing-detail cases whose correct output is a clarification, admin-state preservation cases, and multi-part requests; greenfield cases (operations on near-empty states) are included as a control and reported separately from stateful cases. The arms are:
+
+\begin{enumerate}
+\item \textbf{Released CLI model (control).} The run-3 model, emitting CLI directly. It was trained for greenfield generation, not stateful edits; it is included so that any regression of the plan arms on greenfield-style work is visible, and so the defect classes of Section~\ref{sec:expa-results} can be re-measured on edit-style requests.
+\item \textbf{Prompted plans.} Qwen3-4B-Base, prompted with the contract and the state, emitting plans under grammar constraints restricted to the plan schema.
+\item \textbf{Prompted plans + YANG lookup (adapted).} Arm~2 plus Holl\'osi et al.'s module selection: the model first selects relevant OpenConfig modules (VLAN and interface models) from a name-and-description list, and the selected modules are placed in context. This is an \emph{adaptation} of their method to stateful edits---their task, output (NETCONF XML), and stateless setting are unchanged in a reproduction; ours takes current state as input and emits the compact plan.
+\item \textbf{Fine-tuned plans.} Qwen3-4B-Base fine-tuned on the plan-slice training set to emit the same plans, with clarification as a trained output class.
+\item \textbf{Fine-tuned plans + YANG lookup.} Arm~4 given the same retrieved context as arm~3. This pairing is required for any claim that fine-tuning adds value \emph{with} retrieval: without it, a fine-tuning gain could be an artifact of unequal context.
+\item \textbf{Classifier + slot extraction.} A non-generative baseline: an operation classifier, slot copying for VLAN identifiers, and the same inventory alias resolver as the plan arms. It must emit the same plan JSON or a \texttt{clarify} output and is scored by the same scorer. It receives the same inventory and alias resolver so that the comparison measures the decision procedure, not unequal access to context.
+\end{enumerate}
+
+\emph{Frozen protocol.} Prompted and fine-tuned plan arms share the same base checkpoint (Qwen3-4B-Base), the same context format (the contract's state JSON), the same grammar constraints, and the same token budget; the two prompted variants differ only in retrieved context, isolating the effect of retrieval. \emph{Metrics.} Correct state change is exact: the produced diff must contain every must-change path and no unauthorized path, with exact membership for port/VLAN lists (adding the right VLAN to 27 of 28 ports is a miss on that case, with the shortfall counted). We additionally report unintended-change cases, clarification recall on ambiguous requests and clarification precision on clear requests (both error directions counted separately), invalid-plan rate, median output tokens, and p95 latency per arm.
+
+\subsection{Experiment C: step-down}
+\label{sec:expc}
+
+The winning arm of Experiment~B is retrained at Qwen3-1.7B-Base and Qwen3-0.6B-Base under the identical protocol and data. The question is not only the accuracy at each size but \emph{which metric degrades first}---exact membership, clarification restraint, and operation choice are separate skills and may have separate floors (RQ1).
+
+\subsection{Experiment D: data scaling}
+\label{sec:expd}
+
+The fine-tuned plan arm is retrained on 25\%, 50\%, and 100\% of the slice training rows, subsampled at the level of contrast/clarification groups so split integrity is preserved. The resulting curve measures how much data the plan task actually needs---relevant because plan labels are far cheaper to synthesize than validated full configurations.
+
+\subsection{Experiment E: on-switch measurements (stretch)}
+\label{sec:expe}
+
+On one Catalyst SKU running one IOS~XE release \textbf{[TBD --- SKU and release to be selected]}, the winning small model runs locally in Guest Shell as a change-preview assistant: it receives a request and a snapshot of the switch's own state, and returns a candidate plan and rendered diff for operator review. We measure peak resident memory, cold-start time, p95 request latency, and control-plane CPU during inference. The GGUF file size alone does not predict resident memory; these measurements, not parameter counts, decide whether on-switch deployment is real.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Experiment A: direct generation, scored raw}
+\label{sec:expa-results}
+
+Table~\ref{tab:expa} reports run~3 on the 252-row held-out test split. The model clears the pre-registered publish bar on both legs: Batfish 98.8\% (249/252) against a 95\% bar, and intent-match 92.5\% triaged (233/252; 86.9\% raw) against a 90\% bar, with parse at 252/252. Stopping is transformed relative to run~2 (94.8\% stopped cleanly, from 0.0\%). The model and its GGUF conversion are published (Section~\ref{sec:artifacts}).
+
+\begin{table}[t]
+\centering
+\caption{Experiment A: run 3 (full fine-tune) on the 252-row held-out test split, raw generations.}
+\label{tab:expa}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Metric} & \textbf{Count} & \textbf{\%} \\
+\midrule
+Parse (ciscoconfparse2) & 252/252 & 100.0 \\
+Intent-match, raw & 219/252 & 86.9 \\
+Intent-match, triaged & 233/252 & 92.5 \\
+Batfish (0 init issues) & 249/252 & 98.8 \\
+Stopped cleanly (in-job) & 239/252 & 94.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Per-family results (Table~\ref{tab:perfamily}) localize the weakness. Four families are at or near ceiling on every rung. VLAN/L2 is the outlier: Batfish 95.2\% and triaged intent-match 71.4\%. Cause-tagging all 19 real intent failures across the split---each classified against its raw generation, with precedence truncation, then hostname, then list semantics---gives Table~\ref{tab:causes}. Twelve of the 19 failures involve truncation at the generation cap: 11 are VLAN/L2 rows whose long access-port lists stop mid-block (producing 15--16 of 19--28 reference ports, with \emph{zero} wrong VLAN assignments among the ports emitted), plus one static-route row. Six failures are hostname slips---the model retyped a wrong hostname---spread across five families. Exactly one failure is a list-semantics error: vlan-0213, which completed cleanly but assigned a port group to VLAN~892 instead of 467. The three Batfish failures (static-0771, vlan-0642, vlan-0783) are all parse-clean configurations with partially unrecognized constructs. The conclusion that matters for Phase~2 is narrow and strong: the dominant residual defect of direct generation is \emph{enumeration length}, not configuration semantics---precisely the defect a plan representation removes by construction (RQ4's premise), and the reason Experiment~B must be powered to detect list-semantics differences among \emph{completed} outputs, since truncation noise will no longer mask them.
+
+\begin{table}[t]
+\centering
+\caption{Experiment A per-family results (42 test rows per family).}
+\label{tab:perfamily}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Family} & \textbf{Parse \%} & \textbf{Intent (tri.) \%} & \textbf{Batfish \%} \\
+\midrule
+BGP & 100.0 & 97.6 & 100.0 \\
+Interface/mgmt & 100.0 & 97.6 & 100.0 \\
+OSPF & 100.0 & 92.9 & 100.0 \\
+Static route & 100.0 & 97.6 & 97.6 \\
+Trunk/SVI & 100.0 & 97.6 & 100.0 \\
+VLAN/L2 & 100.0 & 71.4 & 95.2 \\
+\midrule
+\textbf{Overall} & \textbf{100.0} & \textbf{92.5} & \textbf{98.8} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Cause tags for the 19 real intent failures of Experiment A.}
+\label{tab:causes}
+\small
+\begin{tabular}{@{}lrp{4.6cm}@{}}
+\toprule
+\textbf{Cause} & \textbf{Count} & \textbf{Notes} \\
+\midrule
+Truncation & 12 & 11 VLAN/L2 long port lists; static-0771 (also wrong next-hop, missing default route) \\
+Hostname slip & 6 & Wrong hostname retyped; five families affected \\
+List semantics & 1 & vlan-0213: port group assigned to VLAN 892 instead of 467 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Compiler verification against hand-authored goldens}
+\label{sec:results-verification}
+
+Before any model output was scored against the contract, the contract's own machinery was graded against the hand-authored assets of Section~\ref{sec:data}. \texttt{apply()} passes all 13 golden diffs, covering every operation, the multi-step case, and the expected-error case. The independent CLI interpreter reproduces the golden diff from rendered CLI text alone on all 13 cases. The contrast set verifies 21/21 (six triples, the admin-state pair, and the clarify case, including that the second trunk in the two-trunk triple is untouched in all three outcomes, and that the ambiguous-alias case produces a clarification with both candidates and zero state change).
+
+The process caught two real bugs, which is its purpose. First, a \emph{multi-step validation bug}: the validator originally checked every step of a multi-step plan against the \emph{original} state, so the golden case ``create VLAN~40, then assign a port to it'' was wrongly rejected---single-step semantics would have agreed everywhere while composition silently broke. Steps are now validated against the evolving state. Second, \emph{renderer/apply drift}: the delta renderer emitted a spurious \texttt{switchport mode access} line for \texttt{set\_access\_vlan} that \texttt{apply()} does not perform---the CLI would have changed state the plan never authorized. The delta now emits only the parameter assignment. Both bugs are instances of the shared-agreement failure the benchmark was designed to expose: in each case two components agreed with each other and disagreed with the hand-authored expectation.
+
+\subsection{Experiment B: comparison results}
+
+Table~\ref{tab:expb} is the frozen results shell for Experiment~B; the protocol of Section~\ref{sec:expb} is fixed, and the cells will be filled without protocol changes. Greenfield results are reported in a companion table of identical shape.
+
+\begin{table*}[t]
+\centering
+\caption{Experiment B: main results on the stateful split. All cells pending the frozen-protocol run.}
+\label{tab:expb}
+\small
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+\textbf{Arm} & \textbf{Correct change \%} & \textbf{Unintended (cases)} & \textbf{Clarify recall} & \textbf{Clarify precision} & \textbf{Membership shortfall} & \textbf{Tokens (med)} & \textbf{Latency p95} \\
+\midrule
+Released CLI model (control) & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd \\
+Prompted plans & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd \\
+Prompted plans + YANG lookup (adapted) & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd \\
+Fine-tuned plans & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd \\
+Fine-tuned plans + YANG lookup & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd \\
+Classifier + slot extraction & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd & \tbd \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Error causes in Experiment~B are tagged with the taxonomy of Table~\ref{tab:causes}, extended with plan-specific causes (wrong operation, dropped port/VLAN, wrong alias, unnecessary clarification, missed clarification, invalid plan). \tbd{} \textbf{--- per-arm cause table and analysis to be inserted.}
+
+\subsection{Experiments C--E: step-down, scaling, on-switch}
+
+Step-down results (correct change, clarification recall/precision, and membership shortfall at 4B, 1.7B, and 0.6B for the winning arm): \tbd{}. Data-scaling results (the same metrics at 25\%, 50\%, and 100\% of slice training rows): \tbd{}. On-switch measurements (peak RSS, cold start, p95 latency, control-plane CPU on the selected SKU): \tbd{}.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\emph{Attribution is the point.} Experiment~B is designed so that its outcome is informative in either direction. If fine-tuned plans clearly beat prompted plans under identical constraints and context, the semantics of stateful editing---add versus replace against \emph{this} state, restraint on \emph{this} ambiguity---must be learned, and training is where the reliability lives. If prompted plans with grammar constraints match fine-tuning, then the output-space narrowing is doing the work, the honest conclusion is that the compiler and the schema deserve the credit, and deployment should prefer the training-free variant. The classifier arm bounds the question from below: a strong classifier result would mean the slice's semantics are shallower than a generative treatment assumes, and would make the classifier---tiny, deterministic, auditable---the right on-switch artifact. We have pre-committed to the protocol and the metrics so that none of these outcomes requires re-framing the experiment after the fact.
+
+\emph{What Phase 1 teaches beyond its scores.} The publish-bar discipline---raw generations, pre-registered thresholds, triage by independent re-parse rather than by relaxing the checker---is what makes the Phase~1 numbers usable as a baseline rather than as marketing. The same discipline exposed the checker's own limits (the 242 v1.1 audit flags, all in two extraction-limit classes) without contaminating the dataset: flagged training candidates are dropped and regenerated, never patched, so the corpus cannot drift toward whatever the checker finds easy to verify.
+
+\emph{Refusal boundaries are behavior, not validation.} The remove-from-\texttt{all} refusal (Section~\ref{sec:approach}) is enforced by the compiler, but the \emph{useful} behavior---recognizing, before emitting a plan, that a request crosses the boundary and saying so---must be learned by the model like any other output. Whether small models learn refusal boundaries as reliably as operations is an open sub-question of RQ3 that the clarification metrics partially capture.
+
+\emph{Validation ceilings are real.} Batfish is a strong semantic rung, but Batch~9 probing mapped six construct classes it does not model---ACL \texttt{fragments}, NAT static port forwarding, NAT pools with a /28 netmask, extended ACLs as NAT source lists, HSRP \texttt{standby track}, and HSRP \texttt{standby name}---which we excluded from generation rather than train on unvalidatable rows. Any single-rung validation story has such a ceiling; this is why the plan architecture layers independent checks (schema, hand-authored goldens, an independent CLI interpreter, and Batfish where it can speak) instead of trusting one.
+
+\emph{Limitations.} Phase~2 is evaluated on a single vendor (Cisco IOS~XE) and a single slice (VLANs and trunks); the operation set is deliberately small, and generalization to routing, security, and full-device composition---where operations interact across sections---is untested. States and requests are synthetic; real operator language is messier, and real device state carries legacy configuration no sampler would invent. The benchmark, though independently authored, is small by design (it is a semantics benchmark, not a coverage benchmark). The control arm of Experiment~B was trained for a different task (greenfield generation), which is why its results are reported separately and never pooled with the plan arms. Triage involves judgment; we mitigate it with the fixed independent-re-parse rule and by always reporting raw numbers alongside triaged ones.
+
+\emph{Threats to validity.} Synthetic data risks teaching the sampler's habits rather than operators' semantics; the contrast-group split integrity and the independently authored benchmark are the countermeasures. Hand-authored goldens risk encoding \emph{our} reading of IOS behavior; where the contract diverges from IOS deliberately (strict \texttt{set\_access\_vlan}), we say so in the contract, and where it claims to mirror IOS (the \texttt{delete\_vlan} cascades), the claim is checkable against a lab device---which the on-switch study will also exercise.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Network configuration by language model should be evaluated as what it operationally is: editing a running device, where correctness means achieving the requested change and preserving everything else. We have presented a plan-and-compiler architecture that makes those criteria checkable---a small model parses requests into typed change plans against current state, deterministic code validates, applies, and renders, and clarification is a trained output rather than a failure mode. The completed first phase shows both that direct CLI generation can be made strong (100\% parse, 92.5\% triaged intent, 98.8\% Batfish from a \$3.19 fine-tune) and exactly where it breaks: enumeration length and retyped facts, the two defect classes the plan representation removes structurally. The frozen five-arm comparison, the step-down study, and the data-scaling curve will determine how much of the resulting reliability belongs to training, how much to narrowing the output space, and how small a model can get while remaining trustworthy enough to propose changes to a running network \textbf{[TBD --- final claims pending Experiment B]}. Next steps are expanding the operation set beyond the VLAN/trunk slice, full-device composition, and the on-switch measurements of Experiment~E.
+
+\section{Artifacts and Reproducibility}
+\label{sec:artifacts}
+
+All artifacts are public. The datasets (v1.0 and v1.1; v1.2 on completion of Batch~9 validation) are at \url{https://huggingface.co/datasets/aag1091/netconfig-slm-dataset}; the published model, including the Q4\_K\_M GGUF used for local inference, is at \url{https://huggingface.co/aag1091/netconfig-slm-qwen3-4b}; the code---generators, intent-match checker, validation runners, the plan engine, the golden and contrast sets, and all scoring code---is at \url{https://github.com/aag1091-alt/netconfig-slm}; a public generation log is maintained at \url{https://slm.aag1091.com}. The total compute spend for the project to date is approximately \$19.88, of which the published model accounts for \$3.19; the pipeline, the diagnosis, and the benchmark are all reproducible at costs of the same order, which we regard as part of the result: work in this area does not require industrial-scale resources to do carefully.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
