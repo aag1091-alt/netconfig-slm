@@ -55,7 +55,10 @@ state*, which `intent_oc` cannot express.
 All plans are JSON objects: `{"device", "operation", ...fields}`.
 A multi-part request is `{"device", "steps": [plan, ...]}`; steps
 apply in order and later steps see earlier steps' state. A model may
-instead return a **clarify** object (§5).
+instead return a **clarify** object (§5). One operation names exactly
+one interface: a change spanning N interfaces is a multi-step plan
+with one step per interface (**repeated steps** — there is no
+multi-interface operation; §4b, §8).
 
 | Operation | Fields (typed) | Preconditions (validated) |
 |---|---|---|
@@ -81,6 +84,13 @@ instead return a **clarify** object (§5).
   honest rendering would expand ~4,094 ids, so the compiler refuses
   and the operator must state the intended list via
   `replace_trunk_vlans`. A plan model must learn this refusal boundary.
+  In **training data**, however, this situation is not labeled with
+  the rejected plan: the model's expected output is a **clarify**
+  with reason `unsupported_remove_from_all` (§5) asking the operator
+  for the intended allow-list, with zero state change. The rejected
+  plan remains an engine-level refusal, covered by engine tests
+  (`gold-remove-from-all-errors`, `scripts/test_entry_points.py`) —
+  not a training label.
 - **replace_trunk_vlans** = the allowed set becomes exactly the given
   list (bare IOS `allowed vlan <list>`, "allow only"). Unlisted
   existing VLANs are dropped. The schema requires a non-empty list;
@@ -109,8 +119,20 @@ instead return a **clarify** object (§5).
   exists). `native_vlan` pointers are **not** rewritten — IOS leaves
   the configured native VLAN pointing at the deleted id. Deleting a
   nonexistent VLAN is a no-op (IOS accepts `no vlan <id>` silently).
-  Cascade paths are returned by `apply()` as *effects* and are the
-  only non-primary paths a diff may contain.
+  Permitted cascade paths are derived from the operation and the
+  before-state by `src/plan/cascades.py`, **independently of
+  `apply()`'s output** — scoring asserts a diff contains nothing
+  outside primary paths ∪ that derived set, so a cascade (or a bug)
+  can never authorize itself. **PENDING LAB VERIFICATION
+  (2026-11-26 ruling, §8):** these cascade semantics encode what we
+  believe IOS XE leaves behind, but no real XE readback yet
+  distinguishes configured access assignment / trunk membership from
+  operational inactivity — and the CLI mini-interpreter encodes the
+  same assumptions, so its agreement proves nothing about device
+  behavior. Until readback is available, `delete_vlan` cascade
+  labels are **excluded from the first generated batch**; the golden
+  case remains an engine test flagged `"lab_verification":
+  "pending"`.
 - **set_admin_state** changes only `admin`. No other operation touches
   `admin` — "leave its admin state alone" is the default for every
   other op, and training/eval cases grade it explicitly.
@@ -136,9 +158,14 @@ cause-tagged breakdown: 11 of 12 real vlan_l2 failures are
 truncations; the ports it did emit were correctly assigned). A plan
 names each port/VLAN **once**; the deterministic renderer expands
 them into CLI blocks. Output length grows with the *change*, not with
-the size of the device, and a 28-port assignment is a 28-element JSON
-list in one plan — no prose block to truncate. Completeness is
-checkable exactly (§6b), which free-text CLI never allowed.
+the size of the device. A 28-port assignment is a 28-step plan — one
+step per interface, each step naming its port exactly once (repeated
+steps are the multi-port representation, §2) — and a missing or extra
+step changes the resulting state, which exact-membership scoring
+catches (golden `gold-multistep-28-ports` asserts the changed
+interface set exactly, with per-port preservation of unrelated
+fields). Completeness is checkable exactly (§6b), which free-text
+CLI never allowed.
 
 ## 5. Clarify outputs
 
@@ -149,9 +176,13 @@ checkable exactly (§6b), which free-text CLI never allowed.
 ```
 
 Reasons: `ambiguous_alias`, `unknown_interface`, `unknown_vlan`,
-`missing_vlan_id`, `missing_interface`. A clarify output changes no
-state. Scoring is symmetric (§6c): guessing on an ambiguous request is
-an error, and clarifying a resolvable request is an error.
+`missing_vlan_id`, `missing_interface`, `unsupported_remove_from_all`.
+A clarify output changes no state. Scoring is symmetric (§6c):
+guessing on an ambiguous request is an error, and clarifying a
+resolvable request is an error. `unsupported_remove_from_all` is the
+training-facing answer to a remove-from-"all" request (§3): instead
+of emitting a plan the compiler must refuse, the model asks for the
+intended allow-list.
 
 ## 6. Rules for generation, validation, and comparison
 
@@ -167,7 +198,18 @@ field must be present and in range, the interface must exist, and
 VLAN lists must be exact and complete. A plan that omits a port or
 truncates a list fails validation or fails exact-membership scoring —
 it is **never partially applied**. `apply()` re-validates and raises
-`PlanError` rather than guessing.
+`PlanError` rather than guessing. Enforcement lives at the public
+entry points, not in callers' discipline (2026-11-26 fix):
+`apply_plan()` and `render_delta()` both run the full validation
+first — device binding on the outer plan **and** every step, empty
+`steps` rejected, step *i* validated against the state produced by
+steps 0..*i*−1 — and validation is total (malformed values return
+errors, never raise). An invalid plan produces **neither** a
+candidate state **nor** any CLI; `render_delta()` additionally
+dry-runs `apply_plan()` so apply-time refusals (remove-from-"all")
+also yield no CLI. `render_config()` gates on state sanity
+(`validate_state`). `scripts/test_entry_points.py` exercises all of
+this through the public entry points.
 
 **(c) Comparison freeze (prompted vs fine-tuned).** Any comparison of
 plan emitters must hold constant: the same base checkpoint
@@ -179,16 +221,39 @@ results separately — they exercise different skills. Score state
 change exactly: `must_change ⊆ diff` and `diff ⊆ authorized`
 (exact-membership for port/VLAN lists — a diff that adds the right
 VLAN to 27 of 28 ports scores as a miss on that case, with the
-shortfall counted). Clarification is scored both ways per §5. Also
-record output tokens and latency per emitter; the plan representation
-is expected to win on tokens, and the claim must be measured, not
-asserted.
+shortfall counted). Clarification is scored both ways per §5, and on
+content: the **reason must match** and the **candidate set must equal
+the inventory-derived candidate set exactly** (no missing or extra
+candidates). Also record output tokens and latency per emitter; the
+plan representation is expected to win on tokens, and the claim must
+be measured, not asserted.
+
+**Emission completeness (model-side).** The goldens prove the
+*engine* handles a complete plan exactly; whether a *model* can emit
+a complete plan is a separate question, tested separately. The
+benchmark therefore includes the 28-step long-list case (§4b) as an
+emission test under the same frozen token budget: a plan that stops
+early fails completeness-before-apply (§6b) and scores as a miss,
+with the emitted step count reported. For that case the eval must
+report **plan-token vs CLI-token counts** side by side — repeated
+steps repeat the operation/interface fields, so the plan format's
+token advantage over CLI text is quantified on the hardest case, not
+assumed from short ones.
 
 ## 7. Verification assets in this review package
 
 - `data/plan_slice/golden_diffs.jsonl` — hand-authored before/after
-  literals per operation; `scripts/test_golden_diffs.py` grades
-  `apply()` against them.
+  literals per operation (15 cases, incl. the 28-step long-list and
+  mode round-trip cases); `scripts/test_golden_diffs.py` grades
+  `apply()` against them. Cascade authorization in scoring is
+  derived by `src/plan/cascades.py` from the operation and
+  before-state only — never from `apply()`'s output.
+- `scripts/test_entry_points.py` — rejection tests through the
+  public entry points (`apply_plan`, `render_delta`,
+  `render_config`): wrong device bindings (outer and per-step),
+  empty/malformed `steps`, a standalone valid-step-then-invalid-step
+  regression, remove-from-"all" via apply and render, and a
+  malformed-input fuzz set asserting errors-not-exceptions.
 - `data/plan_slice/contrast_triples.jsonl` — same-state add / replace
   / remove triples, an admin-state pair, and an ambiguous-alias
   clarify case, all hand-authored.
@@ -198,3 +263,34 @@ asserted.
   separate code path — the renderer is graded, not trusted). Batfish
   on the rendered full config is the planned third check; it needs
   the Mac-hosted Batfish server and is a later addition.
+
+## 8. Supervisor rulings (2026-11-26)
+
+Recorded from Avinash's review of the public repo at commit
+`f1b5189`. Bulk label generation remains HELD until the fixes these
+rulings required are in and verified.
+
+- **Trunk add / remove / replace — APPROVED.** Union, difference,
+  and exact replacement semantics as specified in §3; explicit no-op
+  cases (add of a present member, remove of an absent member, add to
+  "all") are kept as labeled cases. Unsupported removal from "all"
+  is represented in training as clarification
+  (`unsupported_remove_from_all`), not as a rejected plan.
+- **Mode, access/native VLAN, and admin state — APPROVED.** Each
+  operation changes only the requested configured field; inactive
+  parameters survive mode toggles (see the mode round-trip golden,
+  `gold-mode-round-trip`).
+- **VLAN deletion cascades — HELD.** Cascade labels wait for a real
+  IOS XE readback distinguishing configured access assignment and
+  trunk membership from operational inactivity (§3). If readback is
+  still unavailable when generation starts, `delete_vlan` is left
+  out of the first generated batch and recorded as pending lab
+  verification.
+- **Device binding and clarification — APPROVED.** Caller-bound
+  identity; plans name canonical interfaces; clarification on
+  ambiguity. Binding is enforced on the outer plan and on every step
+  (§6b). Clarification is scored on reason AND candidate-set
+  membership (§6c).
+- **Comparison arms — APPROVED (unchanged).** The YANG-lookup
+  variant ("adapted to stateful edits") and the classifier +
+  slot-extraction arm remain part of the frozen comparison (§6c).

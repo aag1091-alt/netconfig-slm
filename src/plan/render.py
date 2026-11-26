@@ -16,7 +16,15 @@ Two renderers:
 Descriptions are rendered when present (dataset convention: interface
 descriptions echo role labels). Aliases are inventory metadata, not
 CLI, and are never rendered.
+
+Both renderers are public entry points and gate on the same
+validation as apply_plan (schema.validate_output / validate_state):
+an invalid plan or state raises PlanError and produces NO CLI.
+render_delta additionally dry-runs apply_plan first, so apply-time
+refusals (remove from trunk_allowed="all") also yield no CLI.
 """
+from .apply import PlanError, apply_plan
+from .schema import validate_output, validate_state
 
 
 def _vlan_list(vlans):
@@ -28,14 +36,25 @@ def _iface_header(name):
 
 
 def render_delta(plan, state_before):
-    """CLI commands implementing one plan (single or multi-step)."""
+    """CLI commands implementing one plan (single or multi-step).
+
+    Gates first: full validation, then a dry-run apply. Any failure
+    raises PlanError before a single line is produced.
+    """
+    if not isinstance(plan, dict):
+        raise PlanError("plan: must be an object")
+    if plan.get("type") == "clarify":
+        raise PlanError("clarify output: changes no state; no CLI to render")
+    errors = validate_output(plan, state_before)
+    if errors:
+        raise PlanError("; ".join(errors))
+    apply_plan(state_before, plan)  # dry run: apply-time refusals gate too
     if "steps" in plan:
         lines = []
         cur = state_before
-        from .apply import apply_plan
         for step in plan["steps"]:
             lines.extend(render_delta(step, cur))
-            cur, _ = apply_plan(cur, step)
+            cur, _ = apply_plan(cur, step, validate=False)
         return lines
     op = plan["operation"]
     if op == "create_vlan":
@@ -97,7 +116,14 @@ def _render_interface(name, iface):
 
 
 def render_config(state):
-    """Full config for a state, in the dataset's config style."""
+    """Full config for a state, in the dataset's config style.
+
+    Gates on validate_state: a malformed state raises PlanError and
+    produces no config.
+    """
+    errors = validate_state(state)
+    if errors:
+        raise PlanError("; ".join(errors))
     lines = [f"hostname {state['hostname']}", "!"]
     for vid in sorted(state["vlans"], key=lambda v: int(v)):
         lines.append(f"vlan {vid}")

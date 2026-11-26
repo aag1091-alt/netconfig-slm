@@ -1,6 +1,6 @@
 """S' = apply(S, Δ): deterministic application of a validated plan.
 
-Semantics (the choices a scorer can rely on; see docs/PLAN_SLICE.md):
+Semantics (the choices a scorer can rely on; see docs/PLAN_CONTRACT.md):
 
 - add_trunk_vlans: union. On a trunk whose allowed set is "all" this is
   a no-op (every VLAN is already allowed). Never touches native VLAN,
@@ -26,16 +26,23 @@ Semantics (the choices a scorer can rely on; see docs/PLAN_SLICE.md):
   the device: access ports assigned to it fall back to access_vlan=null
   (inactive), and the id is removed from explicit trunk allowed lists
   (a trunk set to "all" is unaffected — "all" no longer includes it
-  because the VLAN no longer exists). The cascade paths are returned in
-  `effects` so scorers can authorize them.
+  because the VLAN no longer exists). The cascade paths that actually
+  changed are returned in `effects`; which paths a cascade is
+  *permitted* to change is derived independently in cascades.py.
 - set_native_vlan / set_admin_state: single-field changes.
 
-apply_plan returns (new_state, effects) where effects is a list of
-additional changed paths caused by cascades (delete_vlan only).
-Raises PlanError for semantic errors the schema cannot see.
+apply_plan is a public entry point and gates on the FULL validation
+(schema.validate_output): device binding on the outer plan and every
+step, non-empty steps, step i validated against the state produced by
+steps 0..i-1. An invalid plan raises PlanError and produces no
+candidate state. apply_plan returns (new_state, effects), where
+effects = the documented cascade paths (per cascades.py, derived from
+the operation and the before-state) that actually changed — never
+"whatever else changed", so effects cannot launder a bug.
 """
+from .cascades import permitted_cascade_paths
 from .diff import diff_states
-from .schema import validate_plan
+from .schema import validate_output
 from .state import clone
 
 
@@ -104,59 +111,30 @@ def _apply_one(state, plan):
 def apply_plan(state, plan, validate=True):
     """Apply a plan (single or multi-step). Returns (new_state, effects).
 
-    effects = changed paths beyond the operation's primary target(s),
-    i.e. delete_vlan cascades. Computed by diffing, so it can never
-    under-report a side effect.
+    The gate: with validate=True (the public path) the plan must pass
+    schema.validate_output in full — the same validation every entry
+    point uses. Internal callers that have already validated a step
+    against the exact state it will see may pass validate=False.
+    Raises PlanError on any validation or apply-time refusal (e.g.
+    remove from trunk_allowed="all"); no partial state is produced.
     """
-    if isinstance(plan, dict) and "steps" in plan:
-        cur = clone(state)
-        for step in plan["steps"]:
-            cur, _ = apply_plan(cur, step, validate=validate)
-        return cur, _cascade_effects(state, cur, plan)
+    if not isinstance(plan, dict):
+        raise PlanError("plan: must be an object")
+    if plan.get("type") == "clarify":
+        raise PlanError("clarify output: changes no state; nothing to apply")
     if validate:
-        errors = validate_plan(plan, state)
+        errors = validate_output(plan, state)
         if errors:
             raise PlanError("; ".join(errors))
-    new_state = _apply_one(state, plan)
-    return new_state, _cascade_effects(state, new_state, plan)
-
-
-def _primary_paths(plan):
-    """Paths the operation itself is authorized to change."""
-    op = plan.get("operation", "")
-    iface = plan.get("interface")
-    if op in ("create_vlan",):
-        return {f"vlans.{plan['vlan_id']}", f"vlans.{plan['vlan_id']}.name"}
-    if op == "delete_vlan":
-        return {f"vlans.{plan['vlan_id']}"}
-    field = {
-        "set_access_vlan": "access_vlan",
-        "add_trunk_vlans": "trunk_allowed",
-        "remove_trunk_vlans": "trunk_allowed",
-        "replace_trunk_vlans": "trunk_allowed",
-        "set_native_vlan": "native_vlan",
-        "set_port_mode": "mode",
-        "set_admin_state": "admin",
-    }.get(op)
-    return {f"interfaces.{iface}.{field}"} if field else set()
-
-
-def _cascade_effects(before, after, plan):
-    changed = set(diff_states(before, after))
-    if isinstance(plan, dict) and "steps" in plan:
-        primary = set()
-        for step in plan["steps"]:
-            primary |= _primary_paths(step)
-    else:
-        primary = _primary_paths(plan)
-    return sorted(changed - primary)
-
-
-def authorized_paths(before, after, plan):
-    """Every path this plan is allowed to have changed (primary + cascade)."""
-    _, effects = apply_plan(before, plan)
-    primary = set()
     steps = plan["steps"] if "steps" in plan else [plan]
+    cur = clone(state)
+    effects = set()
     for step in steps:
-        primary |= _primary_paths(step)
-    return primary | set(effects)
+        nxt = _apply_one(cur, step)
+        changed = set(diff_states(cur, nxt))
+        # Effects are the independently-permitted cascade paths that
+        # actually changed — derived from (operation, before-state)
+        # in cascades.py, NOT "any other path that changed".
+        effects |= changed & permitted_cascade_paths(step, cur)
+        cur = nxt
+    return cur, sorted(effects)

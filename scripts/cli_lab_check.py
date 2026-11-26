@@ -12,6 +12,11 @@ A second lab check with Batfish on the rendered full config is
 planned but requires the Mac-hosted Batfish server (offline at the
 time of writing) — later addition.
 
+Note (2026-11-26 review fixes): render_delta now gates on full
+validation plus a dry-run apply, so for expected_error golden cases
+the renderer itself refuses (PlanError, no CLI) — that refusal is a
+pass. If CLI is produced anyway, the interpreter must reject it.
+
 Usage: .venv/bin/python scripts/cli_lab_check.py
 Exit code 0 iff every golden case's CLI reproduces the golden diff.
 """
@@ -21,6 +26,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from src.plan.apply import PlanError
 from src.plan.diff import diff_states
 from src.plan.render import render_delta
 
@@ -105,15 +111,23 @@ def main():
     failures = 0
     for case in cases:
         before, plan = case["before"], case["plan"]
-        cli = render_delta(plan, before)
         problems = []
-        if case.get("expected_error"):
+        try:
+            cli = render_delta(plan, before)
+        except PlanError as e:
+            if case.get("expected_error"):
+                print(f"PASS  {case['id']:<34} "
+                      f"(renderer refused at gate: {e})")
+                continue
+            problems.append(f"render_delta raised PlanError: {e}")
+            cli = None
+        if cli is not None and case.get("expected_error"):
             try:
                 interpret(before, cli)
                 problems.append("interpreter accepted CLI that should error")
             except LabError:
                 pass
-        else:
+        elif cli is not None:
             try:
                 got = interpret(before, cli)
             except LabError as e:
@@ -125,7 +139,7 @@ def main():
                     f"diff at {diff_states(case['after'], got)}")
         ok = not problems
         print(f"{'PASS' if ok else 'FAIL'}  {case['id']:<34} "
-              f"({len(cli)} CLI lines)")
+              f"({len(cli) if cli is not None else 0} CLI lines)")
         for p in problems:
             print(f"      -> {p}")
         failures += 0 if ok else 1

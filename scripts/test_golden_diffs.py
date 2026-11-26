@@ -5,8 +5,11 @@ The expected after-states in data/plan_slice/golden_diffs.jsonl are
 literals written by hand from docs/PLAN_CONTRACT.md — apply() is
 graded against them, never the source of them. Also checks that the
 schema validator accepts each golden plan and that every changed path
-is inside the plan's authorized set (primary paths + documented
-cascades).
+is authorized. Authorization is derived INDEPENDENTLY of apply() by
+src/plan/cascades.py (operation + before-state only): a step's actual
+changed paths must lie in primary paths ∪ permitted cascades. (The
+previous logic — "effects = whatever apply() changed" — authorized
+apply()'s own output and was removed in the 2026-11-26 review fixes.)
 
 Usage: .venv/bin/python scripts/test_golden_diffs.py
 Exit code 0 iff all cases pass.
@@ -16,7 +19,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from src.plan.apply import apply_plan, authorized_paths, PlanError
+from src.plan.apply import apply_plan, PlanError
+from src.plan.cascades import permitted_cascade_paths, primary_paths
 from src.plan.diff import diff_states
 from src.plan.schema import validate_output
 
@@ -52,14 +56,47 @@ def main():
                     problems.append(
                         f"after-state mismatch at {gd}: "
                         f"expected {[(p, case['after']) for p in gd][:1]}")
-                changed = set(diff_states(before, case["after"]))
-                authorized = authorized_paths(before, case["after"], plan)
-                if not changed <= authorized:
-                    problems.append(
-                        f"unauthorized paths changed: {sorted(changed - authorized)}")
+                # Independent authorization walk: per step, the actual
+                # changed paths must be inside primary ∪ permitted
+                # cascades, both derived from (operation, before-state)
+                # by cascades.py — never from apply()'s own diff.
+                steps = plan["steps"] if "steps" in plan else [plan]
+                cur = before
+                for si, step in enumerate(steps):
+                    nxt, _ = apply_plan(cur, step)
+                    changed_step = set(diff_states(cur, nxt))
+                    allowed_step = (primary_paths(step)
+                                    | permitted_cascade_paths(step, cur))
+                    if not changed_step <= allowed_step:
+                        problems.append(
+                            f"step {si}: unauthorized paths changed: "
+                            f"{sorted(changed_step - allowed_step)}")
+                    cur = nxt
+                if len(steps) == 1:
+                    authored = set(diff_states(before, case["after"]))
+                    allowed = (primary_paths(plan)
+                               | permitted_cascade_paths(plan, before))
+                    if not authored <= allowed:
+                        problems.append(
+                            "hand-authored diff has unauthorized paths: "
+                            f"{sorted(authored - allowed)}")
+                if case.get("expected_changed_interfaces") is not None:
+                    want = set(case["expected_changed_interfaces"])
+                    for label, other in (("hand-authored", case["after"]),
+                                         ("produced", got)):
+                        touched = {p.split(".")[1]
+                                   for p in diff_states(before, other)
+                                   if p.startswith("interfaces.")}
+                        if touched != want:
+                            problems.append(
+                                f"{label} diff touches interfaces "
+                                f"{sorted(touched)}, expected exactly "
+                                f"{sorted(want)}")
         ok = not problems
         per_op.setdefault(op, []).append(ok)
-        print(f"{'PASS' if ok else 'FAIL'}  {case['id']:<34} ({op})")
+        tag = ("  [lab verification pending]"
+               if case.get("lab_verification") == "pending" else "")
+        print(f"{'PASS' if ok else 'FAIL'}  {case['id']:<34} ({op}){tag}")
         for p in problems:
             print(f"      -> {p}")
         failures += 0 if ok else 1
