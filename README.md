@@ -4,7 +4,7 @@ A purpose-built small language model that turns plain-English intent into correc
 
 **Start:** Cisco IOS XE. **Intent format:** OpenConfig-style structured intent + natural language. **Approach:** Fine-tune, don't pretrain. **License:** Apache 2.0.
 
-> Status — 2026-11-26: dataset v1.1 (5,861 pairs, 9 families) and the first model are published. Batch 9 (ACLs, NAT/PAT, HSRP) is mid-validation toward v1.2. Phase 2 — semantic parsing into typed change plans, compiled deterministically — is in design review (see `docs/PLAN_CONTRACT.md`).
+> Status — 2026-11-26: dataset v1.1 (5,861 pairs, 9 families) and the first model are published. Batch 9 (ACLs, NAT/PAT, HSRP) is mid-validation toward v1.2. The project is now governed by `docs/ROADMAP.md`: a capability-driven first release (read config, check eligibility, recommend, plan edits, review changes, interpret readback) over the Phase 2 plan contract. The capability matrix and hand-authored representative examples are in `docs/CAPABILITY_MATRIX.md` and `data/capability_examples/`; the Phase 2 engine fixes are under supervisor review and bulk label generation is held until that review clears.
 
 ## Published artifacts
 
@@ -31,8 +31,8 @@ Model v1 scores on the held-out test split (raw, untruncated generations): parse
 
 - `scripts/` — family generators (`gen_batch*.py`), the intent-match checker (`intent_match.py`), Batfish validation runners, dataset builders, training/scoring utilities
 - `src/plan/` — Phase 2 plan engine: typed device state, plan schema/validation, `apply()`, CLI renderer, state diff
-- `docs/` — `V0_SCOPE.md` (locked v0 scope), `PHASE1_PLAN.md` (family expansion), `PLAN_CONTRACT.md` (Phase 2 operation contract)
-- `data/` — dataset builds (`v1.0/`, `v1.1/`), generated batches, Phase 2 slice (`plan_slice/`: hand-authored golden diffs + contrast triples)
+- `docs/` — `ROADMAP.md` (governing plan), `CAPABILITY_MATRIX.md` (capabilities, record format, release scope), `PLAN_CONTRACT.md` (Phase 2 operation contract), `OPENCONFIG_AND_YANG.md` (how the open models are — and are not — used), `V0_SCOPE.md`, `PHASE1_PLAN.md`, `RELATED_WORK.md`
+- `data/` — dataset builds (`v1.0/`, `v1.1/`), generated batches, Phase 2 slice (`plan_slice/`: hand-authored golden diffs + contrast triples), capability representatives (`capability_examples/`)
 - `outputs/` — training job outputs, scoring records (`SCORED.json`), diagnoses
 
 Model weights are not in this repo — they live on Hugging Face. Publish-scratch files that can carry auth headers (`outputs/hf-fullft/lfs-*.json`) are gitignored by design.
