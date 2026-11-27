@@ -75,10 +75,16 @@ def main():
                         pad_token_id=tok.eos_token_id)
                 raw = tok.decode(gen[0][inputs["input_ids"].shape[1]:],
                                  skip_special_tokens=True)
+                prompt_tokens = int(inputs["input_ids"].shape[1])
+                completion_tokens = int(gen[0].shape[0]) - prompt_tokens
                 out.write(json.dumps({
                     "item_id": item["id"], "task": item["task"],
                     "arm": arm, "prompt_sha256": prompt_sha(item, arm),
                     "checkpoint": CHECKPOINT, "revision": REVISION,
+                    "prompt_tokens": prompt_tokens,
+                    "completion_tokens": completion_tokens,
+                    "finish_reason": "length" if completion_tokens
+                    >= MAX_NEW_TOKENS[item["task"]] else "stop",
                     "raw_output": raw,
                 }, sort_keys=True) + "\n")
                 out.flush()

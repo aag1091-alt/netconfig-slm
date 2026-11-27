@@ -31,11 +31,28 @@ packet. The A→B delta is the measurement.
 | `prompts.md` | The templates in human-readable form. |
 | `schema_packet.txt` | Arm B's evidence: verbatim pinned YANG excerpts + slice notes, with provenance. |
 | `samples.md` | One worked sample per task (arm B rendering, expected output, scoring walkthrough), machine-rendered from `prompts.py`. |
-| `RUBRIC.md` | Scoring rules per task + the frozen report format. |
+| `RUBRIC.md` | Scoring rules per task + the frozen report format (v2, post-review). |
+| `e_rubric.md` | The blind factual rubric for E items (per-item requirements; arm labels stripped at grading time). |
 | `run_config.md` | Checkpoint, revision, decoding, token budgets, job plan. |
-| `run_pilot.py` | The runner (writes `results/raw_outputs.jsonl`). Not executed. |
-| `score_pilot.py` | The scorer (writes `results/scores.json`, `results/RESULTS.md`). Smoke-tested pre-freeze against hand-made stub outputs covering each failure class (ok / facts_mismatch / validation_error / assertion_failed / preservation_violation); stubs removed, `results/` is empty in the freeze. |
+| `run_pilot.py` | The runner (writes `results/raw_outputs.jsonl`, incl. prompt/completion token counts + finish reason per record). Not executed. |
+| `score_pilot.py` | The scorer v2 (writes `results/scores.json`, `results/RESULTS.md`; `--make-blind-sheet` produces the E blind-grading sheet). |
+| `test_score_pilot.py` | Regression tests for the scorer — every case maps to a review finding or a load-bearing behavior. 10/10 groups pass. |
 | `results/` | Empty in the freeze. Raw outputs land here at run time and are kept unmodified. |
+
+## Revision history
+
+- **v2 (this freeze)** — revised per Codex's review of 0231af9 (board
+  ids 27 + 29). Changes: strict whole-output JSON grading for R/P
+  (first-object extraction demoted to a labeled diagnostic); clarify /
+  no_op shape validation via the engine; E split into mechanical
+  citation accuracy vs blind-rubric factual correctness (keyword
+  coverage is diagnostic only — it cannot tell an answer from its
+  negation); raw-record integrity assertion (exactly one record per
+  item/arm); R reported by view + paired outcomes for R/P; E-01's
+  rubric now requires both branches of the trunk-vlans union
+  (vlan-id AND vlan-range); runner records token/finish metadata.
+- **v1 (0231af9)** — initial freeze; superseded by v2 before any
+  inference ran.
 
 Pre-freeze self-review caught one real defect worth noting: the first
 draft of the prompt contract used a wrapped output shape

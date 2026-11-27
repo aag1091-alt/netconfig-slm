@@ -100,7 +100,7 @@ def build_items():
     e_specs = [
         ("Which YANG leaf holds the list of VLANs allowed on a trunk "
          "interface, and what is its type?",
-         ["trunk-vlans", "leaf-list", "vlan-id"],
+         ["trunk-vlans", "leaf-list", "union", "vlan-id", "vlan-range"],
          "openconfig-vlan / vlan-switched-config / trunk-vlans"),
         ("Can a schema-valid OpenConfig instance carry an access-vlan value "
          "for an interface whose interface-mode is TRUNK?",
