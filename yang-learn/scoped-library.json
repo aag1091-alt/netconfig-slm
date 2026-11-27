@@ -1,0 +1,778 @@
+{
+ "ietf-yang-library:modules-state": {
+  "module-set-id": "netconfig-scoped-cat9k-2621",
+  "module": [
+   {
+    "name": "Cisco-IOS-XE-aaa",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-aaa",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-aaa-deviation",
+      "revision": "2025-07-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-aaa-deviation",
+    "revision": "2025-07-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-aaa-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-acl",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-acl",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-aging-time-deviation",
+    "revision": "2025-07-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-aging-time-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-arp",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-arp",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-atm",
+    "revision": "2024-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-atm",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-cef",
+    "revision": "2024-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-cef",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-cef-deviation",
+      "revision": "2024-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-cef-deviation",
+    "revision": "2024-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-cef-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-crypto",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-crypto",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-cts",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-cts",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-cts-switching-deviation",
+      "revision": "2022-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-cts-switching-deviation",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-cts-switching-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-device-sensor",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-device-sensor",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-device-sensor-deviation",
+      "revision": "2026-02-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-device-sensor-deviation",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-device-sensor-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-device-tracking",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-device-tracking",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-device-tracking-cat9k-deviation",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-device-tracking-cat9k-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-dialer-deviation",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-dialer-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-ethernet",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-ethernet",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-ethernet-cat9k-deviation",
+      "revision": "2026-02-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-poch-lb-switch-deviation",
+      "revision": "2022-11-01"
+     }
+    ],
+    "submodule": [
+     {
+      "name": "Cisco-IOS-XE-ethernet-cfm-efp",
+      "revision": "2026-02-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-ethernet-oam",
+      "revision": "2025-07-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-ethernet-cat9k-deviation",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-ethernet-cat9k-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-features",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-features",
+    "conformance-type": "implement",
+    "feature": [
+     "aging-time-switching",
+     "cdp-config-switching",
+     "crypto",
+     "cts-autonomous",
+     "cts-switching",
+     "dad-proxy",
+     "dhcp-guard",
+     "dhcp-server-tracking",
+     "dot1x",
+     "fhrp-sso",
+     "fqdn-acl",
+     "ip-forward",
+     "l2",
+     "l2vpn",
+     "macsec-common",
+     "macsec-iot-routing",
+     "macsec-switch",
+     "mdns-switch",
+     "med",
+     "mtc-acl",
+     "nhrp",
+     "pae",
+     "parameter-map",
+     "pbr-sbit-switching",
+     "pbr-switching",
+     "port-settings",
+     "power-inline-flexible-poe",
+     "prefixlist-autonomous",
+     "private-vlan",
+     "qos-qsm",
+     "ra-throttler",
+     "raguard",
+     "reflexive-acl",
+     "routing-proxy",
+     "sc-level-shared",
+     "suppress",
+     "switching-guard",
+     "switching-platform",
+     "table-map",
+     "transceiver",
+     "vlan"
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-flow",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-flow",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-flow-deviation",
+      "revision": ""
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-flow-deviation",
+    "revision": "",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-flow-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-igmp",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-igmp",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-interface-common",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-interface-common",
+    "conformance-type": "import",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-interfaces-cat9k-deviation",
+    "revision": "2025-03-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-interfaces-cat9k-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-interfaces-deviation",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-interfaces-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-isis",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-isis",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-l2vpn",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-l2vpn",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-line-common-deviation",
+    "revision": "2023-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-line-common-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-line-nonquake-deviation",
+    "revision": "2024-07-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-line-nonquake-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-lisp",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-lisp",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-lisp-deviation",
+      "revision": "2022-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-lisp-deviation",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-lisp-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-logging-deviation",
+    "revision": "2024-07-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-logging-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-mpls",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-mpls",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-native",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-native",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-aaa-deviation",
+      "revision": "2025-07-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-aging-time-deviation",
+      "revision": "2025-07-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-cef-deviation",
+      "revision": "2024-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-cts-switching-deviation",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-device-sensor-deviation",
+      "revision": "2026-02-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-device-tracking-cat9k-deviation",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-dialer-deviation",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-ethernet-cat9k-deviation",
+      "revision": "2026-02-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-flow-deviation",
+      "revision": ""
+     },
+     {
+      "name": "Cisco-IOS-XE-interfaces-cat9k-deviation",
+      "revision": "2025-03-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-interfaces-deviation",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-line-common-deviation",
+      "revision": "2023-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-line-nonquake-deviation",
+      "revision": "2024-07-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-lisp-deviation",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-logging-deviation",
+      "revision": "2024-07-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-nd-deviation",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-ospf-deviation",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-ospfv3-deviation",
+      "revision": "2023-07-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-pnp-deviation",
+      "revision": ""
+     },
+     {
+      "name": "Cisco-IOS-XE-poch-lb-switch-deviation",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-policy-cat9k-deviation",
+      "revision": "2025-03-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-sanet-deviation",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-snmp-deviation",
+      "revision": "2024-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-switch-deviation",
+      "revision": "2026-02-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-switchport-deviation",
+      "revision": "2024-07-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-vlan-ewlc-deviation",
+      "revision": "2024-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-vrrp-deviation",
+      "revision": "2022-11-01"
+     }
+    ],
+    "submodule": [
+     {
+      "name": "Cisco-IOS-XE-hsrp",
+      "revision": "2026-02-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-interfaces",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-ip",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-ipv6",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-license",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-line",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-location",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-logging",
+      "revision": "2026-02-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-parser",
+      "revision": "2024-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-transceiver-monitor",
+      "revision": "2022-11-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-transport",
+      "revision": "2024-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-nd",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-nd",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-nd-deviation",
+      "revision": "2022-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-nd-deviation",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-nd-deviation.yang",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-object-group",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-object-group",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-ospf",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-ospf",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-ospf-deviation",
+      "revision": "2026-08-01"
+     }
+    ],
+    "submodule": [
+     {
+      "name": "Cisco-IOS-XE-ospf-obsolete",
+      "revision": "2022-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-ospf-deviation",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-ospf-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-ospfv3",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-ospfv3",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-ospfv3-deviation",
+      "revision": "2023-07-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-ospfv3-deviation",
+    "revision": "2023-07-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-ospfv3-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-pnp",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-pnp",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-pnp-deviation",
+      "revision": ""
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-pnp-deviation",
+    "revision": "",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-pnp-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-poch-lb-switch-deviation",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-poch-lb-switch-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-policy",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-policy",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-policy-cat9k-deviation",
+      "revision": "2025-03-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-switch-deviation",
+      "revision": "2026-02-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-policy-cat9k-deviation",
+    "revision": "2025-03-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-policy-cat9k-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-pppoe",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-pppoe",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-sanet",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-sanet",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-sanet-deviation",
+      "revision": "2022-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-sanet-deviation",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-sanet-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-segment-routing",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-segment-routing",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-snmp",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-snmp",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-snmp-deviation",
+      "revision": "2024-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-snmp-deviation",
+    "revision": "2024-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-snmp-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-switch",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-switch",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-device-tracking-cat9k-deviation",
+      "revision": "2026-08-01"
+     },
+     {
+      "name": "Cisco-IOS-XE-switch-deviation",
+      "revision": "2026-02-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-switch-deviation",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-switch-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-switchport-deviation",
+    "revision": "2024-07-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-switchport-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-tunnel",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-tunnel",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-types",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-types",
+    "conformance-type": "import",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-vlan",
+    "revision": "2026-08-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-vlan",
+    "conformance-type": "implement",
+    "deviation": [
+     {
+      "name": "Cisco-IOS-XE-vlan-ewlc-deviation",
+      "revision": "2024-11-01"
+     }
+    ],
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-vlan-ewlc-deviation",
+    "revision": "2024-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-vlan-ewlc-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-vrrp-deviation",
+    "revision": "2022-11-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-vrrp-deviation",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "Cisco-IOS-XE-vtp",
+    "revision": "2026-02-01",
+    "namespace": "http://cisco.com/ns/yang/Cisco-IOS-XE-vtp",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "cisco-semver",
+    "revision": "2019-03-20",
+    "namespace": "http://cisco.com/ns/yang/cisco-semver",
+    "conformance-type": "implement",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "ietf-inet-types",
+    "revision": "2013-07-15",
+    "namespace": "urn:ietf:params:xml:ns:yang:ietf-inet-types",
+    "conformance-type": "import",
+    "yangson-yl:keep-obsolete": true
+   },
+   {
+    "name": "ietf-yang-types",
+    "revision": "2013-07-15",
+    "namespace": "urn:ietf:params:xml:ns:yang:ietf-yang-types",
+    "conformance-type": "import",
+    "yangson-yl:keep-obsolete": true
+   }
+  ]
+ }
+}
