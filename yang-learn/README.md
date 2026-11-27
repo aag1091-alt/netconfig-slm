@@ -80,6 +80,27 @@ reviewed and a training scope/cost can be quoted.
 5. **Wording.** The nonmandatory mode choice is "at most one case"
    everywhere (it was "exactly one" in three places).
 
+## Revision 3 — per Codex #69/#70 (sample cleared)
+
+Codex replayed revision 2 independently: all 41 records regenerated
+with zero drops and `records.jsonl` matched byte-for-byte; the
+sample is cleared as schema-training prep. Two further fixes landed
+with the scale-up design (`SCALE_DESIGN.md`):
+
+1. **Defining-node provenance.** Provenance now cites the module
+   that *textually defines* each node (via the statement's source
+   file, which pyang preserves through grouping expansions and
+   augments): configuration-entry paths cite `Cisco-IOS-XE-vlan`,
+   switchport grouping paths cite `Cisco-IOS-XE-switch`, the
+   interface key cites `Cisco-IOS-XE-interfaces` — each with its own
+   revision, grouped per record under `source.modules`. (Revision 2
+   cited the instantiating module, Cisco-IOS-XE-native, for all.)
+2. **Edit target selectors.** Every typed edit now carries an
+   explicit `target` (list path + list key, e.g. GigabitEthernet
+   `name = "1/0/1"`), and the apply-check resolves the target by key
+   instead of by position — the precondition for multi-interface
+   states at scale.
+
 ## Record families (records.jsonl, split = train_candidate)
 
 | family | n | what it teaches |

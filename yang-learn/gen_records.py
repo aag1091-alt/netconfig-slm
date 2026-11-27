@@ -26,7 +26,60 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from schema_tools import inventory, leaf_facts, load_context  # noqa: E402
+from schema_tools import (  # noqa: E402
+    DATA_KWS, defining_module, inventory, leaf_facts, load_context,
+    schema_path)
+
+
+def build_prov_map(bundle: Path) -> dict:
+    """schema path -> {module, revision} of the DEFINING node.
+
+    Walks every data node of the root module's instantiated tree
+    (grouping expansions and augments included) and records the
+    (sub)module whose file textually defines the node, with that
+    module's own revision.
+    """
+    ctx, errors = load_context(bundle)
+    if errors:
+        raise SystemExit(f"pyang load errors: {errors[:3]}")
+    revs: dict[str, str | None] = {}
+    for (name, _rev), stmt in ctx.modules.items():
+        if name not in revs:
+            r = stmt.search_one("revision")
+            revs[name] = r.arg if r is not None else None
+    mod = ctx.get_module("Cisco-IOS-XE-native")
+    prov: dict[str, dict] = {}
+
+    def record(stmt):
+        m = defining_module(stmt)
+        prov[schema_path(stmt)] = {"module": m, "revision": revs.get(m)}
+
+    def walk(stmt):
+        for child in getattr(stmt, "i_children", []) or []:
+            if child.keyword in DATA_KWS:
+                record(child)
+                walk(child)
+
+    for top in getattr(mod, "i_children", []) or []:
+        if top.keyword in DATA_KWS:
+            record(top)
+        walk(top)
+    return prov
+
+
+def source_for(paths, prov, extra=None) -> dict:
+    """Group paths by defining module/revision into a source block."""
+    groups: dict[tuple, list] = {}
+    for p in paths:
+        info = prov[p]
+        assert info["module"] and info["revision"], f"provenance gap: {p}"
+        groups.setdefault((info["module"], info["revision"]),
+                          []).append(p)
+    out = {"modules": [{"module": m, "revision": r, "paths": ps}
+                       for (m, r), ps in sorted(groups.items())]}
+    if extra:
+        out.update(extra)
+    return out
 
 S = "Cisco-IOS-XE-switch:"
 V = "Cisco-IOS-XE-vlan:"
@@ -124,6 +177,7 @@ def main() -> int:
         stale.unlink()
 
     facts = {f["path"]: f for f in inventory(bundle)}
+    prov = build_prov_map(bundle)
     records: list[dict] = []
     instance_files: dict[str, str] = {}  # filename -> record id
 
@@ -172,7 +226,9 @@ def main() -> int:
             "fact": {"path": path, "type": f["type"],
                      "default": f["default"], "when": f["when"],
                      "must": f["must"]},
-            "source": f["source"], "validation": None})
+            "source": {**f["source"],
+                       "revision": prov[path]["revision"]},
+            "validation": None})
 
     # mode is a choice, not a leaf — authored from the module source.
     records.append({
@@ -193,6 +249,7 @@ def main() -> int:
                  "cases": ["access", "trunk", "dot1q-tunnel", "dynamic",
                            "private-vlan"]},
         "source": {"module": "Cisco-IOS-XE-switch",
+                   "revision": prov[f"{SW}/mode"]["revision"],
                    "file": "Cisco-IOS-XE-switch.yang", "line": 728},
         "validation": None})
 
@@ -303,8 +360,7 @@ def main() -> int:
             "completion": completion,
             "fact": {"instance_file": rel, "intended_verdict": intended,
                      "violated_rule": rule, "expected_node": expect},
-            "source": {"module": "Cisco-IOS-XE-native",
-                       "revision": "2026-08-01", "paths": paths},
+            "source": source_for(paths, prov),
             "validation": None})
 
     # ------------------------------------------------------------ typed_edit
@@ -394,8 +450,7 @@ def main() -> int:
                      "changed_paths": changed,
                      "preserved_paths": preserved,
                      "schema_only_reason": so_reason},
-            "source": {"module": "Cisco-IOS-XE-native",
-                       "revision": "2026-08-01", "paths": [edited_path]},
+            "source": source_for([edited_path], prov),
             "validation": None})
 
     # -------------------------------------------------------- revised_schema
@@ -425,52 +480,71 @@ def main() -> int:
                        f"differ.\n\n{PROFILE}\n\n{q}"),
             "completion": ans,
             "fact": {"profile_rule": rule},
-            "source": {"module": "Cisco-IOS-XE-native",
-                       "revision": "2026-08-01", "paths": rs_paths[i - 1],
-                       "profile": "P1 (authored, embedded in prompt)"},
+            "source": source_for(
+                rs_paths[i - 1], prov,
+                {"profile": "P1 (authored, embedded in prompt)"}),
             "validation": {"tool": "none",
                            "note": "profile rule, not base schema"}})
 
     # ------------------------------------------------ typed_edit (edit-spec
-    # completions; each spec is machine-checked by applying it to the
-    # before-state and comparing with the after-state, whose files are
-    # shared with the matching state_reconstruction records)
+    # completions; every edit carries an explicit target selector —
+    # list path + list key — so specs stay unambiguous when states
+    # hold multiple interfaces; each spec is machine-checked by
+    # applying it to the before-state and comparing with the
+    # after-state, whose files are shared with the matching
+    # state_reconstruction records)
+    GE_LIST = "/native/interface/GigabitEthernet"
+    ENTRY_LIST = "/native/vlan/configuration-entry"
+
     def apply_edits(before, edits):
         st = copy.deepcopy(before)
         root = st["Cisco-IOS-XE-native:native"]
-        ge0 = root["interface"]["GigabitEthernet"][0]
-        sw = ge0["switchport-config"]["switchport"]
         for e in edits:
-            if e["op"] == "set" and e["path"] == P_ACCESS:
-                sw[S + "access"][S + "vlan"][S + "vlan"] = e["new"]
-            elif e["op"] == "swap_case" and e["path"] == P_MODE:
-                sw[S + "mode"] = {S + e["new"]: {}}
-            elif e["op"] == "add_entry":
-                root["vlan"][V + "configuration-entry"].append(e["new"])
-            elif e["op"] == "remove_entry":
-                root["vlan"][V + "configuration-entry"] = [
-                    x for x in root["vlan"][V + "configuration-entry"]
-                    if x["vlan-id"] != e["key"]]
+            tgt = e["target"]
+            if tgt["list"] == GE_LIST:
+                entry = next(
+                    x for x in root["interface"]["GigabitEthernet"]
+                    if x["name"] == tgt["key"]["name"])
+                sw = entry["switchport-config"]["switchport"]
+                if e["op"] == "set" and e["path"] == P_ACCESS:
+                    sw[S + "access"][S + "vlan"][S + "vlan"] = e["new"]
+                elif e["op"] == "swap_case" and e["path"] == P_MODE:
+                    sw[S + "mode"] = {S + e["new"]: {}}
+                else:
+                    raise ValueError(f"unsupported edit {e}")
+            elif tgt["list"] == ENTRY_LIST:
+                entries = root["vlan"][V + "configuration-entry"]
+                if e["op"] == "add_entry":
+                    entries.append(e["new"])
+                elif e["op"] == "remove_entry":
+                    root["vlan"][V + "configuration-entry"] = [
+                        x for x in entries
+                        if x["vlan-id"] != tgt["key"]["vlan-id"]]
+                else:
+                    raise ValueError(f"unsupported edit {e}")
             else:
-                raise ValueError(f"unsupported edit {e}")
+                raise ValueError(f"unsupported target {tgt}")
         return st
 
     te2_defs = [
         # (instruction, sr_index, edits, executable, schema_only_reason)
         ("Change GigabitEthernet 1/0/1 from access mode to trunk mode. "
          "Change nothing else.", 2,
-         [{"path": P_MODE, "op": "swap_case", "old": "access",
+         [{"target": {"list": GE_LIST, "key": {"name": "1/0/1"}},
+           "path": P_MODE, "op": "swap_case", "old": "access",
            "new": "trunk"}], True, None),
         ("Add a configuration entry for VLAN 20.", 4,
-         [{"path": "/native/vlan/configuration-entry", "op": "add_entry",
+         [{"target": {"list": ENTRY_LIST},
+           "path": ENTRY_LIST, "op": "add_entry",
            "new": {"vlan-id": "20"}}], True, None),
         ("Set the access VLAN of GigabitEthernet 1/0/1 from 10 to 20.",
-         1, [{"path": P_ACCESS, "op": "set", "old": 10, "new": 20}],
+         1, [{"target": {"list": GE_LIST, "key": {"name": "1/0/1"}},
+              "path": P_ACCESS, "op": "set", "old": 10, "new": 20}],
          False, "sets access VLAN 20, which has no configuration-entry "
                 "in the state (missing VLAN prerequisite)"),
         ("Remove the configuration entry for VLAN 20.", 6,
-         [{"path": "/native/vlan/configuration-entry",
-           "op": "remove_entry", "key": "20"}],
+         [{"target": {"list": ENTRY_LIST, "key": {"vlan-id": "20"}},
+           "path": ENTRY_LIST, "op": "remove_entry"}],
          False, "deletion case — labeled schema-only, separate from "
                 "executable edit labels"),
     ]
@@ -481,8 +555,9 @@ def main() -> int:
         after = te_defs[sr_idx - 1][2]
         prompt = (f"Return the typed edit that transforms the state "
                   f"below as instructed — the edit operations only, "
-                  f"not the full state. Preserve every value the edit "
-                  f"does not touch.\n\nEdit: {instruction}\n\nState:\n"
+                  f"not the full state. Each edit names its target "
+                  f"list and key. Preserve every value the edit does "
+                  f"not touch.\n\nEdit: {instruction}\n\nState:\n"
                   f"{json.dumps(before, indent=1)}")
         records.append({
             "id": rid, "family": "typed_edit",
@@ -495,9 +570,7 @@ def main() -> int:
                      "before_file": f"instances/YL-SR-{sr_idx:02d}-before.json",
                      "after_file": f"instances/YL-SR-{sr_idx:02d}-after.json",
                      "schema_only_reason": so_reason},
-            "source": {"module": "Cisco-IOS-XE-native",
-                       "revision": "2026-08-01",
-                       "paths": [e["path"] for e in edits]},
+            "source": source_for([e["path"] for e in edits], prov),
             "validation": None,
             "_check": {"before": before, "after": after,
                        "edits": edits}})

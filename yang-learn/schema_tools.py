@@ -60,6 +60,17 @@ def schema_path(stmt) -> str:
 
 
 def defining_module(stmt) -> str:
+    """The (sub)module where the statement textually lives.
+
+    pyang preserves the definition site in pos.ref even for grouping
+    expansions and augments instantiated under another module, and in
+    this bundle every file is named <module>.yang — so the file stem
+    is the defining module. (Walking .parent instead returns the
+    instantiating module, e.g. Cisco-IOS-XE-native for everything.)
+    """
+    ref = getattr(stmt.pos, "ref", "") or ""
+    if ref:
+        return Path(str(ref)).stem
     node = stmt
     while node is not None:
         if node.keyword in ("module", "submodule"):
