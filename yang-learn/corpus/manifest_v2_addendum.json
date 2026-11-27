@@ -1,0 +1,39 @@
+{
+ "corpus": "v2 additions (train/dev only; benchmark v1 frozen at 5189d33, untouched)",
+ "generator": "gen_corpus_v2.py",
+ "splits": {
+  "train": {
+   "total": 371,
+   "by_family": {
+    "path_meaning": 214,
+    "instance_validity": 105,
+    "revised_schema": 27,
+    "typed_edit": 25
+   }
+  },
+  "dev": {
+   "total": 63,
+   "by_family": {
+    "path_meaning": 40,
+    "instance_validity": 15,
+    "revised_schema": 6,
+    "typed_edit": 2
+   }
+  }
+ },
+ "dropped_validation": [],
+ "dropped_duplicates": [
+  "V2-IV-022",
+  "V2-IV-023",
+  "V2-IV-024",
+  "V2-RS-014",
+  "V2-RS-015",
+  "V2-RS-024",
+  "V2-RS-030",
+  "V2-RS-031",
+  "V2-TE-N08",
+  "V2-TE-N20",
+  "V2-TE-N28"
+ ],
+ "validation": "PM facts via pyang inventory; IV/TE verdicts via yangson (validate_all); RS verdicts via in-generator predicates; TE-negative selectors mechanically verified"
+}
