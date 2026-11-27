@@ -159,3 +159,16 @@ time and are recorded per record.
 `vendor/` holds the five directly-cited modules plus the two cat9k
 set files for review convenience; the full closure comes from the
 pinned bundle above.
+
+## Corpus v1 (2026-11-26)
+
+The scale-up is built: `gen_corpus.py` generates the full corpus
+under SCALE_DESIGN.md (as amended), validates every record through
+the same pyang-facts ≠ yangson-verdicts chain, and writes
+`corpus/{train,dev,test,benchmark}.jsonl` + `corpus/manifest.json`
+(actual split/coverage/drop counts and pinned-tokenizer stats).
+Final run: train 1,047 · dev 78 · test 160 · benchmark 209, zero
+drops. Bench v1 (benchmark + the 8 hand-authored held-out records)
+is defined in `corpus/BENCHMARK.md` and frozen by commit.
+`tokenize_corpus.py` reproduces the token stats. Training awaits
+Avinash's approval of the firm quote in SCALE_DESIGN.md (A5).

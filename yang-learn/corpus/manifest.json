@@ -1,0 +1,223 @@
+{
+ "bundle": "YangModels/yang @ 9c23db975096b67843858128f37947a0c30a2d45 (xe/2621, IOS XE 26.2.1)",
+ "splits": {
+  "train": {
+   "total": 1047,
+   "by_family": {
+    "path_meaning": 167,
+    "instance_validity": 326,
+    "state_reconstruction": 260,
+    "typed_edit": 234,
+    "revised_schema": 60
+   }
+  },
+  "dev": {
+   "total": 78,
+   "by_family": {
+    "path_meaning": 15,
+    "instance_validity": 18,
+    "state_reconstruction": 24,
+    "typed_edit": 15,
+    "revised_schema": 6
+   }
+  },
+  "test": {
+   "total": 160,
+   "by_family": {
+    "path_meaning": 21,
+    "instance_validity": 90,
+    "state_reconstruction": 20,
+    "typed_edit": 25,
+    "revised_schema": 4
+   }
+  }
+ },
+ "benchmark": {
+  "total": 209,
+  "by_family": {
+   "path_meaning": 32,
+   "instance_validity": 70,
+   "state_reconstruction": 40,
+   "typed_edit": 41,
+   "revised_schema": 26
+  },
+  "note": "plus the 8 hand-authored records in ../held_out.jsonl; frozen by the commit that adds this manifest"
+ },
+ "sample_folded_into_train": 41,
+ "coverage": {
+  "pattern": 81,
+  "when": 24,
+  "enumeration": 50,
+  "range": 238,
+  "union": 184,
+  "default": 11,
+  "enum": 70,
+  "key": 49,
+  "choice": 49
+ },
+ "dropped": {
+  "corpus": [],
+  "benchmark": []
+ },
+ "tokens": {
+  "tokenizer": "Qwen/Qwen3-4B-Base @ 906bfd4b",
+  "max_lens": [
+   1024,
+   1536
+  ],
+  "splits": {
+   "train": {
+    "records": 1047,
+    "prompt_tokens": 267237,
+    "completion_tokens": 102279,
+    "total_tokens": 369516,
+    "max_record_tokens": 834,
+    "records_over_max_len": {
+     "1024": 0,
+     "1536": 0
+    },
+    "per_family": {
+     "instance_validity": {
+      "records": 326,
+      "prompt_tokens": 92919,
+      "completion_tokens": 4887
+     },
+     "path_meaning": {
+      "records": 167,
+      "prompt_tokens": 10769,
+      "completion_tokens": 3767
+     },
+     "revised_schema": {
+      "records": 60,
+      "prompt_tokens": 5090,
+      "completion_tokens": 1495
+     },
+     "state_reconstruction": {
+      "records": 260,
+      "prompt_tokens": 81133,
+      "completion_tokens": 72103
+     },
+     "typed_edit": {
+      "records": 234,
+      "prompt_tokens": 77326,
+      "completion_tokens": 20027
+     }
+    }
+   },
+   "dev": {
+    "records": 78,
+    "prompt_tokens": 19716,
+    "completion_tokens": 8695,
+    "total_tokens": 28411,
+    "max_record_tokens": 803,
+    "records_over_max_len": {
+     "1024": 0,
+     "1536": 0
+    },
+    "per_family": {
+     "instance_validity": {
+      "records": 18,
+      "prompt_tokens": 5949,
+      "completion_tokens": 222
+     },
+     "path_meaning": {
+      "records": 15,
+      "prompt_tokens": 980,
+      "completion_tokens": 339
+     },
+     "revised_schema": {
+      "records": 6,
+      "prompt_tokens": 476,
+      "completion_tokens": 116
+     },
+     "state_reconstruction": {
+      "records": 24,
+      "prompt_tokens": 7492,
+      "completion_tokens": 6703
+     },
+     "typed_edit": {
+      "records": 15,
+      "prompt_tokens": 4819,
+      "completion_tokens": 1315
+     }
+    }
+   },
+   "test": {
+    "records": 160,
+    "prompt_tokens": 41936,
+    "completion_tokens": 10194,
+    "total_tokens": 52130,
+    "max_record_tokens": 797,
+    "records_over_max_len": {
+     "1024": 0,
+     "1536": 0
+    },
+    "per_family": {
+     "instance_validity": {
+      "records": 90,
+      "prompt_tokens": 25911,
+      "completion_tokens": 2046
+     },
+     "path_meaning": {
+      "records": 21,
+      "prompt_tokens": 1298,
+      "completion_tokens": 657
+     },
+     "revised_schema": {
+      "records": 4,
+      "prompt_tokens": 306,
+      "completion_tokens": 74
+     },
+     "state_reconstruction": {
+      "records": 20,
+      "prompt_tokens": 6201,
+      "completion_tokens": 5653
+     },
+     "typed_edit": {
+      "records": 25,
+      "prompt_tokens": 8220,
+      "completion_tokens": 1764
+     }
+    }
+   },
+   "benchmark": {
+    "records": 209,
+    "prompt_tokens": 48719,
+    "completion_tokens": 17581,
+    "total_tokens": 66300,
+    "max_record_tokens": 807,
+    "records_over_max_len": {
+     "1024": 0,
+     "1536": 0
+    },
+    "per_family": {
+     "instance_validity": {
+      "records": 70,
+      "prompt_tokens": 17380,
+      "completion_tokens": 1145
+     },
+     "path_meaning": {
+      "records": 32,
+      "prompt_tokens": 2099,
+      "completion_tokens": 621
+     },
+     "revised_schema": {
+      "records": 26,
+      "prompt_tokens": 1900,
+      "completion_tokens": 500
+     },
+     "state_reconstruction": {
+      "records": 40,
+      "prompt_tokens": 13431,
+      "completion_tokens": 12048
+     },
+     "typed_edit": {
+      "records": 41,
+      "prompt_tokens": 13909,
+      "completion_tokens": 3267
+     }
+    }
+   }
+  }
+ }
+}
