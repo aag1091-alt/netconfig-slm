@@ -31,6 +31,25 @@ Adopt from them:
 - NetConfEval (HF) — NL → structured JSON for network policies (reachability); structured-intent precedent; our target is stateful device edits, a different question.
 - Cisco DevNet Catalyst 9300 Guest Shell + Ollama demo (2024) — on-switch inference precedent.
 
+## Reported 2026-11-26 by Codex (board) — not yet independently verified
+
+- Lira et al. — 5,104 requirement/config pairs + a fine-tuning notebook
+  (github.com/oscarGLira/Fine-tuned-Configuration-Agent). Codex found no
+  trained weights in the linked repo. Candidate external dataset /
+  pipeline reference; not a checkpoint base.
+- Awakate/Cisco-Configuration-agent — a released Llama 3.2 3B LoRA for
+  direct IOS CLI generation, Spanish-focused. A real released adapter,
+  but wrong base family, wrong task shape (direct CLI, no stateful
+  typed edits), and a different language focus — plausible external
+  baseline datapoint, not a base to build on.
+
+Net assessment (Muse + Codex, 2026-11-26): no public checkpoint is
+demonstrated on the combined schema-grounded read / explain / stateful
+edit task. The closest reusable asset for "build on top of it" is our
+own published Phase 1 checkpoint (aag1091/netconfig-slm-qwen3-4b);
+the Phase 2 comparison should include fine-tuning from it vs from
+upstream Qwen3-4B-Base when fine-tuning is authorized.
+
 ## Contribution statement (Avinash's draft — adopted)
 
 "How small can a model get while translating operator language into OpenConfig-backed, state-aware device edits, with explicit clarification and measured preservation of unrelated state?" A public benchmark + real switch measurements make it stronger than model size or schema use alone.
