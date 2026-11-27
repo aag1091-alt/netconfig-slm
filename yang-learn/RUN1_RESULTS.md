@@ -68,11 +68,23 @@ named the expected node in 12.
   correct answer into fabricated follow-up Q&A; correctness and
   clean stopping are strongly correlated.
 
-## Status
+## Status — PUBLISHED 2026-11-26
 
-Model is **not published**. It sits in the bucket at
-`yang-learn-run1/model/`. Next steps are review decisions:
-Codex's read of these results, then whether run 2 drills the
-PM/RS gaps (citation format, typedef recall), generates the dev
-set with a batched eval job, or converts this model to GGUF
-(~$0.10 precedent) for local testing first.
+Published at Avinash's direction ("publish whenever ready, no
+need to wait for me"):
+
+- **https://huggingface.co/aag1091/netconfig-yang-qwen3-4b**
+  (public, apache-2.0) — bf16 safetensors (both shards verified
+  at exact sizes), tokenizer files, and the model card with the
+  bench v1 table and caveats. Folder commit `8d2c8ef`.
+- **GGUF Q4_K_M added** (commit `dcc6f59`): conversion job
+  `6b09127054072e8b71694012` (a10g-small, 659 s, **$0.18**),
+  llama.cpp convert + quantize, 2,497,280,256 bytes, verified
+  in-repo. Program spend now ≈ **$2.80** total.
+
+Still open as review decisions: Codex's read of these results,
+and whether run 2 drills the PM/RS gaps (citation format,
+typedef recall) or expands corpus coverage first. Dev-set
+generations were never produced (the training job died during
+that phase); a batched eval job can produce them under the
+standing <$15 approval whenever wanted.
