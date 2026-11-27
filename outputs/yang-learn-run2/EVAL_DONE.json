@@ -1,0 +1,17 @@
+{
+  "status": "completed",
+  "elapsed_s": 653.7,
+  "model": "/output/yang-learn-run2/model",
+  "groups": {
+    "dev": {
+      "rows": 141,
+      "stopped_cleanly": 131,
+      "gen_s": 271.1
+    },
+    "benchmark": {
+      "rows": 217,
+      "stopped_cleanly": 207,
+      "gen_s": 350.8
+    }
+  }
+}
