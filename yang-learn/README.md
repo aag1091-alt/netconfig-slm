@@ -5,8 +5,8 @@ config training, the model should first **learn the YANG models
 themselves** — the actual schema of the target platform — so later
 tasks rest on grounded structure instead of surface pattern-matching.
 
-This directory is a **small, reviewable sample** (37 generated records
-+ 6 hand-authored held-out records), not a training set. Bulk
+This directory is a **small, reviewable sample** (41 generated records
++ 8 hand-authored held-out records), not a training set. Bulk
 generation and any weight updates are held until this sample is
 reviewed and a training scope/cost can be quoted.
 
@@ -42,25 +42,62 @@ reviewed and a training scope/cost can be quoted.
   modules). No component both writes a label and judges it.
 - The generator (`gen_records.py`) drops any record whose yangson
   verdict disagrees with its intended label, and reports the drop.
-  This run: **37 kept, 0 dropped** (14/14 validity verdicts matched;
-  all 16 typed-edit before/after states valid).
+  Revision 2 run: **41 kept, 0 dropped** (14/14 validity verdicts
+  matched at the *rule* level — see below; all 16 reconstruction
+  before/after states valid; all 4 edit specs pass an apply-check).
+
+## Revision 2 — per Codex review of the first sample
+
+1. **Origin & provenance.** Every record carries `origin`:
+   `generated_fact` (extracted from the schema by pyang),
+   `authored_structure` (read from the source by hand), or
+   `template_instance` (a manually constructed instance/edit
+   template). No record has a null `source` anymore: validity, edit,
+   reconstruction, and profile records carry the module, revision,
+   and the exact schema paths they exercise.
+2. **Rule-level verification.** An invalid case no longer passes on
+   the verdict alone: the yangson rejection must implicate the
+   *expected node* and be a constraint rejection (RawTypeError /
+   YangTypeError / SchemaError). Each validity record's
+   `validation.verdict_kind` records `expected_rejection`,
+   `accepted`, or `validator_exception` — an encoding error on the
+   generator's side is classified as an exception and the record is
+   dropped, never counted as a rejection. This run: 10/10 invalid
+   cases are `expected_rejection`.
+3. **Held-out revised schema.** `held_out.jsonl` now includes two
+   hand-authored `revised_schema` records under a **new profile
+   P2** (native VLAN must be 999; access VLANs even) that never
+   appears in the train-candidate set.
+4. **Edit forms separated.** Full-state completions are family
+   `state_reconstruction` (task_form `full_state`); family
+   `typed_edit` now returns the *edit spec itself* (task_form
+   `edit_spec`), machine-checked by applying it to the before-state
+   and comparing to the after-state. Both forms carry
+   `executable_on_device`: edits that reference a VLAN with no
+   configuration-entry (missing prerequisite), deletion cases, and
+   legacy-enum cases are labeled schema-only (`false`, with
+   `schema_only_reason`) and kept separate from executable labels.
+5. **Wording.** The nonmandatory mode choice is "at most one case"
+   everywhere (it was "exactly one" in three places).
 
 ## Record families (records.jsonl, split = train_candidate)
 
 | family | n | what it teaches |
 |---|---|---|
 | path_meaning | 11 | a leaf's type/range/default/meaning, or a `when` condition, at an exact schema path, with source provenance |
-| instance_validity | 14 | judge a full JSON instance valid/invalid; every invalid case breaks exactly one rule (union range, key pattern, enum, choice exclusivity, `when`) |
-| typed_edit | 8 | apply one narrow edit to a state; changed vs preserved paths are computed mechanically and both states are yangson-valid |
+| instance_validity | 14 | judge a full JSON instance valid/invalid; every invalid case breaks exactly one rule (union range, key pattern, enum, choice exclusivity, `when`) and the rejection is verified at that rule's node |
+| state_reconstruction | 8 | apply one narrow edit and return the full resulting state; changed vs preserved paths computed mechanically; both states yangson-valid; `executable_on_device` flags schema-only cases |
+| typed_edit | 4 | return the typed edit spec (not the state); verified by applying the spec to the before-state |
 | revised_schema | 4 | questions answered under an overriding deployment profile (excerpt embedded in the prompt) — tests using a *given* rule over the memorized base schema |
 
-`held_out.jsonl` (6 records) is **hand-authored**, kept separate from
+`held_out.jsonl` (8 records) is **hand-authored**, kept separate from
 the generator's templates, and covers discrimination cases the
 templates don't: union branch vs JSON type, pattern edge cases
 (including `"10-5"`, which the pattern provably cannot reject), a
 two-conjunct `when`, the wrapper-vs-config mode contrast, a different
 choice-exclusivity pair, and a two-interface preserve-everything-else
-edit. Its instance verdicts were confirmed with yangson at authoring
+edit, plus two revised-schema cases under a fresh profile (P2) the
+train-candidate set never uses. Its instance verdicts were confirmed with yangson at authoring
 time and are recorded per record.
 
 ## Platform assumptions & caveats (read before scaling)
