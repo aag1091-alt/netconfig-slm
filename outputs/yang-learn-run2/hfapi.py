@@ -16,4 +16,4 @@ def call(method, path, body=None):
 
 if __name__ == "__main__":
     out = call(sys.argv[1], sys.argv[2])
-    print(json.dumps(out, indent=1)[:6000])
+    print(json.dumps(out, indent=1))

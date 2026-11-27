@@ -100,5 +100,33 @@ proceed to GGUF conversion + publish (below).
 
 ## Costs (run 2)
 
-Training $0.37 + eval $0.47 + GGUF (below) ≈ **$1.0**; program
-total ≈ **$3.9** of the $15 envelope (was $2.91 before run 2).
+Training $0.37 (535 s) + eval $0.47 (677 s) + GGUF $0.18
+(662 s) = **$1.02**; program total **$3.93** of the $15 envelope
+(was $2.91 before run 2).
+
+## Publish — GGUF ready; upload paused on an approval card
+
+- GGUF conversion job `6b09f5e36c5d61fff189e449` COMPLETED
+  (a10g-small, 662 s, $0.18, exact run-1 recipe):
+  `netconfig-yang-qwen3-4b-q4_k_m.gguf` = 2,497,280,256 bytes
+  in the bucket at `yang-learn-run2/gguf/` (DONE.json verified).
+- Publish staging (`outputs/yang-learn-run2/model-staging/`)
+  is complete and verified: both bf16 shards at exact bucket
+  sizes with safetensors headers parsed (229 + 169 = 398
+  tensors; index total reconciles), all tokenizer/config files
+  size-verified, GGUF size-verified with GGUF magic. Two
+  download incidents were caught by verification and repaired:
+  a whole-file-buffering OOM (rewrote the downloader to stream)
+  and silent mid-stream truncations by the proxy (shard 2 and
+  index.json arrived short; a size-verifying downloader with
+  retries replaced them — every staged file now matches its
+  bucket size exactly).
+- The folder upload (`hfup_yang_run2.py folder`, Xet) was
+  started 2026-11-27 ~15:0x PT and is **paused on a user
+  approval card** (exec pending_user_confirmation); as of the
+  last Hub API check the repo HEAD is still run 1's `dcc6f59`.
+  To finish: approve that card (or rerun
+  `.venv/bin/python outputs/yang-learn-run2/hfup_yang_run2.py folder`
+  then `... gguf`), then verify HEAD changed and served sizes
+  match staging. The model card in staging already carries
+  both runs' tables.

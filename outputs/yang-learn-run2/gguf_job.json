@@ -1,0 +1,62 @@
+{
+ "type": "job",
+ "id": "6b09f5e36c5d61fff189e449",
+ "createdAt": "2026-11-27T21:28:03.607Z",
+ "createdBy": {
+  "id": "6b0459053f94e1753d0a2af7",
+  "name": "aag1091"
+ },
+ "dockerImage": "pytorch/pytorch:2.5.1-cuda12.4-cudnn9-devel",
+ "arguments": [],
+ "command": [
+  "bash",
+  "-c",
+  "set -e\nexport DEBIAN_FRONTEND=noninteractive\napt-get update -qq && apt-get install -y -qq git cmake build-essential > /dev/null\ngit clone --depth 1 https://github.com/ggerganov/llama.cpp /tmp/llama.cpp\npip install --quiet -r /tmp/llama.cpp/requirements.txt\ncmake -S /tmp/llama.cpp -B /tmp/llama.cpp/build -DCMAKE_BUILD_TYPE=Release > /dev/null\ncmake --build /tmp/llama.cpp/build --target llama-quantize -j 4\nmkdir -p /output/yang-learn-run2/gguf\npython3 /tmp/llama.cpp/convert_hf_to_gguf.py /output/yang-learn-run2/model --outfile /output/yang-learn-run2/gguf/model-f16.gguf --outtype f16\n/tmp/llama.cpp/build/bin/llama-quantize /output/yang-learn-run2/gguf/model-f16.gguf /output/yang-learn-run2/gguf/netconfig-yang-qwen3-4b-q4_k_m.gguf Q4_K_M\nrm /output/yang-learn-run2/gguf/model-f16.gguf\npython3 -c \"import json,os; p='/output/yang-learn-run2/gguf/netconfig-yang-qwen3-4b-q4_k_m.gguf'; json.dump({'status':'completed','file':'netconfig-yang-qwen3-4b-q4_k_m.gguf','size_bytes':os.path.getsize(p)}, open('/output/yang-learn-run2/gguf/DONE.json','w'), indent=2)\"\necho GGUF_DONE"
+ ],
+ "environment": {},
+ "flavor": "a10g-small",
+ "arch": "amd64",
+ "timeout": 1800,
+ "retry": 0,
+ "volumes": [
+  {
+   "type": "bucket",
+   "source": "aag1091/netconfig-train-output",
+   "mountPath": "/output",
+   "readOnly": false,
+   "configuredByUserId": "6b0459053f94e1753d0a2af7"
+  }
+ ],
+ "expose": {
+  "ports": []
+ },
+ "ssh": {
+  "enabled": false
+ },
+ "startedAt": "2026-11-27T21:29:55.819Z",
+ "finishedAt": "2026-11-27T21:39:06.191Z",
+ "durations": {
+  "schedulingSecs": 112,
+  "runningSecs": 550,
+  "totalSecs": 662
+ },
+ "owner": {
+  "id": "6b0459053f94e1753d0a2af7",
+  "name": "aag1091",
+  "type": "user",
+  "avatarUrl": "/avatars/8080932c8ff938c848ec076324e0d916.svg"
+ },
+ "initiator": {
+  "id": "6b0459053f94e1753d0a2af7",
+  "name": "aag1091",
+  "type": "user",
+  "avatarUrl": "/avatars/8080932c8ff938c848ec076324e0d916.svg"
+ },
+ "status": {
+  "stage": "COMPLETED",
+  "message": null,
+  "failureCount": 0
+ },
+ "secrets": [],
+ "labels": {}
+}
