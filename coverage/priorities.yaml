@@ -1,0 +1,59 @@
+# Priority labels for the YANG coverage dashboard.
+#
+# HEURISTIC, EDITABLE, AND NOT MEASURED: these groups are a human
+# judgement about which parts of the schema matter most for a
+# switch-configuration model, written by the project maintainers.
+# They are NOT derived from telemetry, device logs, or usage data,
+# and no usage percentages are claimed anywhere. Edit this file and
+# re-run generate_coverage.py to change the labels.
+#
+# Format: a flat list of groups. Each group has an id, a label, a
+# note, and path patterns matched against canonical leaf paths.
+# Pattern segments: "*" matches exactly one path segment, "**"
+# matches the rest of the path. The FIRST matching group wins, so
+# order is the priority order.
+#
+# Groups (first match wins):
+
+- id: interface-admin-description
+  label: "Interface admin state & description"
+  note: "shutdown / description / name-adjacent leaves on interfaces"
+  patterns:
+    - "/native/interface/*/shutdown"
+    - "/native/interface/*/description"
+    - "/native/interface/*/switchport-config/shutdown"
+- id: access-voice-vlan
+  label: "Access & voice VLAN assignment"
+  note: "the access/voice VLAN leaves under every interface's switchport"
+  patterns:
+    - "/native/interface/*/switchport-config/switchport/access/**"
+    - "/native/interface/*/switchport-config/switchport/voice/**"
+    - "/native/interface/*/switchport/access/**"
+    - "/native/interface/*/switchport/voice/**"
+- id: trunk-vlans
+  label: "Trunk allowed & native VLANs"
+  note: "trunk allowed/native/encapsulation leaves"
+  patterns:
+    - "/native/interface/*/switchport-config/switchport/trunk/**"
+    - "/native/interface/*/switchport/trunk/**"
+- id: port-channels
+  label: "Port channels & member channel-groups"
+  note: "Port-channel interfaces and channel-group membership leaves"
+  patterns:
+    - "/native/interface/Port-channel/**"
+    - "/native/interface/Port-channel-subinterface/**"
+    - "/native/interface/*/channel-group/**"
+    - "/native/interface/*/switchport-config/channel-group/**"
+- id: port-protections
+  label: "Port protections (port-security, storm-control)"
+  note: "port-security configuration and storm-control leaves"
+  patterns:
+    - "/native/interface/*/switchport-config/switchport/port-security-config/**"
+    - "/native/interface/*/switchport/port-security-config/**"
+    - "/native/interface/*/switchport-config/switchport/storm-control/**"
+    - "/native/interface/*/storm-control/**"
+- id: vlan-definitions
+  label: "VLAN definitions"
+  note: "the /native/vlan configuration-entry surface"
+  patterns:
+    - "/native/vlan/**"

@@ -1,0 +1,49 @@
+name: coverage-pages
+
+# Publishes the YANG coverage dashboard (coverage/site + the
+# committed coverage/data/coverage.json) to GitHub Pages.
+# CI only publishes — the JSON is generated locally and committed
+# (see coverage/README.md "Refresh procedure"). Before publishing,
+# the freshness check verifies the committed JSON still matches the
+# corpus in this checkout; a corpus change without a regeneration
+# fails the deploy instead of serving old numbers as current
+# (see coverage/DEPLOYMENT.md).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "coverage/**"
+      - "yang-learn/corpus/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: coverage-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Freshness check (fail rather than publish stale numbers)
+        run: python3 coverage/check_freshness.py
+      - name: Assemble site
+        # Shared with the gh-pages fallback publisher
+        # (coverage/publish_gh_pages.sh) so both paths publish
+        # identical bytes.
+        run: bash coverage/build_site.sh _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

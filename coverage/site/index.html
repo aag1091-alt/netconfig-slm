@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IOS XE 26.2.1 YANG coverage — yang-learn corpus v1</title>
+<meta name="description" content="How much of the IOS XE 26.2.1 native YANG surface (Catalyst 9K family set) the yang-learn corpus v1 exercises, per canonical schema path. Schema coverage only — no device validation is implied.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>IOS XE 26.2.1 YANG coverage</h1>
+  <p class="subtitle">What the yang-learn corpus v1 exercises of the
+  native YANG surface (Catalyst&nbsp;9K family set), per canonical
+  schema path. <strong>Schema coverage only</strong> — nothing here
+  implies device or IOS&nbsp;XE validation.</p>
+  <section id="headline" aria-label="Headline coverage">
+    <p class="loading">Loading coverage data…</p>
+  </section>
+</header>
+
+<main>
+  <section class="controls" aria-label="View controls">
+    <label>Overlay
+      <select id="overlay">
+        <option value="train" selected>Training (train split)</option>
+        <option value="corpus">Corpus (train+dev+test)</option>
+        <option value="dev">Dev split</option>
+        <option value="test">Test split</option>
+        <option value="benchmark">Benchmark (bench v1)</option>
+        <option value="held_out">Held-out (hand-authored)</option>
+      </select>
+    </label>
+    <label>Show
+      <select id="view">
+        <option value="all" selected>All nodes</option>
+        <option value="covered">Covered only</option>
+        <option value="uncovered">Uncovered only</option>
+      </select>
+    </label>
+    <label>Priority
+      <select id="priority"><option value="">All priorities</option></select>
+    </label>
+    <label class="check"><input type="checkbox" id="show-excluded">
+      Show excluded leaves (obsolete)</label>
+    <label class="search">Search paths
+      <input type="search" id="search" placeholder="e.g. trunk/allowed or port-security"
+             aria-label="Search schema paths">
+    </label>
+  </section>
+
+  <section id="search-results" hidden aria-label="Search results"></section>
+
+  <nav aria-label="Schema tree">
+    <ul id="tree" role="tree"></ul>
+  </nav>
+  <p id="tree-status" role="status"></p>
+
+  <section id="priorities" aria-label="Priority groups"></section>
+
+  <section id="families" aria-label="Model pass rates by family"></section>
+
+  <section id="categories" aria-label="What is not counted"></section>
+</main>
+
+<footer id="provenance"></footer>
+<script src="app.js"></script>
+</body>
+</html>
