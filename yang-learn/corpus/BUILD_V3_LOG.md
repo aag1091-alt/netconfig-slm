@@ -241,3 +241,47 @@ dropped, never relabeled):
   already evidenced by PM/IV — this family teaches policy
   deltas over known paths, not new paths. Running total vs
   the 77,026 goal: 305 (0.40%).
+
+## Batch 4 — state_reconstruction + typed_edit (part: corpus/v3_parts/srte.jsonl)
+
+- Generated 940, deduped 0, validation-dropped 0, **final
+  940: SR 528 (train 512 / dev 16), TE 412 (train 398 /
+  dev 14)**. SR: 8 edit kinds × 66 scenarios (set_access_vlan,
+  swap_mode, set_native_vlan, add_entry, set_voice_vlan,
+  remove_entry, set_allowed, set_encap). TE positives 352
+  share SR scenario groups; TE negatives 60 (14.6% of TE —
+  the plan's ~15%): 20 invalid_key (malformed interface
+  names incl. the new `01/0/1`, `1-0-1`, `GigabitEthernet1/0/1`,
+  `1/0/1a` shapes) + 40 target_not_found (well-formed keys
+  absent from the state). SR dev quota 16 met exactly;
+  TE dev 14 vs quota 12 (+2 group overshoot).
+- Targets vs achieved: SR plan +450 → **+512 train**;
+  TE plan +350 → **+398 train**. Both exceed target (the
+  rebalance headroom from batch 1, taken as full honest
+  tuple supply per plan §7).
+- Independently verified end-to-end (fresh code, not the
+  generator's): zero prompt overlap vs all prior splits +
+  held_out + pm/iv/rs parts; no scenario group spans splits;
+  split assignment reproduces exactly; for every SR record
+  the prompt state == before_file, the completion ==
+  after_file, and an independent leaf diff of before→after
+  is prefix-consistent with fact.changed_paths (the fact
+  lists added/removed subtree roots alongside their leaves);
+  for every TE positive, an independent edit applier
+  applying fact.edits to the before state reproduces the SR
+  twin's after state exactly; for every TE negative, the
+  error kind checks out against the schema's name pattern /
+  state membership; a 40-record sample of SR after-states
+  re-validates under yangson. One convention confirmed
+  rather than "fixed": TE edit paths are SCHEMA paths
+  (P_ALLOWED has included the `vlan-choice` segment since
+  v1 — choice/case nodes are transparent in instance JSON,
+  and the applier resolves them as such); SR changed_paths
+  are data-tree paths. The two forms are consistent within
+  each family across v1+v2+v3.
+- Direct-evidence coverage: **+0 leaves** (305 raw / 183
+  normalized). SR/TE edited leaves (access/native/allowed/
+  voice/encap/mode/entries) were already designated subjects
+  of PM/IV records; this batch deepens those leaves with
+  state-transition evidence rather than evidencing new
+  ones. Running total vs the 77,026 goal: 305 (0.40%).
