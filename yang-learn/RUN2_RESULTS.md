@@ -104,7 +104,7 @@ Training $0.37 (535 s) + eval $0.47 (677 s) + GGUF $0.18
 (662 s) = **$1.02**; program total **$3.93** of the $15 envelope
 (was $2.91 before run 2).
 
-## Publish — GGUF ready; upload paused on an approval card
+## Publish — bf16 PUBLISHED (commit 6ce42fe); GGUF upload pending its approval card
 
 - GGUF conversion job `6b09f5e36c5d61fff189e449` COMPLETED
   (a10g-small, 662 s, $0.18, exact run-1 recipe):
@@ -121,12 +121,19 @@ Training $0.37 (535 s) + eval $0.47 (677 s) + GGUF $0.18
   index.json arrived short; a size-verifying downloader with
   retries replaced them — every staged file now matches its
   bucket size exactly).
-- The folder upload (`hfup_yang_run2.py folder`, Xet) was
-  started 2026-11-27 ~15:0x PT and is **paused on a user
-  approval card** (exec pending_user_confirmation); as of the
-  last Hub API check the repo HEAD is still run 1's `dcc6f59`.
-  To finish: approve that card (or rerun
-  `.venv/bin/python outputs/yang-learn-run2/hfup_yang_run2.py folder`
-  then `... gguf`), then verify HEAD changed and served sizes
-  match staging. The model card in staging already carries
-  both runs' tables.
+- The folder upload (`hfup_yang_run2.py folder`, Xet) paused
+  on a user approval card; once approved it COMPLETED:
+  bf16 commit
+  `6ce42fecc081127067177f83b09f05171762d696`. Hub API
+  verified: HEAD moved from run 1's `dcc6f59` to `6ce42fe`,
+  every served file at its exact staging size (shards
+  4,967,215,360 + 3,077,766,632 bytes), and the run-2 model
+  card (both runs' tables) is live.
+- The GGUF upload (`hfup_yang_run2.py gguf`) transferred the
+  full 2.50 GB and is parked on the same kind of approval
+  card; approving it lands the final commit replacing the
+  GGUF. Run-2 GGUF is 2,497,280,256 bytes — identical in size
+  to run 1's by construction, so replacement is proven by the
+  new commit + LFS hash at that point. The GGUF also remains
+  in the bucket (`yang-learn-run2/gguf/`) and in staging, so
+  nothing is at risk either way.
