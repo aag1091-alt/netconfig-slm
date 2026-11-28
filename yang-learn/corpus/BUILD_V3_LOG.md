@@ -285,3 +285,40 @@ dropped, never relabeled):
   of PM/IV records; this batch deepens those leaves with
   state-transition evidence rather than evidencing new
   ones. Running total vs the 77,026 goal: 305 (0.40%).
+
+## Batch 5 — paired_view (part: corpus/v3_parts/pv.jsonl)
+
+- 302 unique states survived the gates (yangson validity +
+  100% CLI round-trip via ciscoconfparse2, parse(render(
+  state)) == state), generating 453 records: direction A
+  (CLI→JSON) 302, direction B (JSON→CLI) 151 (= A // 2 per
+  the plan's ratio), dropped_roundtrip 0, dropped_yangson 0,
+  deduped 0, **final 453: train 433 / dev 20** (dev quota
+  met exactly).
+- Target vs achieved: plan +600 train at full supply
+  (400 states); achieved **+433 train**. The state supply
+  exhausted at 302: PV states are drawn from the SRTE
+  scenario-state pool, and only 302 distinct states are both
+  yangson-valid and CLI-renderable (the renderer covers the
+  access/trunk/port-security subset; states carrying
+  violation/mac-address/dynamic constructs are not
+  CLI-renderable in this slice and never enter the pool).
+  Reported, not padded, per plan §7.
+- Independently verified: an external IOS XE CLI parser
+  (written from the CLI text and the pinned schema shapes,
+  not the generator's renderer) reproduces the JSON state
+  exactly for all 453 records in both directions; instance
+  files match the states; zero prompt overlap vs all prior
+  splits + held_out + pm/iv/rs/srte parts; no scenario group
+  spans splits; split assignment reproduces exactly.
+- Direct-evidence coverage: **+0 leaves** (305 raw / 183
+  normalized). PV subject paths are the same switchport
+  leaves already evidenced. Running total vs the 77,026
+  goal: 305 (0.40%). Tranche note: the strict designated-
+  subject accounting saturates the switchport/vlan subtree
+  early — PM+IV evidenced essentially every leaf the later
+  families designate, so batches 3–5 deepen already-counted
+  leaves (transitions, policy deltas, CLI views) instead of
+  adding new ones. The 77,026 goal is a 50%-of-/native
+  program goal spanning future tranches (router/ip/acl
+  subtrees are untouched by tranche 1's families).
