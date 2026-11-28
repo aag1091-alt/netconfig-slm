@@ -1,0 +1,112 @@
+{
+ "corpus": "v3 additions (tranche 1; train/dev only; benchmark v1 frozen, untouched)",
+ "generator": "gen_corpus_v3.py",
+ "plan": "yang-learn/CORPUS_V3_PLAN.md @ fa85fbc",
+ "splits": {
+  "train_additions": {
+   "total": 2782,
+   "by_family": {
+    "instance_validity": 919,
+    "path_meaning": 160,
+    "paired_view": 433,
+    "revised_schema": 360,
+    "state_reconstruction": 512,
+    "typed_edit": 398
+   }
+  },
+  "dev_additions": {
+   "total": 147,
+   "by_family": {
+    "instance_validity": 42,
+    "path_meaning": 40,
+    "paired_view": 20,
+    "revised_schema": 15,
+    "state_reconstruction": 16,
+    "typed_edit": 14
+   }
+  },
+  "combined_train_total": 4200
+ },
+ "held_out_v3": {
+  "total": 250,
+  "by_family": {
+   "instance_validity": 68,
+   "path_meaning": 50,
+   "paired_view": 48,
+   "revised_schema": 36,
+   "state_reconstruction": 27,
+   "typed_edit": 21
+  },
+  "file": "held_out_v3.jsonl"
+ },
+ "tokens": {
+  "tokenizer": "Qwen/Qwen3-4B-Base @ 906bfd4b",
+  "train_additions_by_family": {
+   "instance_validity": {
+    "records": 919,
+    "tokens": 295502,
+    "max_len": 485
+   },
+   "paired_view": {
+    "records": 433,
+    "tokens": 134686,
+    "max_len": 479
+   },
+   "path_meaning": {
+    "records": 160,
+    "tokens": 13074,
+    "max_len": 220
+   },
+   "revised_schema": {
+    "records": 360,
+    "tokens": 41632,
+    "max_len": 142
+   },
+   "state_reconstruction": {
+    "records": 512,
+    "tokens": 299113,
+    "max_len": 810
+   },
+   "typed_edit": {
+    "records": 398,
+    "tokens": 180222,
+    "max_len": 562
+   }
+  },
+  "train_additions_total": 964229,
+  "combined_by_family": {
+   "instance_validity": {
+    "records": 1350,
+    "tokens": 426362,
+    "max_len": 485
+   },
+   "paired_view": {
+    "records": 433,
+    "tokens": 134686,
+    "max_len": 479
+   },
+   "path_meaning": {
+    "records": 541,
+    "tokens": 45999,
+    "max_len": 220
+   },
+   "revised_schema": {
+    "records": 447,
+    "tokens": 51231,
+    "max_len": 142
+   },
+   "state_reconstruction": {
+    "records": 772,
+    "tokens": 452349,
+    "max_len": 834
+   },
+   "typed_edit": {
+    "records": 657,
+    "tokens": 287425,
+    "max_len": 571
+   }
+  },
+  "combined_total": 1398052
+ },
+ "validation": "PM facts via pyang inventory; IV/SR/TE verdicts via yangson (validate_all; must_sibling via the documented SemanticError pass); RS verdicts via in-generator predicates; paired_view via yangson + ciscoconfparse2 round-trip equality; all additions prompt-deduped against every earlier split and part"
+}
