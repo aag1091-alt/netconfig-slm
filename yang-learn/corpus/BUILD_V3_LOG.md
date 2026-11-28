@@ -322,3 +322,26 @@ dropped, never relabeled):
   adding new ones. The 77,026 goal is a 50%-of-/native
   program goal spanning future tranches (router/ip/acl
   subtrees are untouched by tranche 1's families).
+
+## Batch 6 — holdout-v3 (file: corpus/held_out_v3.jsonl)
+
+- **250 records** (plan ~260): path_meaning 50 (TwentyFiveGigE
+  / HundredGigE lists only — the schema's list names are the
+  short forms), instance_validity 68 (GigabitEthernet 3/0/1 +
+  3/0/2 only; 6 intended labels dropped by yangson
+  arbitration, 3 cases × 2 variants, never relabeled),
+  revised_schema 36 (profiles P13/P14 only), SR/TE 48
+  (27 SR + 21 TE on holdout-only grid values), paired_view
+  48 (reserved state tuples, round-trip drops 0).
+- Shortfalls vs the ~260 plan figure: IV −2 (70 planned,
+  74 generated, 6 arbitration drops), SR/TE −8 (56 planned;
+  the reserved grid yields 48 unique scenarios). Honest
+  supply, documented per plan §7.
+- Mechanically verified: **zero prompt overlap** between
+  held_out_v3.jsonl and every train/dev/test/benchmark file
+  (v1 splits, v1 held_out, v2 additions, all five v3 parts);
+  no internal duplicates; reservation discipline checked
+  record by record (PM list segment, IV interface names,
+  RS profile ids). All records carry split "held_out_v3".
+  This set is evaluation-only: it is excluded from the
+  combined train assembly and from coverage accounting.

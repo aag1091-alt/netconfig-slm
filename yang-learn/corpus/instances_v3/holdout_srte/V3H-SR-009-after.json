@@ -1,0 +1,50 @@
+{
+ "Cisco-IOS-XE-native:native": {
+  "interface": {
+   "GigabitEthernet": [
+    {
+     "name": "3/0/1",
+     "switchport-config": {
+      "switchport": {
+       "Cisco-IOS-XE-switch:mode": {
+        "Cisco-IOS-XE-switch:trunk": {}
+       },
+       "Cisco-IOS-XE-switch:trunk": {
+        "Cisco-IOS-XE-switch:native": {
+         "Cisco-IOS-XE-switch:vlan": {
+          "Cisco-IOS-XE-switch:vlan-id": 888
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "name": "3/0/3",
+     "switchport-config": {
+      "switchport": {
+       "Cisco-IOS-XE-switch:mode": {
+        "Cisco-IOS-XE-switch:access": {}
+       },
+       "Cisco-IOS-XE-switch:access": {
+        "Cisco-IOS-XE-switch:vlan": {
+         "Cisco-IOS-XE-switch:vlan": 30
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  "vlan": {
+   "Cisco-IOS-XE-vlan:configuration-entry": [
+    {
+     "vlan-id": "40"
+    },
+    {
+     "vlan-id": "50"
+    }
+   ]
+  }
+ }
+}
