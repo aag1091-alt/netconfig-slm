@@ -94,3 +94,30 @@ All run against the scoped yangson library as-is
   the shortfall is NOT padded.
 
 <!-- per-batch entries are appended below as batches land -->
+
+## Batch 1 — path_meaning (part: corpus/v3_parts/pm.jsonl)
+
+- Generated 200, deduped 0, validation n/a (pyang facts), final
+  200: **train 160 / dev 40** (dev quota met exactly).
+  Composition: type 45, when-form 8, must-form 16 (NEW form —
+  no v1/v2 record explains a must condition), plain-type 131
+  (the full remaining deduped plain pool: pool exhausted).
+- Target vs achieved: plan +700 train; achieved +160 train.
+  The shortfall is structural, measured per key over the 192
+  non-reserved constrained keys: 111 keys are POOL_EXHAUSTED
+  (every concrete path already used by a v1 split — most are
+  single-path facts); 36 keys are CAP_REACHED with paths still
+  remaining (24 failure-class keys at the cumulative cap 3,
+  12 other keys at cap 2 — the plan's caps are cumulative
+  across v2+v3 and v2 already spent them); only 45 keys had
+  cap headroom (each topped up by exactly 1). Per plan §7 the
+  gap is reported, not padded: no 4th concrete path per fact.
+- Direct-evidence coverage: **+84 leaves** (216 → 300 raw;
+  normalized 129 → 183). Running total vs the 77,026 goal:
+  300 (0.39%). Priority deltas: vlan-definitions 22→46,
+  port-protections 68→93, port-channels 50→61, trunk-vlans
+  29→33, access-voice-vlan 6→7.
+- Rebalance note: the PM shortfall (~540 train records) is
+  offset later in the build by letting SR/PV run to their full
+  honest tuple supply (see their batch entries); IV and RS
+  floors are untouched, per plan §7's protection order.
