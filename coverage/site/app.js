@@ -404,6 +404,14 @@ function renderPanels() {
     el("p", null, "Refresh: re-run coverage/generate_coverage.py, commit the regenerated coverage/data/coverage.json, and GitHub Pages republishes. See coverage/README.md."),
   );
   if (m.generated_at) $("provenance").append(el("p", null, `Generated ${m.generated_at}.`));
+  if (m.fingerprint) {
+    const counts = Object.entries(m.fingerprint.split_counts)
+      .map(([k, v]) => `${k} ${v}`).join(" · ");
+    $("provenance").append(el("p", null,
+      `Data inputs fingerprint ${m.fingerprint.inputs_digest.slice(0, 12)}… (corpus records: ${counts}). ` +
+      "If the corpus changed after this fingerprint was recorded, the numbers above are stale — " +
+      "the publish pipeline checks this and refuses to serve stale data. See coverage/DEPLOYMENT.md."));
+  }
 }
 
 function wire() {

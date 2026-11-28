@@ -27,10 +27,15 @@ Method (see coverage/README.md for the full methodology):
 Deterministic: same bundle + same corpus -> same JSON (records and
 leaves are sorted; no timestamps inside data sections except the
 provenance block's generated_at, which --no-timestamp omits).
+meta.fingerprint records sha256 hashes of every input (corpus
+splits, scores snapshot, priorities, bundle digest, this generator)
+so coverage/check_freshness.py can detect a stale committed JSON
+without re-running pyang.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -384,6 +389,63 @@ def load_records(repo: Path) -> dict[str, list[dict]]:
                       fn.read_text(encoding="utf-8").splitlines()
                       if l.strip()]
     return out
+
+
+# ---------------------------------------------------------------- fingerprints
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def bundle_digest(bundle: Path):
+    """Digest of the exact bundle files the inventory reads:
+    yang-set-cat9k.xml plus every Cisco-IOS-XE-*.yang file. Catches
+    bundle drift that the recorded pin string alone would miss.
+    None when the bundle is absent (freshness checks then skip it —
+    a real generation cannot happen without the bundle anyway)."""
+    if not (bundle / "yang-set-cat9k.xml").exists():
+        return None
+    names = sorted([p.name for p in bundle.glob("Cisco-IOS-XE-*.yang")]
+                   + ["yang-set-cat9k.xml"])
+    h = hashlib.sha256()
+    for name in names:
+        h.update(f"{name}:{sha256_file(bundle / name)}\n".encode())
+    return h.hexdigest()
+
+
+def compute_fingerprints(repo: Path, bundle: Path,
+                         records: dict | None = None) -> dict:
+    """Fingerprints of every input that determines coverage.json:
+    the corpus split files, the vendored scores snapshot,
+    priorities.yaml, the YANG bundle, and this generator itself.
+    Recorded in meta.fingerprint at generation time;
+    coverage/check_freshness.py recomputes and compares them."""
+    inputs: dict[str, str] = {}
+    for rel in list(SPLIT_FILES.values()) + [SCORES_FILE,
+                                             "coverage/priorities.yaml"]:
+        inputs[rel] = sha256_file(repo / rel)
+    digest = hashlib.sha256()
+    for rel in sorted(inputs):
+        digest.update(f"{rel}:{inputs[rel]}\n".encode())
+    if records is None:
+        counts = {}
+        for split in SPLITS:
+            text = (repo / SPLIT_FILES[split]).read_text(
+                encoding="utf-8")
+            counts[split] = sum(1 for l in text.splitlines() if l.strip())
+    else:
+        counts = {split: len(records[split]) for split in SPLITS}
+    return {
+        "inputs": inputs,
+        "inputs_digest": digest.hexdigest(),
+        "split_counts": counts,
+        "bundle_digest": bundle_digest(bundle),
+        "generator_sha256": sha256_file(Path(__file__).resolve()),
+    }
 
 
 # ---------------------------------------------------------------- tree
@@ -761,6 +823,7 @@ def main() -> int:
         "overall_pass_bench_v1": scores["overall"],
         "splits": SPLITS,
         "files": files_list,
+        "fingerprint": compute_fingerprints(repo, bundle, records),
     }
     if not args.no_timestamp:
         from datetime import datetime, timezone
