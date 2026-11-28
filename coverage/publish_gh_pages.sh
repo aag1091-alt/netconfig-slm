@@ -59,19 +59,39 @@ add_file "$BUILD_DIR/.nojekyll" .nojekyll
 TREE="$(git write-tree)"
 unset GIT_INDEX_FILE
 
-PARENT=()
-if git rev-parse -q --verify refs/heads/gh-pages >/dev/null; then
-  PARENT=(-p "$(git rev-parse refs/heads/gh-pages)")
+PARENT_ARGS=()
+# Parent on the REMOTE gh-pages tip when it exists (whoever published
+# last may have done so from another machine, so the local branch can
+# be stale or absent); fall back to the local branch, else root commit.
+git fetch origin gh-pages 2>/dev/null || true
+REMOTE_TIP="$(git rev-parse -q --verify refs/remotes/origin/gh-pages 2>/dev/null || true)"
+LOCAL_TIP="$(git rev-parse -q --verify refs/heads/gh-pages 2>/dev/null || true)"
+if [ -n "$REMOTE_TIP" ]; then
+  PARENT_ARGS=(-p "$REMOTE_TIP")
+elif [ -n "$LOCAL_TIP" ]; then
+  PARENT_ARGS=(-p "$LOCAL_TIP")
 fi
-COMMIT="$(git commit-tree "$TREE" "${PARENT[@]}" \
-  -m "Publish YANG coverage dashboard (data generated $GENERATED_AT)")"
+# NB: never expand a possibly-empty array under `set -u` — macOS ships
+# bash 3.2, where "${ARR[@]}" on an empty array is an unbound-variable
+# error. Branch on the count instead.
+if [ "${#PARENT_ARGS[@]}" -gt 0 ]; then
+  COMMIT="$(git commit-tree "$TREE" "${PARENT_ARGS[@]}" \
+    -m "Publish YANG coverage dashboard (data generated $GENERATED_AT)")"
+else
+  COMMIT="$(git commit-tree "$TREE" \
+    -m "Publish YANG coverage dashboard (data generated $GENERATED_AT)")"
+fi
 
 echo "Would-be gh-pages tree (commit $COMMIT):"
 git ls-tree -r "$COMMIT"
 echo
 echo "File sizes / sha256 of the assembled site:"
+# Portable size/hash: GNU stat/sha256sum vs macOS stat -f / shasum.
 (cd "$BUILD_DIR" && find . -type f | sort | \
-  xargs -I{} sh -c 'printf "  %10s  %s  %s\n" "$(stat -c%s "{}")" "$(sha256sum "{}" | cut -c1-16)…" "{}"')
+  xargs -I{} sh -c '
+    sz="$(stat -c%s "{}" 2>/dev/null || stat -f%z "{}")"
+    hs="$(sha256sum "{}" 2>/dev/null | cut -c1-16 || shasum -a 256 "{}" | cut -c1-16)"
+    printf "  %10s  %s…  %s\n" "$sz" "$hs" "{}"')
 
 if [ "$PUSH" = "0" ]; then
   git update-ref "$DRY_REF" "$COMMIT"
