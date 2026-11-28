@@ -1,0 +1,28 @@
+{
+ "Cisco-IOS-XE-native:native": {
+  "interface": {
+   "TenGigabitEthernet": [
+    {
+     "name": "1/0/25",
+     "switchport-config": {
+      "switchport": {
+       "Cisco-IOS-XE-switch:mode": {
+        "Cisco-IOS-XE-switch:trunk": {}
+       },
+       "Cisco-IOS-XE-switch:trunk": {
+        "Cisco-IOS-XE-switch:encapsulation": "dot1q"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "vlan": {
+   "Cisco-IOS-XE-vlan:configuration-entry": [
+    {
+     "vlan-id": "10"
+    }
+   ]
+  }
+ }
+}

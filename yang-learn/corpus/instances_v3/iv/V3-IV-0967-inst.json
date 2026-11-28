@@ -1,0 +1,43 @@
+{
+ "Cisco-IOS-XE-native:native": {
+  "interface": {
+   "FiveGigabitEthernet": [
+    {
+     "name": "5/0/2",
+     "switchport-config": {
+      "switchport": {
+       "Cisco-IOS-XE-switch:mode": {
+        "Cisco-IOS-XE-switch:access": {}
+       },
+       "Cisco-IOS-XE-switch:access": {
+        "Cisco-IOS-XE-switch:vlan": {
+         "Cisco-IOS-XE-switch:vlan": 10
+        }
+       },
+       "Cisco-IOS-XE-switch:port-security-config": {
+        "Cisco-IOS-XE-switch:port-security": {
+         "Cisco-IOS-XE-switch:maximum-address-config": {
+          "Cisco-IOS-XE-switch:maximum-vlan-access": {
+           "Cisco-IOS-XE-switch:maximum": 100,
+           "Cisco-IOS-XE-switch:vlan": "access"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  "vlan": {
+   "Cisco-IOS-XE-vlan:configuration-entry": [
+    {
+     "vlan-id": "10"
+    },
+    {
+     "vlan-id": "20"
+    }
+   ]
+  }
+ }
+}

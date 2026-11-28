@@ -121,3 +121,92 @@ All run against the scoped yangson library as-is
   offset later in the build by letting SR/PV run to their full
   honest tuple supply (see their batch entries); IV and RS
   floors are untouched, per plan §7's protection order.
+
+## Batch 2 — instance_validity (part: corpus/v3_parts/iv.jsonl)
+
+Reconciliation first: the part file found on disk (463 records)
+was STALE — generated before generator fixes — and failed the
+plan's per-class balance audit (choice_mode 0V/14I, enum_aging
+0V/12I, mac_pattern 0V/14I, when_maxvlan 0V/3I, enum_encap
+2V/20I). Its verdicts were all yangson-consistent; the
+imbalance came from three instance-shape bugs, found by direct
+yangson probes and fixed in gen_corpus_v3.py (gen_corpus.py
+untouched):
+
+- violation_choice: protect/restrict/report are `empty` leaves
+  directly under `violation` (JSON `[null]`); shutdown is a
+  case container `{vlan: [null]}`. The old `{case: {}}` shape
+  made valids unvalidatable and invalids reject at the wrong
+  node. New `_vio_inner()` helper, also used by holdout.
+- mac_pattern: `hw-address-access` is a LIST — instances are
+  `[{hw-address: v}]`, not a bare container.
+- enum literals: maximum-vlan/vlan is the enumeration string
+  `"vlan"` (not `[10]`); maximum-vlan-voice/vlan is `"voice"`
+  (generator had `"access"`).
+
+Two further build bugs found and fixed during reconciliation:
+
+- EXTRA_FILES pointed held-out dedupe at a nonexistent path
+  (`corpus/held_out.jsonl`); the real file is
+  `yang-learn/held_out.jsonl`. The guard had been silently
+  skipping held-out dedupe (verified zero actual overlap for
+  the PM/IV parts after the fix).
+- `--force` regeneration self-deduped: `all_prompts()` includes
+  the batch's own part file, so a forced re-run dropped most
+  of its own output (489 of 565 in the first attempt). All
+  gen_* dedupe reads now exclude their own part file.
+- Collision-driven variant shifting: variantize's scenario
+  space is (interface × bystander pattern) = 12 combos; v1
+  used v=0..5 and v2 v=0..2, so v3 valids for classes whose
+  value space v1 had fully enumerated (choice_mode,
+  enum_aging, enum_encap, union_access, union_voice) collided
+  on every v in 0..5 and were deduped wholesale (60 records).
+  gen_iv now rebuilds a colliding record at v+6/+12/+18 —
+  combos no earlier corpus used — making the scenario
+  genuinely new instead of dropping it (66 records shifted in
+  the final run, 0 deduped).
+
+Two schema findings from yangson arbitration (intended labels
+dropped, never relabeled):
+
+- maximum-vlan-voice/maximum WITHOUT its vlan sibling is
+  ACCEPTED — the voice pair carries no must. The case was
+  removed from must_cases (the two maximum-vlan-access /
+  maximum-vlan pairs do carry the sibling musts, verified).
+- maximum-vlan under ACCESS mode (intended invalid, when
+  requires trunk) is ACCEPTED: 3 records dropped
+  (V3-IV-0889..0891). The dynamic-mode sibling case does
+  reject, and stays.
+
+- Final run: generated 1,026 (incl. the expansion below),
+  balance-trimmed 58 + 4 post-validation, deduped 0,
+  validation-dropped 3, **final 961: train 919 / dev 42**
+  (dev quota 40, +2 group-granularity overshoot of the
+  v1/v2 group-atomic split method). Per-class balance: all
+  21 classes inside 45:55–55:45 (worst must_sibling 29V/24I,
+  pattern_ifname 24V/20I). Part invalid share 49.6%;
+  combined IV train invalid share 48.6% (cap 55%).
+  Independently re-verified end-to-end: every verdict ==
+  yangson verdict, every instance file byte-matches its
+  prompt, zero prompt overlap vs all v1+v2 splits + held_out
+  + pm part, split assignment reproduces exactly.
+- Target vs achieved: plan +1,100 train (floor ≥900);
+  achieved **+919 train — floor met**. The pre-expansion
+  generator yielded only 510 train: the authored case lists
+  were smaller than the plan's per-class estimates. The gap
+  was closed honestly with batch 2b (in this same part):
+  audited fresh values completing the plan's rings plus
+  interior values for the range/union classes, fresh enum
+  near-miss spellings, remaining violation/choice combos,
+  fresh must maximum values, an extended TenGigabitEthernet
+  subset, and new FortyGigabitEthernet / FiveGigabitEthernet
+  subsets (both lists probed to validate). No padding: every
+  added value is disjoint from the v1/v2/v3 case lists.
+- Direct-evidence coverage: **+5 leaves** (300 → 305 raw;
+  normalized unchanged at 183). IV's designated subjects are
+  mostly leaves the PM batch already evidenced (the same
+  port-security leaves under yangson arbitration); 203 IV
+  train records carry construct-level subjects (choices /
+  containers) that the strict rule does not count. Running
+  total vs the 77,026 goal: 305 (0.40%). Priority delta:
+  port-protections 93→97.
