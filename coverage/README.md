@@ -160,28 +160,48 @@ re-run the generator to change them.
 ```
 coverage/
   generate_coverage.py   inventory + evidence join + rollups -> JSON
+  regen.sh               the one regeneration command (finds a pyang python)
+  check_freshness.py     stale-JSON guard (fingerprints; --full = regen + compare)
+  build_site.sh          the one site assembly (used by both publish paths)
+  publish_gh_pages.sh    gh-pages fallback publisher (dry run unless --push)
+  Makefile               regen / check / check-full / test / site shortcuts
   priorities.yaml        heuristic priority labels (editable)
   data/coverage.json     generated, committed — the page's only input
   data/run1_scores.json  vendored snapshot of the run-1 bench scores
   site/                  index.html + style.css + app.js (no framework)
   tests/test_rollup.py   fixture tests for rollup/dedupe/evidence
+  tests/test_freshness.py fixture tests for the freshness fingerprints
   tests/verify_branch.py end-to-end branch check vs schema_tools.py
+  workflows/coverage-pages.yml  Pages workflow, staged here until the
+                         gh token gains the `workflow` scope to land
+                         it in .github/workflows/ (see DEPLOYMENT.md)
   VERIFICATION.md        what was verified, with numbers
-.github/workflows/coverage-pages.yml   Pages publish (CI never generates)
+  DEPLOYMENT.md          publish paths, freshness contract, first deploy
 ```
 
 ## Refresh procedure
 
-1. `netconfig-slm/.venv/bin/python coverage/generate_coverage.py`
-   (needs pyang; ~2 minutes; `--bundle` if the bundle is not at
-   `../bundles/xe-2621` relative to the repo root).
+1. `bash coverage/regen.sh` (or `make -C coverage regen`; ~2
+   minutes; the script finds a python with pyang — the repo venv —
+   and accepts `--bundle` etc. via the generator). Regeneration is
+   deterministic: same inputs → same JSON apart from
+   `meta.generated_at`.
 2. Review the printed headline + resolution counts (unresolved must
    be 0 or explained).
-3. Commit the regenerated `coverage/data/coverage.json`.
-4. On merge to `main`, the `coverage-pages` workflow republishes
-   GitHub Pages. It triggers on pushes touching `coverage/**` or
+3. Commit the regenerated `coverage/data/coverage.json`. The JSON
+   records `meta.fingerprint` — hashes of every input — and
+   `coverage/check_freshness.py` (fast; `--full` also regenerates
+   and compares) fails if the corpus, bundle, or generator changed
+   after generation, so stale numbers can't be republished as
+   current. The page footer shows the fingerprint and generation
+   time.
+4. Publishing: on merge to `main`, the `coverage-pages` workflow
+   republishes GitHub Pages — after passing the freshness check.
+   It triggers on pushes touching `coverage/**` or
    `yang-learn/corpus/**`, and can be run manually
-   (`workflow_dispatch`).
+   (`workflow_dispatch`). Until the workflow lands in
+   `.github/workflows/` (token `workflow` scope), the gh-pages
+   branch fallback in `DEPLOYMENT.md` is the deploy path.
 
 Local preview: serve the `coverage/` directory
 (`python3 -m http.server` inside `coverage/`) and open

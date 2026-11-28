@@ -5,8 +5,9 @@ repo root on the `coverage-dashboard` branch.
 
 ## 1. Fixture tests (pure logic)
 
-`python3 -m unittest discover -s coverage/tests -v` — **11 tests,
-all passing.** They cover:
+`python3 -m unittest discover -s coverage/tests -v` — **17 tests,
+all passing** (11 rollup/evidence fixtures + 6 freshness fixtures,
+§5). They cover:
 
 - **Rollup math.** A fixture where child A is 1/2 (50 %) and child B
   is 9/10 (90 %): averaging child percentages would give 70 %; the
@@ -104,3 +105,41 @@ both layouts it will run in — the Pages assembly (`index.html` +
 `coverage/data/`) — and all assets returned 200. `app.js` passes
 `node --check`. Rendering is lazy (children are built on first
 expand), so the 187k-leaf tree never enters the DOM at once.
+
+## 5. Freshness, determinism, and the gh-pages fallback
+
+Added after Codex's PR #1 review (the staged workflow republishes
+the committed JSON but never regenerates it, so corpus changes
+could have left old numbers looking current):
+
+- **Determinism probe.** Two consecutive full regenerations with
+  `--no-timestamp` are **byte-identical**, and the then-committed
+  JSON equalled a fresh regeneration once `meta.generated_at` was
+  stripped — the timestamp is the only nondeterminism, by design.
+- **Fingerprints.** The generator now records `meta.fingerprint`
+  (sha256 of the five corpus files, the scores snapshot,
+  `priorities.yaml`, a bundle digest over `yang-set-cat9k.xml` +
+  all `Cisco-IOS-XE-*.yang`, the generator's own hash, and
+  per-split record counts 1047/78/160/209/8). Regenerating with
+  fingerprinting changed **no numbers**: the new JSON is identical
+  to the pre-fingerprint regeneration apart from the fingerprint
+  block and the timestamp (headline still 154,052 · 106 · 0.07 %,
+  resolution 2,134/889/0).
+- **Freshness check exercised three ways.**
+  `check_freshness.py` on the committed data: FRESH (exit 0). The
+  same check against a copy with one recorded hash doctored:
+  STALE (exit 1), naming `yang-learn/corpus/train.jsonl`.
+  `--full` (regenerate + exact compare): FRESH. Six fixture tests
+  (`tests/test_freshness.py`) cover corpus/bundle/scores changes,
+  a missing fingerprint block, and determinism of the fingerprint
+  computation itself.
+- **One assembly for both publish paths.** `build_site.sh` output
+  was diffed against the workflow's previous inline `cp` assembly:
+  identical trees. The staged workflow now calls `build_site.sh`
+  and runs the freshness check before publishing.
+- **gh-pages dry run.** `publish_gh_pages.sh` (no `--push`) built
+  the site and produced would-be commit `6f62c91…` with the tree
+  `.nojekyll`, `index.html`, `style.css`, `app.js`,
+  `data/coverage.json` (9,997,338 bytes); it left **no** refs
+  behind (`refs/heads/gh-pages` untouched, temp ref deleted) and
+  pushed nothing. Activation steps are in `DEPLOYMENT.md`.
