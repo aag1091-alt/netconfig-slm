@@ -1707,10 +1707,6 @@ def main() -> int:
     return 0
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
-
-
 # ---------------------------------------------------------------- RS
 # Verdicts are computed from explicit predicate specs (the v2
 # discipline); rationale strings are templated per predicate kind
@@ -3158,3 +3154,7 @@ def gen_finalize() -> dict:
         "tokens_train_additions": addendum["tokens"]
         ["train_additions_total"],
         "tokens_combined": addendum["tokens"]["combined_total"]})
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

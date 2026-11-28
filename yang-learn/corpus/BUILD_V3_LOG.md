@@ -210,3 +210,34 @@ dropped, never relabeled):
   containers) that the strict rule does not count. Running
   total vs the 77,026 goal: 305 (0.40%). Priority delta:
   port-protections 93→97.
+
+## Batch 3 — revised_schema (part: corpus/v3_parts/rs.jsonl)
+
+- Build fix first: the generator's `main()` dispatch sat
+  mid-file, before the gen_rs/gen_srte/gen_pv/gen_holdout/
+  gen_finalize definitions — every subcommand past `iv` would
+  have NameError'd (pm/iv were defined above it, which is why
+  batches 1–2 ran). The `__main__` block now sits at the end
+  of the file; no generator logic changed.
+- Generated 375, deduped 0, **final 375: train 360 / dev 15**
+  (dev quota 12, +3 group-granularity overshoot). New
+  profiles P7–P12: 318 records (P7 48, P8 68, P9 48, P10 46,
+  P11 52, P12 56); maintenance on P1/P3/P4/P5: 57. Verdicts
+  183 allowed / 192 not-allowed. Verdicts are computed from
+  the profile predicate specs embedded in each prompt (the
+  v2 discipline); P13/P14 appear nowhere (holdout-reserved).
+- Target vs achieved: plan +450 train (floor ≥350);
+  achieved **+360 train — floor met**, 90 under target: the
+  authored predicate grids for P7–P12 plus maintenance
+  exhaust at 375 unique (profile × rule × value) prompts.
+  Per plan §7 the gap is reported, not padded.
+- Independently verified: zero prompt overlap vs all prior
+  splits + held_out + pm/iv parts, completion verdict ==
+  fact verdict on all 375, prompt embeds the named profile,
+  no scenario group spans splits, split assignment
+  reproduces exactly.
+- Direct-evidence coverage: **+0 leaves** (305 raw / 183
+  normalized). RS subjects are the same switchport leaves
+  already evidenced by PM/IV — this family teaches policy
+  deltas over known paths, not new paths. Running total vs
+  the 77,026 goal: 305 (0.40%).
