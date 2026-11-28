@@ -104,7 +104,7 @@ Training $0.37 (535 s) + eval $0.47 (677 s) + GGUF $0.18
 (662 s) = **$1.02**; program total **$3.93** of the $15 envelope
 (was $2.91 before run 2).
 
-## Publish — bf16 PUBLISHED (commit 6ce42fe); GGUF upload pending its approval card
+## Publish — PUBLISHED (bf16 commit 6ce42fe; GGUF commit fe7e6b4, hash-verified)
 
 - GGUF conversion job `6b09f5e36c5d61fff189e449` COMPLETED
   (a10g-small, 662 s, $0.18, exact run-1 recipe):
@@ -129,11 +129,16 @@ Training $0.37 (535 s) + eval $0.47 (677 s) + GGUF $0.18
   every served file at its exact staging size (shards
   4,967,215,360 + 3,077,766,632 bytes), and the run-2 model
   card (both runs' tables) is live.
-- The GGUF upload (`hfup_yang_run2.py gguf`) transferred the
-  full 2.50 GB and is parked on the same kind of approval
-  card; approving it lands the final commit replacing the
-  GGUF. Run-2 GGUF is 2,497,280,256 bytes — identical in size
-  to run 1's by construction, so replacement is proven by the
-  new commit + LFS hash at that point. The GGUF also remains
-  in the bucket (`yang-learn-run2/gguf/`) and in staging, so
-  nothing is at risk either way.
+- The GGUF upload (`hfup_yang_run2.py gguf`) likewise
+  paused on an approval card and COMPLETED once approved:
+  commit `fe7e6b43c6b802c7d2108bc54020ae3d1dd67181`.
+  Final Hub API verification: HEAD = `fe7e6b4`; the served
+  GGUF's LFS sha256
+  (`9d487f4f89829da6948eced240e21d4eb3c1cfb0306736f9bf797f0937bca2cd`)
+  matches the local run-2 GGUF exactly — proving the served
+  file is run 2's, not run 1's (the two are identical in
+  size, 2,497,280,256 bytes, by construction). Both bf16
+  shards' LFS hashes likewise match staging. Publish is
+  complete: https://huggingface.co/aag1091/netconfig-yang-qwen3-4b
+  now serves the run-2 model (bf16 + Q4_K_M GGUF + run-2
+  model card).
